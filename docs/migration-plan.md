@@ -4,7 +4,7 @@ Moving Kiwi Tracker from the Expo app to a native iOS app, a React web app and
 a backend owned by this repo. Until iOS parity (Phase 7) this file is the only
 tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 
-**Current phase:** 0 — Decisions and setup
+**Current phase:** 1 — Foundation
 
 ## How to use this file
 
