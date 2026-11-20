@@ -1,0 +1,56 @@
+---
+name: port-feature
+description: Port a capability from the Expo reference app (.reference/kiwi-tracker) to the native iOS app, matching its rules, flows, copy and states. Use when starting or continuing a tracker item that brings a reference feature to iOS, or when asked to "port", "match" or "check parity" for a screen or feature.
+---
+
+# Port a feature
+
+The Expo app at `.reference/kiwi-tracker` (pinned to `c6db92f`) is the reference. The iOS app matches
+what it does and says; native components decide how the chrome looks. The
+parity rule and its documented exceptions are in
+`docs/architecture.md#native-components-and-parity`.
+
+If `.reference/kiwi-tracker` is missing, recreate it as `docs/migration-plan.md`
+Phase 0 describes; never read or run `../kiwi-tracker` instead.
+
+## 1. Read the reference
+
+- Find the capability's routes in `src/app`, its module in `src/modules/<area>`
+  and anything it uses from `src/shared`. The map from Expo folders to iOS
+  targets is in `docs/architecture.md#expo--ios-map`.
+- Read its tests: they are the specification of its rules.
+- List what a person sees: each screen and sheet, every string, and the
+  loading, empty, error and Retry states.
+
+## 2. Port the rules first
+
+- Port pure rules and validation to `KiwiDomain`, and port their Jest tests to
+  Swift Testing with the same case names and the same expectations. Passing
+  these is the definition of a matching rule.
+- If a reference test looks wrong, port it as it is and tell the developer;
+  don't fix the rule silently.
+
+## 3. Data, state, UI
+
+- Stores in `KiwiData` read and write the same columns the reference does, with
+  the same validation before writing. No schema change unless the tracker item
+  asks for one.
+- Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
+  operations and load and retry behavior.
+- Screens use native components. Copy every string verbatim from the reference.
+  Add `#Preview`s for loaded, empty, loading and error.
+
+## 4. Compare side by side
+
+- Run the reference on the iOS Simulator (`npm ci`, then `npm run ios`, in `.reference/kiwi-tracker`)
+  and the native app on the local stack, signed in as the same seeded account.
+- Walk every flow from step 1 in both and compare screenshots: content, order,
+  copy, states and what each action does. Chrome may differ where a native
+  component replaces a custom one; nothing else may.
+- Fix differences, or list the ones that are intentional for the developer to
+  confirm, and record confirmed ones in `docs/architecture.md`.
+
+## 5. Hand over
+
+Continue with the root `AGENTS.md` workflow: checks, local validation, the
+developer's check on the shared project, tracker sync and wrap-up.

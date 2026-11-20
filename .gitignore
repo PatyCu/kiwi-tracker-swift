@@ -1,0 +1,17 @@
+.DS_Store
+
+# Xcode and SwiftPM
+xcuserdata/
+DerivedData/
+.build/
+*.xcresult
+
+# Shared Supabase project connection (see docs/architecture.md#environments)
+ios/Config/Shared.xcconfig
+
+# Pinned copy of the Expo reference app (see AGENTS.md)
+.reference/
+
+# Claude Code personal settings and app worktrees
+.claude/settings.local.json
+.claude/worktrees/
