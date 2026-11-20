@@ -54,14 +54,13 @@ flowchart LR
 ```text
 kiwi-tracker-swift/
 ├── AGENTS.md, CLAUDE.md     # agent guidance shared by every part of the repo
-├── docs/                    # architecture, backend, design system
+├── docs/                    # architecture, Supabase backend, migration plan
 ├── ios/                     # native iOS app (own AGENTS.md)
 ├── web/                     # React web app, when its work starts (own AGENTS.md)
-└── supabase/                # migrations, seed, local stack config, when moved here
+└── supabase/                # migrations, seed, local stack config
 ```
 
-`web/` and `supabase/` are added when their work starts; no empty folders
-before that.
+`web/` is added when its work starts; no empty folders before that.
 
 ## iOS app
 
@@ -242,13 +241,14 @@ are; the native and web apps are new clients of the same backend.
 
 - **Shared project.** All apps use the Expo app's Supabase project: same
   accounts and data, so the household can switch apps at any time.
-- **Ownership.** `supabase/` is copied into this repository, and new
+- **Ownership.** `supabase/` was copied into this repository, and new
   migrations are written only here. The Expo repo keeps its copy untouched;
   the Expo app is frozen, so it never pushes a migration again.
 - **Compatibility.** Parity needs no migrations. Until the Expo app is retired,
   any schema change must keep it working: additive changes only.
 - **Local first.** Changes are checked on the local stack, then applied to the
-  shared project before the developer's check, as today.
+  shared project before the developer's check, as today. How:
+  [docs/supabase.md](supabase.md).
 
 ## Web app
 

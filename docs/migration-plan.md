@@ -43,8 +43,8 @@ tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 
 ## Phase 1 — Foundation
 
-- [ ] `supabase/` (migrations, seed, config) copied here from `.reference/kiwi-tracker`
-- [ ] Local stack runs from this repo; `supabase db push --remote --dry-run` lists nothing
+- [x] `supabase/` (migrations, seed, config) copied here from `.reference/kiwi-tracker`
+- [x] Local stack runs from this repo; `supabase db push --remote --dry-run` lists nothing
 - [ ] Xcode project, `KiwiKit` package with its four targets, Swift 6, warnings as errors
 - [ ] `KiwiTracker` and `KiwiTracker Shared` schemes with their xcconfigs
 - [ ] Supabase client and generated Swift row types (`make db-types`)

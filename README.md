@@ -9,12 +9,15 @@ starts, the React web app and the Supabase backend. The Expo app,
 [PatyCu/kiwi-tracker](https://github.com/PatyCu/kiwi-tracker), is the
 reference they match.
 
-> Status: project setup and architecture, under review. No app code yet.
+> Status: Phase 1 (Foundation). The Supabase backend lives here; no app code
+> yet.
 
 ## Docs
 
 - [docs/architecture.md](docs/architecture.md) — system design, iOS
   architecture, environments and testing.
+- [docs/supabase.md](docs/supabase.md) — data model, accounts, local stack
+  and schema changes.
 - [docs/migration-plan.md](docs/migration-plan.md) — migration phases and
   where we are.
 - [AGENTS.md](AGENTS.md) and [ios/AGENTS.md](ios/AGENTS.md) — engineering
@@ -23,9 +26,8 @@ reference they match.
 ## Prerequisites
 
 - Xcode 27 with an iOS 26 simulator.
-- The Supabase CLI and a Docker-compatible runtime (Colima), as in the
-  reference app's
-  [Supabase docs](https://github.com/PatyCu/kiwi-tracker/blob/main/docs/supabase.md#local-development).
+- The Supabase CLI and a Docker-compatible runtime (Colima); see
+  [docs/supabase.md](docs/supabase.md#local-development).
 - The reference app's pinned copy at `.reference/kiwi-tracker` (see
   [Phase 0](docs/migration-plan.md#phase-0--decisions-and-setup)).
 
