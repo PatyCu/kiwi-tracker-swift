@@ -9,8 +9,8 @@ starts, the React web app and the Supabase backend. The Expo app,
 [PatyCu/kiwi-tracker](https://github.com/PatyCu/kiwi-tracker), is the
 reference they match.
 
-> Status: Phase 1 (Foundation). The Supabase backend lives here; no app code
-> yet.
+> Status: Phase 1 (Foundation). The Supabase backend and the Xcode project
+> live here; the app shows no screens yet.
 
 ## Docs
 

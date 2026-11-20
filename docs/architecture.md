@@ -211,10 +211,18 @@ deselect a day, so it can't match the reference.
 
 ### Environments
 
-| Scheme                | Supabase                 | Config                                                                 |
-| --------------------- | ------------------------ | ---------------------------------------------------------------------- |
-| `KiwiTracker`         | Local stack (`supabase start`) | `ios/Config/Local.xcconfig`, committed (local URL and publishable key). |
-| `KiwiTracker Shared`  | Shared project           | `ios/Config/Shared.xcconfig`, git-ignored, same two keys.              |
+| Scheme               | Build configuration | Supabase                       | Config                                                                  |
+| -------------------- | ------------------- | ------------------------------ | ----------------------------------------------------------------------- |
+| `KiwiTracker`        | `Debug`             | Local stack (`supabase start`) | `ios/Config/Local.xcconfig`, committed (local URL and publishable key). |
+| `KiwiTracker Shared` | `Debug Shared`      | Shared project                 | `ios/Config/Shared.xcconfig`, git-ignored, same two keys.               |
+
+Each scheme picks its Supabase project through its build configuration, whose
+base is the matching xcconfig. The second configuration's name starts with
+`Debug` because Xcode builds local packages unoptimized and with `DEBUG` only
+for configurations named that way. To create `Shared.xcconfig`, copy
+`Local.xcconfig` and set the shared project's URL and publishable key
+(**Project Settings → API**). xcconfig reads `//` as a comment, so URLs are
+written `https:/$()/…`.
 
 The xcconfig values reach the app through Info.plist keys read once at launch;
 a missing or invalid value fails with an error that names it. Only

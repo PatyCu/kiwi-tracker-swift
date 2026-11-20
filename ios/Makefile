@@ -15,7 +15,7 @@ format-check:
 
 build:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
-		-destination 'generic/platform=iOS Simulator' -quiet build
+		-destination 'platform=iOS Simulator,name=$(SIMULATOR)' -quiet build
 
 test:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
