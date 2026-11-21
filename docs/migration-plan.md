@@ -62,7 +62,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Sign in with email and password (KIW-46)
 - [x] Show or hide the password (KIW-98)
 - [x] Sign out from Settings — [tracker](../tracker/sign-out/)
-- [ ] Waiting for the household: loading, error with Retry, no-household screen (KIW-89)
+- [x] Waiting for the household: loading, error with Retry, no-household screen (KIW-89) — [tracker](../tracker/waiting-for-household/)
 - [ ] Household alias on Today, Pets and Settings (KIW-88)
 - [ ] Household members by display name in Settings (KIW-91)
 - [ ] Appearance setting: System, Light, Dark (KIW-41)
@@ -121,7 +121,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [ ] Fixed Expo bugs re-checked on iOS (KIW-5, KIW-6, KIW-7, KIW-99, KIW-100, KIW-105)
 - [ ] TestFlight build (iOS part of KIW-21)
 - [ ] The household uses the native app instead of the Expo iOS build
-- [ ] Linear resumed in the Kiwi Tracker project: ported features and open bugs reflected there
+- [ ] Linear resumed in the Kiwi Tracker project: ported features, open bugs and [after-parity improvements](../tracker/after-parity.md) reflected there
 
 **Exit:** the developer signs off iOS parity.
 

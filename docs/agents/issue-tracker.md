@@ -14,14 +14,16 @@ tracker/
 │   └── issues/
 │       ├── 01-<slug>.md
 │       └── 02-<slug>.md
-└── bugs/
-    └── 01-<slug>.md
+├── bugs/
+│   └── 01-<slug>.md
+└── after-parity.md          ← improvements that change reference behaviour
 ```
 
 - **Feature folder**: created when work on a feature starts, never ahead of it. The feature's line in the plan then links to it: `- [ ] Sign out from Settings (KIW-n) — [tracker](../tracker/sign-out/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
 - **Ticket**: one file per piece of work, `issues/NN-<slug>.md`, numbered from `01` in delivery order, never one combined file. The title is the first heading; a `Status:` line follows it (and `Blocked by: NN, NN` when it waits on other tickets); then what to build and what done looks like. Discussion goes at the bottom under `## Comments`.
 - **Status**: one of the triage roles in [`triage-labels.md`](triage-labels.md), `in-progress` once work starts, or `done`, set in the commit that finishes it (`git log` on the file finds that commit). Decided work starts at `ready-for-agent` or `ready-for-human`.
 - **Bug**: `tracker/bugs/NN-<slug>.md`, numbered from `01`, with a `Status:` line, what goes wrong and where it was found. When fixed, `Status: done`. Open bugs come before the next ticket.
+- **After parity**: an improvement that would change the reference app's behaviour is one bullet in `tracker/after-parity.md`, not a feature or a bug, until Phase 7 moves it to Linear.
 - **Close a feature**: when its last ticket is `done`, tick it off in the plan in the same commit.
 
 ### When a skill says "publish to the issue tracker"

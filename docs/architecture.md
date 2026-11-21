@@ -115,7 +115,9 @@ Rules that follow from this:
 - Feature folders mirror the Expo app's `src/modules`, so a capability is found
   in the same place in both. Within `KiwiFeatures`, a folder doesn't reach into
   another's `State` or `Forms`; shared needs move to `KiwiDomain` or
-  `KiwiDesign`.
+  `KiwiDesign`, or `AppRoot` hands them in (for example, `NoHouseholdScreen`
+  takes the email and a Sign out slot that `AppRoot` fills with Auth's
+  `SignOutButton`).
 - No `Utils`, `Helpers` or `Common` folders.
 
 ### Data flow

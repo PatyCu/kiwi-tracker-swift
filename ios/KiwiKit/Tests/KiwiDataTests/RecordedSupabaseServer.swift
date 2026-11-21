@@ -4,9 +4,9 @@ import Synchronization
 
 @testable import KiwiData
 
-/// Answers a backend's requests with recorded Supabase Auth responses. Each test uses its own
+/// Answers a backend's requests with recorded Supabase responses. Each test uses its own
 /// host, so tests running in parallel don't share answers.
-final class RecordedAuthServer: URLProtocol, @unchecked Sendable {
+final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
   typealias Answer = @Sendable (URLRequest, Data) throws -> (status: Int, body: String)
 
   private static let answers = Mutex<[String: Answer]>([:])
@@ -20,7 +20,7 @@ final class RecordedAuthServer: URLProtocol, @unchecked Sendable {
   ) throws -> SupabaseBackend {
     answers.withLock { $0[host] = answer }
     let configuration = URLSessionConfiguration.ephemeral
-    configuration.protocolClasses = [RecordedAuthServer.self]
+    configuration.protocolClasses = [RecordedSupabaseServer.self]
     return SupabaseBackend(
       config: try SupabaseConfig(url: "http://\(host)", publishableKey: "sb_publishable_test"),
       sessionStorage: storage,

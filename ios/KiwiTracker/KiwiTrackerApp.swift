@@ -9,7 +9,10 @@ struct KiwiTrackerApp: App {
   init() {
     do {
       let backend = SupabaseBackend(config: try SupabaseConfig(bundle: .main))
-      root = AppRoot(auth: SupabasePasswordAuth(backend: backend))
+      root = AppRoot(
+        auth: SupabasePasswordAuth(backend: backend),
+        households: SupabaseHouseholdStore(backend: backend)
+      )
     } catch {
       // The message names the missing or invalid key, as the reference's setup error does.
       root = AppRoot(signInUnavailable: error.description)

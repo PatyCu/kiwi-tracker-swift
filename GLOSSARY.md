@@ -11,3 +11,15 @@ _Avoid_: User, login
 **Session**:
 One device's stored sign-in to an Account. Signing out ends it on that device only.
 _Avoid_: Login, auth
+
+**Household**:
+The group of Accounts that share pets. Each Account belongs to at most one. Households are set up by hand, never in the app.
+_Avoid_: Family, home, team
+
+**Member**:
+An Account in a Household, known there by its display name, never by its email.
+_Avoid_: User, owner
+
+**Household alias**:
+What Members call their Household, shown in titles.
+_Avoid_: Household name
