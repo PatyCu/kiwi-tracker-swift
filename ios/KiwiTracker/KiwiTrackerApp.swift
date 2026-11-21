@@ -4,20 +4,21 @@ import SwiftUI
 
 @main
 struct KiwiTrackerApp: App {
-  private let backend: SupabaseBackend
+  private let root: AppRoot
 
   init() {
     do {
-      backend = SupabaseBackend(config: try SupabaseConfig(bundle: .main))
+      let backend = SupabaseBackend(config: try SupabaseConfig(bundle: .main))
+      root = AppRoot(auth: SupabasePasswordAuth(backend: backend))
     } catch {
-      // A build without valid Supabase settings can't do anything; the message names the key.
-      fatalError(error.description)
+      // The message names the missing or invalid key, as the reference's setup error does.
+      root = AppRoot(signInUnavailable: error.description)
     }
   }
 
   var body: some Scene {
     WindowGroup {
-      AppShell()
+      root
     }
   }
 }

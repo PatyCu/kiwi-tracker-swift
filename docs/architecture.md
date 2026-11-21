@@ -209,6 +209,14 @@ deselect a day, so it can't match the reference.
 - Sign-in with email and password through Supabase Auth; public sign-up stays
   off. supabase-swift keeps the session in the Keychain (the Expo app used
   AsyncStorage) and refreshes tokens while the app is active.
+- At launch the root shows a blank screen while the stored session is read,
+  then sign-in or the tabs. A stored session that expired since the last
+  launch is refreshed first, as supabase-js does; if that fails, the app
+  shows sign-in. A build without valid Supabase settings shows "Sign-in is
+  not available" with the reason instead of crashing.
+- Unlike AsyncStorage, the Keychain keeps the session when the app is
+  deleted, so reinstalling stays signed in. To see sign-in again in the
+  simulator, run `xcrun simctl keychain booted reset`.
 - Pet photos: scaled to 512px JPEG before upload, stored as
   `<pet_id>/<timestamp>.jpg`, shown through signed links valid for one hour
   and re-signed 10 minutes before expiry. Downloaded images are cached in

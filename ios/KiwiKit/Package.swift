@@ -23,7 +23,13 @@ let package = Package(
       dependencies: ["KiwiDomain", .product(name: "Supabase", package: "supabase-swift")],
       swiftSettings: strict
     ),
-    .testTarget(name: "KiwiDataTests", dependencies: ["KiwiData"], swiftSettings: strict),
+    .testTarget(
+      name: "KiwiDataTests",
+      dependencies: [
+        "KiwiData", "KiwiDomain", .product(name: "Supabase", package: "supabase-swift"),
+      ],
+      swiftSettings: strict
+    ),
     .target(
       name: "KiwiDesign",
       resources: [.process("Resources")],
@@ -36,7 +42,7 @@ let package = Package(
     ),
     .testTarget(
       name: "KiwiFeaturesTests",
-      dependencies: ["KiwiFeatures"],
+      dependencies: ["KiwiFeatures", "KiwiDomain"],
       swiftSettings: mainActorByDefault
     ),
   ]
