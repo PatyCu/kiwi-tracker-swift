@@ -5,6 +5,8 @@ xcuserdata/
 DerivedData/
 .build/
 *.xcresult
+# Created when KiwiKit is resolved on its own; the Xcode project's lockfile is the one used
+ios/KiwiKit/Package.resolved
 
 # Shared Supabase project connection (see docs/architecture.md#environments)
 ios/Config/Shared.xcconfig
