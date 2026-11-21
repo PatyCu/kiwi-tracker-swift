@@ -18,9 +18,22 @@
 		A1000000000000000000D004 /* KiwiKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KiwiKit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A1000000000000000000E002 /* Exceptions for "KiwiTracker" folder in "KiwiTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A10000000000000000001001 /* KiwiTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A1000000000000000000E001 /* KiwiTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A1000000000000000000E002 /* Exceptions for "KiwiTracker" folder in "KiwiTracker" target */,
+			);
 			path = KiwiTracker;
 			sourceTree = "<group>";
 		};
@@ -216,6 +229,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KiwiTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kiwi Tracker";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -242,6 +256,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = KiwiTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kiwi Tracker";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

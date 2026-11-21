@@ -76,6 +76,7 @@ kiwi-tracker-swift/
 | State               | Observation (`@Observable`)                 | Native, no third-party state library.                                                                           |
 | Async               | `async`/`await`, structured concurrency     | No Combine in new code.                                                                                         |
 | Backend SDK         | [supabase-swift](https://github.com/supabase/supabase-swift) | Official SDK for Auth, PostgREST and Storage. The only production dependency.                    |
+| Row types           | `make db-types` (Supabase CLI 2.121.0 via `npx`) | Plain `Codable` structs in `KiwiData/Generated`. Later CLIs generate supabase-swift v3 `@Table` types; the app stays on stable v2 (2.55.7) until v3 is released. |
 | Tests               | Swift Testing (+ XCTest for UI tests)       | Bundled with Xcode.                                                                                             |
 | Format and lint     | `swift format` (bundled with the toolchain) | No extra tool to install.                                                                                       |
 | Project             | Xcode project + one local Swift package     | Xcode's synchronized folders keep the project file small; the package enforces module boundaries.               |

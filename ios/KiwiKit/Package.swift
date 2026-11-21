@@ -13,9 +13,17 @@ let package = Package(
     .library(name: "KiwiData", targets: ["KiwiData"]),
     .library(name: "KiwiFeatures", targets: ["KiwiFeatures"]),
   ],
+  dependencies: [
+    .package(url: "https://github.com/supabase/supabase-swift", exact: "2.55.7")
+  ],
   targets: [
     .target(name: "KiwiDomain", swiftSettings: strict),
-    .target(name: "KiwiData", dependencies: ["KiwiDomain"], swiftSettings: strict),
+    .target(
+      name: "KiwiData",
+      dependencies: ["KiwiDomain", .product(name: "Supabase", package: "supabase-swift")],
+      swiftSettings: strict
+    ),
+    .testTarget(name: "KiwiDataTests", dependencies: ["KiwiData"], swiftSettings: strict),
     .target(name: "KiwiDesign", swiftSettings: mainActorByDefault),
     .target(
       name: "KiwiFeatures",
