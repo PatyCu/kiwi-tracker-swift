@@ -1,17 +1,21 @@
 import KiwiDesign
+import KiwiDomain
 import SwiftUI
 
 /// The signed-in app: four tabs, each with its own navigation stack, opened
-/// from `kiwitracker://` URLs. Each tab shows a placeholder until its feature
-/// is ported. Expects the `SessionModel` in the environment.
+/// from `kiwitracker://` URLs, for the loaded `household`, which it also puts in the
+/// environment. Each tab shows a placeholder until its feature is ported. Expects the
+/// `SessionModel` in the environment.
 public struct AppShell: View {
+  private let household: Household
   @State private var navigation: AppNavigation
 
-  public init() {
-    self.init(navigation: AppNavigation())
+  public init(household: Household) {
+    self.init(household: household, navigation: AppNavigation())
   }
 
-  init(navigation: AppNavigation) {
+  init(household: Household, navigation: AppNavigation) {
+    self.household = household
     _navigation = State(initialValue: navigation)
   }
 
@@ -19,11 +23,14 @@ public struct AppShell: View {
     @Bindable var navigation = navigation
     TabView(selection: $navigation.selectedTab) {
       tab(.today) {
-        NavigationStack { PlaceholderScreen(tab: .today) }
+        NavigationStack {
+          PlaceholderScreen(tab: .today, navigationTitle: todayTitle(for: household))
+        }
       }
       tab(.pets) {
         NavigationStack(path: $navigation.petsPath) {
-          PlaceholderScreen(tab: .pets).routeDestinations()
+          PlaceholderScreen(tab: .pets, navigationTitle: petsTitle(for: household))
+            .routeDestinations()
         }
       }
       tab(.calendar) {
@@ -36,6 +43,7 @@ public struct AppShell: View {
       }
     }
     .tint(Palette.kiwi)
+    .environment(\.household, household)
     .onOpenURL { navigation.open($0) }
     .alert("Page not found", isPresented: $navigation.showsPageNotFound) {
       Button("Return to Today") { navigation.returnToToday() }
@@ -66,14 +74,17 @@ extension View {
 private struct PlaceholderScreen: View {
   let title: String
   let systemImage: String
+  let navigationTitle: String
 
-  init(title: String, systemImage: String) {
+  init(title: String, systemImage: String, navigationTitle: String? = nil) {
     self.title = title
     self.systemImage = systemImage
+    self.navigationTitle = navigationTitle ?? title
   }
 
-  init(tab: AppTab) {
-    self.init(title: tab.title, systemImage: tab.systemImage)
+  /// The tab's placeholder, titled with the tab's label unless `navigationTitle` is given.
+  init(tab: AppTab, navigationTitle: String? = nil) {
+    self.init(title: tab.title, systemImage: tab.systemImage, navigationTitle: navigationTitle)
   }
 
   var body: some View {
@@ -86,18 +97,19 @@ private struct PlaceholderScreen: View {
       .padding()
     }
     .background(Palette.bg)
-    .navigationTitle(title)
+    .navigationTitle(navigationTitle)
   }
 }
 
 private let previewPetID = UUID()
 
 #Preview("Today") {
-  AppShell().previewSession()
+  AppShell(household: .preview).previewSession()
 }
 
 #Preview("Pet profile") {
   AppShell(
+    household: .preview,
     navigation: AppNavigation(
       selectedTab: .pets,
       petsPath: [.pet(previewPetID), .petProfile(previewPetID)]
@@ -107,7 +119,7 @@ private let previewPetID = UUID()
 }
 
 #Preview("Dark") {
-  AppShell(navigation: AppNavigation(selectedTab: .calendar))
+  AppShell(household: .preview, navigation: AppNavigation(selectedTab: .calendar))
     .previewSession()
     .preferredColorScheme(.dark)
 }

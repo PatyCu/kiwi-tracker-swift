@@ -1,0 +1,36 @@
+import KiwiDesign
+import KiwiDomain
+import SwiftUI
+
+/// The signed-in Account's Household in Settings, as the reference app's `HouseholdSection`.
+/// The reference labels the alias "Name"; this uses the glossary's "Alias". Members arrive with
+/// their own feature.
+struct HouseholdSection: View {
+  @Environment(\.household) private var household
+
+  var body: some View {
+    // The tabs only open once the Household has loaded, so it is always there.
+    if let household {
+      Section("Household") {
+        LabeledContent("Alias", value: household.alias)
+      }
+    }
+  }
+}
+
+#if DEBUG
+  private func previewForm() -> some View {
+    Form { HouseholdSection() }
+      .scrollContentBackground(.hidden)
+      .background(Palette.bg)
+      .environment(\.household, .preview)
+  }
+
+  #Preview("Light") {
+    previewForm()
+  }
+
+  #Preview("Dark") {
+    previewForm().preferredColorScheme(.dark)
+  }
+#endif

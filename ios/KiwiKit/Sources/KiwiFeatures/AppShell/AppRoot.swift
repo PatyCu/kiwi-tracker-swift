@@ -84,7 +84,7 @@ private struct HouseholdRoot: View {
       case .missing:
         NoHouseholdScreen(email: email, onCheckAgain: reload) { SignOutButton() }
       case .ready(let loaded):
-        AppShell().environment(\.household, loaded)
+        AppShell(household: loaded)
       }
     }
     .task { await household.load() }

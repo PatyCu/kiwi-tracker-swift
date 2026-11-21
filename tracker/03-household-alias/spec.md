@@ -1,6 +1,6 @@
 # Household alias on Today, Pets and Settings (KIW-88)
 
-Status: ready-for-agent
+Status: done
 
 ## Problem Statement
 

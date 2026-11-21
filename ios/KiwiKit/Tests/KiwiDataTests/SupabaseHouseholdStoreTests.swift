@@ -29,6 +29,16 @@ import Testing
     #expect(request.queryItems == [URLQueryItem(name: "select", value: "id,alias")])
   }
 
+  @Test func trimsSpacesFromBothEndsOfTheAlias() async throws {
+    let backend = try RecordedSupabaseServer.backend { _, _ in
+      (200, #"[{"id": "22222222-2222-4222-8222-222222222222", "alias": "  The Burrow \n"}]"#)
+    }
+
+    let household = try await SupabaseHouseholdStore(backend: backend).loadHousehold()
+
+    #expect(household?.alias == "The Burrow")
+  }
+
   @Test func returnsNilWhenTheAccountIsNotInAHousehold() async throws {
     let backend = try RecordedSupabaseServer.backend { _, _ in (200, "[]") }
 
