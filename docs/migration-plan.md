@@ -61,9 +61,9 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 - [x] Sign in with email and password (KIW-46)
 - [x] Show or hide the password (KIW-98)
-- [x] Sign out from Settings — [tracker](../tracker/sign-out/)
-- [x] Waiting for the household: loading, error with Retry, no-household screen (KIW-89) — [tracker](../tracker/waiting-for-household/)
-- [ ] Household alias on Today, Pets and Settings (KIW-88) — [tracker](../tracker/household-alias/)
+- [x] Sign out from Settings — [tracker](../tracker/01-sign-out/)
+- [x] Waiting for the household: loading, error with Retry, no-household screen (KIW-89) — [tracker](../tracker/02-waiting-for-household/)
+- [ ] Household alias on Today, Pets and Settings (KIW-88) — [tracker](../tracker/03-household-alias/)
 - [ ] Household members by display name in Settings (KIW-91)
 - [ ] Appearance setting: System, Light, Dark (KIW-41)
 

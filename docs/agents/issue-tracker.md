@@ -8,7 +8,7 @@ Where the engineering skills (`to-tickets`, `to-spec`, `triage`, `wayfinder`) re
 
 ```
 tracker/
-├── <feature-slug>/
+├── NN-<feature-slug>/
 │   ├── spec.md              ← only if a spec was written
 │   ├── map.md               ← only for wayfinding
 │   └── issues/
@@ -19,7 +19,7 @@ tracker/
 └── after-parity.md          ← improvements that change reference behaviour
 ```
 
-- **Feature folder**: created when work on a feature starts, never ahead of it. The feature's line in the plan then links to it: `- [ ] Sign out from Settings (KIW-n) — [tracker](../tracker/sign-out/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
+- **Feature folder**: `NN-<feature-slug>/`, created when work on a feature starts, never ahead of it. `NN` is two digits, one more than the highest feature folder so far (`bugs/` doesn't count). The feature's line in the plan then links to it: `- [ ] Sign out from Settings (KIW-n) — [tracker](../tracker/01-sign-out/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
 - **Ticket**: one file per piece of work, `issues/NN-<slug>.md`, numbered from `01` in delivery order, never one combined file. The title is the first heading; a `Status:` line follows it (and `Blocked by: NN, NN` when it waits on other tickets); then what to build and what done looks like. Discussion goes at the bottom under `## Comments`.
 - **Status**: one of the triage roles in [`triage-labels.md`](triage-labels.md), `in-progress` once work starts, or `done`, set in the commit that finishes it (`git log` on the file finds that commit). Decided work starts at `ready-for-agent` or `ready-for-human`.
 - **Bug**: `tracker/bugs/NN-<slug>.md`, numbered from `01`, with a `Status:` line, what goes wrong and where it was found. When fixed, `Status: done`. Open bugs come before the next ticket.
@@ -36,7 +36,7 @@ Read the file at the path, or the ticket number within the feature, the develope
 
 ### Wayfinding
 
-Used by `/wayfinder`. The **map** is `tracker/<effort>/map.md` (Notes / Decisions-so-far / Fog); each **child** is `tracker/<effort>/issues/NN-<slug>.md`.
+Used by `/wayfinder`. The **map** is `tracker/NN-<effort>/map.md` (Notes / Decisions-so-far / Fog); each **child** is `tracker/NN-<effort>/issues/NN-<slug>.md`.
 
 - A `Type:` line records the ticket type (`research`/`prototype`/`grilling`/`task`); `Status:` is `claimed` or `resolved` here.
 - **Blocking**: `Blocked by: NN, NN`. A ticket is unblocked when every file it lists is `resolved`.
