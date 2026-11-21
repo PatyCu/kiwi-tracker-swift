@@ -10,6 +10,7 @@ struct SignInScreen: View {
 
   @State private var form: PasswordSignInForm
   @FocusState private var focusedField: Field?
+  @State private var passwordVisible = false
 
   init(auth: any PasswordAuth) {
     self.init(form: PasswordSignInForm(auth: auth))
@@ -45,14 +46,29 @@ struct SignInScreen: View {
         .submitLabel(.next)
         .focused($focusedField, equals: .email)
         .onSubmit { focusedField = .password }
+        .padding(14)
         .inputFieldStyle()
         fieldLabel("PASSWORD")
-        SecureField("Password", text: $form.password, prompt: Text(""))
-          .textContentType(.password)
-          .submitLabel(.go)
-          .focused($focusedField, equals: .password)
-          .onSubmit(submit)
-          .inputFieldStyle()
+        HStack(spacing: 0) {
+          passwordInput
+            .textContentType(.password)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .submitLabel(.go)
+            .focused($focusedField, equals: .password)
+            .onSubmit(submit)
+            .padding(14)
+          // The icon shows the current state: an open, tinted eye while the password is visible.
+          Toggle("Show password", isOn: $passwordVisible)
+            .toggleStyle(PasswordVisibilityToggleStyle())
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .inputFieldStyle()
+        .onChange(of: passwordVisible) {
+          // Swapping the field drops focus; give it back so the keyboard stays up.
+          guard focusedField == .password else { return }
+          Task { focusedField = .password }
+        }
         if let error = form.error {
           Text(error)
             .font(.subheadline)
@@ -89,6 +105,14 @@ struct SignInScreen: View {
     }
   }
 
+  @ViewBuilder private var passwordInput: some View {
+    if passwordVisible {
+      TextField("Password", text: $form.password, prompt: Text(""))
+    } else {
+      SecureField("Password", text: $form.password, prompt: Text(""))
+    }
+  }
+
   private func fieldLabel(_ text: String) -> some View {
     Text(text)
       .font(.caption2.weight(.heavy))
@@ -104,11 +128,27 @@ struct SignInScreen: View {
   }
 }
 
+/// The eye button beside the password, read by VoiceOver as a "Show password" switch.
+private struct PasswordVisibilityToggleStyle: ToggleStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    Button {
+      configuration.isOn.toggle()
+    } label: {
+      Image(systemName: configuration.isOn ? "eye" : "eye.slash")
+        .font(.title3)
+        .foregroundStyle(configuration.isOn ? Palette.kiwi : Palette.muted)
+        .padding(.horizontal, 14)
+        .frame(maxHeight: .infinity)
+        .contentShape(.rect)
+    }
+    .buttonStyle(.plain)
+  }
+}
+
 extension View {
   fileprivate func inputFieldStyle() -> some View {
     font(.callout)
       .foregroundStyle(Palette.text)
-      .padding(14)
       .frame(minHeight: 50)
       .background(Palette.surface2, in: .rect(cornerRadius: 14))
       .overlay(RoundedRectangle(cornerRadius: 14).stroke(Palette.line))

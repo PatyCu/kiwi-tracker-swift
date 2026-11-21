@@ -58,7 +58,7 @@ tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 ## Phase 2 — Accounts and households
 
 - [x] Sign in with email and password (KIW-46)
-- [ ] Show or hide the password (KIW-98)
+- [x] Show or hide the password (KIW-98)
 - [ ] Session kept across launches; sign out from Settings
 - [ ] Waiting for the household: loading, error with Retry, no-household screen (KIW-89)
 - [ ] Household alias on Today, Pets and Settings (KIW-88)
