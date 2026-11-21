@@ -192,7 +192,12 @@ deselect a day, so it can't match the reference.
 
 - The Expo palette (`src/shared/theme/palette.ts`) becomes color sets in
   `KiwiDesign`'s asset catalog, each with its light and dark value, exposed as
-  `Color.kiwi`, `Color.surface`, … The tint is `kiwi`.
+  `Palette.kiwi`, `Palette.surface`, … A `Palette` namespace rather than
+  `Color` extensions, because `blue` would clash with `Color.blue`. The tint
+  is `kiwi`.
+- `tabBar` (the custom tab bar's background, replaced by the native `TabView`)
+  and the unused `lime` and `amberWash` aren't ported.
+- `BrandLogo` shows the logo at the reference's sizes (44pt by default).
 - Text uses the system font (SF Pro), as the Expo app does on iOS, with
   Dynamic Type text styles.
 - App icon and logo are copied from the Expo app's `assets/images`.

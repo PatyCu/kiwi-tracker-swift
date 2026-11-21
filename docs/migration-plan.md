@@ -48,7 +48,7 @@ tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 - [x] Xcode project, `KiwiKit` package with its four targets, Swift 6, warnings as errors
 - [x] `KiwiTracker` and `KiwiTracker Shared` schemes with their xcconfigs
 - [x] Supabase client and generated Swift row types (`make db-types`)
-- [ ] Palette, app icon and logo in `KiwiDesign`
+- [x] Palette, app icon and logo in `KiwiDesign`
 - [ ] Shared components: load/error state with Retry, placeholder card, section header
 - [ ] App shell: four tabs with placeholders, `Route`, `kiwitracker://` URLs
 - [ ] `make format-check`, `make build`, `make test` pass

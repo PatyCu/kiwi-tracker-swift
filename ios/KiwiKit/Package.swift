@@ -24,7 +24,11 @@ let package = Package(
       swiftSettings: strict
     ),
     .testTarget(name: "KiwiDataTests", dependencies: ["KiwiData"], swiftSettings: strict),
-    .target(name: "KiwiDesign", swiftSettings: mainActorByDefault),
+    .target(
+      name: "KiwiDesign",
+      resources: [.process("Resources")],
+      swiftSettings: mainActorByDefault
+    ),
     .target(
       name: "KiwiFeatures",
       dependencies: ["KiwiDomain", "KiwiDesign"],
