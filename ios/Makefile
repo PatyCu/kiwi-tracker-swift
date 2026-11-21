@@ -13,7 +13,7 @@ DB_TYPES     := KiwiKit/Sources/KiwiData/Generated/DatabaseTypes.swift
 SIMULATOR_ID = $(shell xcrun simctl list devices available -j | jq -r --arg name "$(SIMULATOR)" \
 	'[.devices | to_entries | sort_by(.key)[] | select(.key | test("iOS")) | .value[] | select(.name == $$name)] | last | .udid')
 
-.PHONY: format format-check lint build test run run-shared db-types
+.PHONY: format format-check lint build test run run-shared simulator-id db-types
 
 format:
 	swift format format --in-place --recursive --parallel .
@@ -32,7 +32,7 @@ build:
 test:
 	rm -rf $(TEST_RESULTS)
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -destination '$(DESTINATION)' -quiet \
-		-resultBundlePath $(TEST_RESULTS) test; status=$$?; \
+		-resultBundlePath $(TEST_RESULTS) $(if $(ONLY),-only-testing:$(ONLY)) test; status=$$?; \
 	xcrun xcresulttool get test-results summary --path $(TEST_RESULTS) | \
 		jq -r '"Tests \(.result): \(.passedTests) passed, \(.failedTests) failed, \(.skippedTests) skipped."'; \
 	exit $$status
@@ -65,3 +65,6 @@ db-types:
 	$(SUPABASE_TYPEGEN_CLI) gen types --lang swift --schema public --workdir .. > KiwiKit/.build/DatabaseTypes.swift
 	mv KiwiKit/.build/DatabaseTypes.swift $(DB_TYPES)
 	swift format format --in-place $(DB_TYPES)
+
+simulator-id:
+	@echo $(SIMULATOR_ID)

@@ -23,8 +23,9 @@ Run from `ios/`:
 make lint    # swift format lint --strict, plus scripts/check-conventions.sh
 make build   # xcodebuild, warnings are errors
 make test    # Swift Testing for KiwiKit; prints the pass and fail counts
+make test ONLY=KiwiFeaturesTests/TodayScreenTests   # one suite (or Target/Suite/test)
 ```
 
 - Prefer the Xcode MCP server (`.mcp.json`) or the simulator tools for builds, previews and launches when available; `make` is the fallback and what wrap-up runs.
 - `make run` builds the `KiwiTracker` scheme (local stack) and opens it on the iPhone 17 Pro on the newest iOS runtime, by UDID; `make run-shared` does the same with `KiwiTracker Shared`, for the developer's check on the shared project. Target simulators by UDID, never `booted`: the developer may have other simulators open.
-- To tap through a flow, use the Xcode MCP device-interaction tools on that iOS 27 simulator (they don't support iOS 26); they hand the taps to a subagent that loads the `device-interaction` skill.
+- To tap through a flow, hand it to a subagent that loads the `drive-simulator` skill.
