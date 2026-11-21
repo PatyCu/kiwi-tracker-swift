@@ -9,7 +9,7 @@ struct HouseholdSection: View {
   @Environment(\.household) private var household
 
   var body: some View {
-    // The tabs only open once the Household has loaded, so it is always there.
+    // Always set inside the tabs; see `EnvironmentValues.household`.
     if let household {
       Section("Household") {
         LabeledContent("Alias", value: household.alias)

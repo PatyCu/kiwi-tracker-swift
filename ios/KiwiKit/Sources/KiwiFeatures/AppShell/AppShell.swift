@@ -76,15 +76,17 @@ private struct PlaceholderScreen: View {
   let systemImage: String
   let navigationTitle: String
 
-  init(title: String, systemImage: String, navigationTitle: String? = nil) {
+  init(title: String, systemImage: String) {
     self.title = title
     self.systemImage = systemImage
-    self.navigationTitle = navigationTitle ?? title
+    navigationTitle = title
   }
 
   /// The tab's placeholder, titled with the tab's label unless `navigationTitle` is given.
   init(tab: AppTab, navigationTitle: String? = nil) {
-    self.init(title: tab.title, systemImage: tab.systemImage, navigationTitle: navigationTitle)
+    title = tab.title
+    systemImage = tab.systemImage
+    self.navigationTitle = navigationTitle ?? tab.title
   }
 
   var body: some View {

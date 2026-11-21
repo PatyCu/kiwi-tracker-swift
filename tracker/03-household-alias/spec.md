@@ -29,7 +29,7 @@ Once the Household has loaded, Today's title reads "Today in ‹alias›" and Pe
 
 ## Implementation Decisions
 
-- **Domain**: `Household` trims spaces and newlines from both ends of its alias when it's created, so every source and screen gets the trimmed alias. The schema already rejects blank aliases, so trimming can't produce an empty one. No schema change.
+- **Domain**: `Household` trims spaces and newlines from both ends of its alias when it's created, so every source and screen gets the trimmed alias. The schema rejects aliases that are only spaces; one made only of other whitespace, such as newlines, would trim to empty, which is accepted as too unlikely to guard against. No schema change.
 - **Titles**: `KiwiFeatures` gets two copy functions taking the `Household`: one for "Today in ‹alias›", one for "Pets in ‹alias›". The current Today and Pets screens (still placeholders) use them as their navigation titles. Tab labels don't change.
 - **No fallback titles**: the reference falls back to "Today" and "Your pets" while the Household hasn't loaded. On iOS the tabs only open after the Household has loaded, so the functions take a `Household` that's always there and have no fallback.
 - **Settings**: a native `Form` section titled "Household", placed above Account, with one labelled row "Alias" showing the alias, read from the Household in the environment. Members (KIW-91) and Appearance (KIW-41) come later.
