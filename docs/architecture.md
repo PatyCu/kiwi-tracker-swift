@@ -68,7 +68,7 @@ kiwi-tracker-swift/
 
 | Choice              | Value                                       | Why                                                                                                             |
 | ------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Minimum iOS         | 26.0                                        | Current native look (Liquid Glass tab and navigation bars) with no fallbacks; the installed simulator is 26.1. |
+| Minimum iOS         | 26.0                                        | Current native look (Liquid Glass tab and navigation bars) with no fallbacks.                                   |
 | Bundle ID           | `com.patycu.kiwitracker`                    | Fixed once the first TestFlight build exists.                                                                   |
 | Devices             | iPhone, portrait                            | Same as the Expo app's iOS build.                                                                               |
 | Language            | Swift 6, strict concurrency                 | Data races are compile errors. App and feature code default to `MainActor` isolation.                           |
@@ -76,7 +76,7 @@ kiwi-tracker-swift/
 | State               | Observation (`@Observable`)                 | Native, no third-party state library.                                                                           |
 | Async               | `async`/`await`, structured concurrency     | No Combine in new code.                                                                                         |
 | Backend SDK         | [supabase-swift](https://github.com/supabase/supabase-swift) | Official SDK for Auth, PostgREST and Storage. The only production dependency.                    |
-| Row types           | `make db-types` (Supabase CLI 2.121.0 via `npx`) | Plain `Codable` structs in `KiwiData/Generated`. Later CLIs generate supabase-swift v3 `@Table` types; the app stays on stable v2 (2.55.7) until v3 is released. |
+| Row types           | Generated from the schema                   | Plain `Codable` structs. Later CLIs generate supabase-swift v3 types; the app stays on stable v2 until v3 is released. |
 | Tests               | Swift Testing (+ XCTest for UI tests)       | Bundled with Xcode.                                                                                             |
 | Format and lint     | `swift format` (bundled with the toolchain) | No extra tool to install.                                                                                       |
 | Project             | Xcode project + one local Swift package     | Xcode's synchronized folders keep the project file small; the package enforces module boundaries.               |
@@ -102,10 +102,10 @@ flowchart TD
 
 | Target         | Holds                                                                                                                                                                   | May import                       |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `KiwiDomain`   | Models (`Pet`, `PetEvent`, `CalendarEvent`, `Household`), pure rules (pet status, current diet, timeline entries, month grid, upcoming care), validation, store protocols. | Foundation                       |
-| `KiwiData`     | The Supabase client, one store per table or bucket implementing the domain protocols, generated row types and their mapping, the pet photo cache.                       | `KiwiDomain`, Supabase           |
-| `KiwiDesign`   | Palette and typography, shared components (load and error state, placeholder card, brand logo, section header).                                                         | SwiftUI                          |
-| `KiwiFeatures` | One folder per product area (`Auth`, `Households`, `Today`, `Pets`, `PetEvents`, `PetStatus`, `Calendar`, `CalendarEvents`, `Settings`), each with `UI`, `State`, `Forms`. | `KiwiDomain`, `KiwiDesign`       |
+| `KiwiDomain`   | Models, pure rules, validation, store protocols.                                                          | Foundation                 |
+| `KiwiData`     | The Supabase client, one store per table or bucket implementing the domain protocols, row mapping, the pet photo cache. | `KiwiDomain`, Supabase     |
+| `KiwiDesign`   | Palette, typography, shared components.                                                                   | SwiftUI                    |
+| `KiwiFeatures` | One folder per product area, each with `UI`, `State`, `Forms`.                                            | `KiwiDomain`, `KiwiDesign` |
 
 Rules that follow from this:
 
@@ -115,9 +115,7 @@ Rules that follow from this:
 - Feature folders mirror the Expo app's `src/modules`, so a capability is found
   in the same place in both. Within `KiwiFeatures`, a folder doesn't reach into
   another's `State` or `Forms`; shared needs move to `KiwiDomain` or
-  `KiwiDesign`, or `AppRoot` hands them in (for example, `NoHouseholdScreen`
-  takes the email and a Sign out slot that `AppRoot` fills with Auth's
-  `SignOutButton`).
+  `KiwiDesign`, or `AppRoot` hands them in.
 - No `Utils`, `Helpers` or `Common` folders.
 
 ### Data flow
@@ -140,31 +138,25 @@ sequenceDiagram
 ```
 
 - **Stores** (`KiwiData`) are stateless: typed inputs, typed outputs, typed
-  errors (`PetStoreError`, …). They map rows to domain models and back.
+  errors. They map rows to domain models and back.
 - **Models** (`KiwiFeatures/*/State`) are `@MainActor @Observable` classes that
-  hold what screens show and expose operations: `PetsModel`, `PetEventsModel`,
-  `CalendarEventsModel`, `HouseholdModel`, `SessionModel`. They replace the
-  Expo app's providers, one for one.
-- **Load state** is a single enum, `LoadState<Value>` (`.loading`,
-  `.loaded(Value)`, `.failed(Error)`), rendered by one shared view with Retry.
+  hold what screens show and expose operations. They replace the Expo app's
+  providers, one for one.
+- **Load state** is a single enum rendered by one shared view with Retry.
   Retry reloads only what failed, as in the Expo app.
 - **Dependency injection** goes through the SwiftUI environment: the app target
   builds the live stores and models once and puts them in the environment.
-  Previews and tests use in-memory stores with fixture data
-  (`KiwiFeatures/PreviewSupport`, compiled only in Debug).
+  Previews and tests use in-memory stores with fixture data.
 - **Writes** never drop user input on failure: the form keeps its values and
   shows the error.
 
 ### Navigation
 
-| Expo                                | iOS                                                                           |
-| ----------------------------------- | ----------------------------------------------------------------------------- |
-| Tabs: Today, Pets, Calendar, Settings | `TabView` with `Tab`, SF Symbols matching the Ionicons (house, pawprint, calendar, gearshape). |
-| Pets and Calendar stacks            | One `NavigationStack` per tab, with a typed path of `Route` values (`.pet(petID)`, `.petProfile(petID)`, `.record(petID, recordID)`). |
-| `ModalSheet` (custom)               | `.sheet` with `presentationDetents`.                                          |
-| Confirm dialogs (`dialogs.ts`)      | `.confirmationDialog` / `.alert`.                                             |
-| `kiwitracker://` scheme             | Same URL scheme and paths, handled with `onOpenURL` mapped to the tab and its `Route` path, with parent screens under the last one so Back works. Any other URL shows a "Page not found" alert with "Return to Today". |
-| Root layout waits for the household | Root view switches on session and household state: sign-in, loading, no household, error with Retry, tabs. |
+Each tab has its own `NavigationStack` with a typed path of `Route` values, and
+the `kiwitracker://` URLs keep the Expo app's scheme and paths, opening the
+tab and its path with parent screens underneath so Back works. The root view
+waits for the session and the household before it shows the tabs, as the Expo
+app's root layout does.
 
 Routes carry IDs, never objects, so required context stays explicit (pet
 operations receive `petID`), as in the Expo app.
@@ -173,17 +165,7 @@ operations receive `petID`), as in the Expo app.
 
 "Same UX" means the same information architecture, flows, rules, copy,
 branding and empty, loading and error states. Platform chrome comes from
-native components, so on iOS it looks and behaves like iOS:
-
-| Need                     | Native component                                       |
-| ------------------------ | ------------------------------------------------------ |
-| Tab bar, navigation bars | `TabView`, `NavigationStack`, toolbars                 |
-| Forms in sheets          | `Form`, `TextField`, `Picker`, `Toggle`                |
-| Date and time            | `DatePicker`                                           |
-| Pet photo                | `PhotosPicker`; scaling to 512px JPEG with ImageIO     |
-| Empty states             | `ContentUnavailableView`, styled with the palette      |
-| Filter by pet and type   | `Menu` / sheet with toggles                            |
-| Password show/hide       | `SecureField` ↔ `TextField` with an eye button         |
+native components, so on iOS it looks and behaves like iOS.
 
 Exception: the Calendar's compact month (Monday-first weeks, "‹ Month ›"
 header, tapping the selected day deselects it, per-day markers) is a custom
@@ -192,40 +174,20 @@ deselect a day, so it can't match the reference.
 
 ### Branding
 
-- The Expo palette (`src/shared/theme/palette.ts`) becomes color sets in
-  `KiwiDesign`'s asset catalog, each with its light and dark value, exposed as
-  `Palette.kiwi`, `Palette.surface`, … A `Palette` namespace rather than
-  `Color` extensions, because `blue` would clash with `Color.blue`. The tint
-  is `kiwi`.
-- `tabBar` (the custom tab bar's background, replaced by the native `TabView`)
-  and the unused `lime` and `amberWash` aren't ported.
-- `BrandLogo` shows the logo at the reference's sizes (44pt by default).
-- Text uses the system font (SF Pro), as the Expo app does on iOS, with
-  Dynamic Type text styles.
-- App icon and logo are copied from the Expo app's `assets/images`.
-- Appearance (System, Light, Dark) in Settings sets `preferredColorScheme`. As
-  in the Expo app, the choice lasts until the app quits.
+The Expo palette becomes color sets in `KiwiDesign`, each with its light and
+dark value. Text uses the system font with Dynamic Type, as the Expo app does
+on iOS.
 
-### Auth, session and photos
+### Session and photos
 
-- Sign-in with email and password through Supabase Auth; public sign-up stays
-  off. supabase-swift keeps the session in the Keychain (the Expo app used
-  AsyncStorage) and refreshes tokens while the app is active.
-- At launch the root shows a blank screen while the stored session is read,
-  then sign-in or the tabs. A stored session that expired since the last
-  launch is refreshed first, as supabase-js does; if that fails, the app
-  shows sign-in. A build without valid Supabase settings shows "Sign-in is
-  not available" with the reason instead of crashing.
-- Sign out in Settings ends the session on this device only (local scope),
-  with no confirmation, as in the Expo app. The sign-in form then starts
-  empty, and the next sign-in opens a new tab shell on Today.
+- Accounts sign in with email and password through Supabase Auth; public
+  sign-up stays off. supabase-swift keeps the session in the Keychain (the
+  Expo app used AsyncStorage) and refreshes tokens while the app is active.
 - Unlike AsyncStorage, the Keychain keeps the session when the app is
   deleted, so reinstalling stays signed in; sign out to see sign-in again.
-- Pet photos: scaled to 512px JPEG before upload, stored as
-  `<pet_id>/<timestamp>.jpg`, shown through signed links valid for one hour
-  and re-signed 10 minutes before expiry. Downloaded images are cached in
-  Caches under their storage path, so a new link reuses the file; sign-out
-  clears the cache. Same behavior as the Expo app on iOS.
+- Pet photos are shown through short-lived signed links, and downloaded
+  images are cached on the device under their storage path, so a new link
+  reuses the file. Same behavior as the Expo app on iOS.
 
 ### Environments
 
@@ -234,18 +196,11 @@ deselect a day, so it can't match the reference.
 | `KiwiTracker`        | `Debug`             | Local stack (`supabase start`) | `ios/Config/Local.xcconfig`, committed (local URL and publishable key). |
 | `KiwiTracker Shared` | `Debug Shared`      | Shared project                 | `ios/Config/Shared.xcconfig`, git-ignored, same two keys.               |
 
-Each scheme picks its Supabase project through its build configuration, whose
-base is the matching xcconfig. The second configuration's name starts with
-`Debug` because Xcode builds local packages unoptimized and with `DEBUG` only
-for configurations named that way. To create `Shared.xcconfig`, copy
-`Local.xcconfig` and set the shared project's URL and publishable key
-(**Project Settings → API**). xcconfig reads `//` as a comment, so URLs are
-written `https:/$()/…`.
-
-The xcconfig values reach the app through Info.plist keys read once at launch;
-a missing or invalid value fails with an error that names it. Only
-publishable keys go in these files. The simulator reaches the local stack at
-`127.0.0.1`.
+Each scheme picks its Supabase project through its build configuration. The
+second configuration's name starts with `Debug` because Xcode builds local
+packages unoptimized and with `DEBUG` only for configurations named that way.
+Only publishable keys go in these files. Setting up `Shared.xcconfig`:
+[README](../README.md#run).
 
 ### Testing and validation
 
@@ -257,8 +212,6 @@ publishable keys go in these files. The simulator reaches the local stack at
 | Screens        | Every screen has `#Preview`s for loaded, empty, loading and error, used for visual parity checks.      | Xcode previews.                            |
 | App            | The change, end to end, on the local stack in the simulator.                                           | Agent in the simulator panel.              |
 | Shared project | The developer's single check before anything is committed.                                             | Developer, `KiwiTracker Shared` scheme.    |
-
-Warnings fail the build (`SWIFT_TREAT_WARNINGS_AS_ERRORS`).
 
 ## Backend
 
@@ -292,17 +245,3 @@ The same rules exist in Swift and TypeScript, so they can drift.
 - When the web app starts, those cases move to shared JSON fixtures in this
   repo that both test suites read, so a rule change updates one file and fails
   both suites until both are fixed.
-- User-facing copy is matched verbatim to the reference.
-
-## Expo → iOS map
-
-| Expo (`src/…`)                           | iOS (`ios/KiwiKit/Sources/…`)                         |
-| ---------------------------------------- | ----------------------------------------------------- |
-| `app/` (Expo Router)                     | `KiwiFeatures/AppShell` (tabs, stacks, `Route`, URLs); the app target shows it |
-| `modules/*/model`, pure rule files       | `KiwiDomain`                                          |
-| `modules/*/persistence`, `shared/supabase` | `KiwiData`                                          |
-| `modules/*/state` (providers)            | `KiwiFeatures/*/State` (`@Observable` models)         |
-| `modules/*/forms` (hooks)                | `KiwiFeatures/*/Forms` (`@Observable` form models)    |
-| `modules/*/ui`                           | `KiwiFeatures/*/UI`                                   |
-| `shared/theme`, `shared/ui`              | `KiwiDesign`                                          |
-| `modules/pets/media`                     | `KiwiData` (cache, upload) + `KiwiFeatures/Pets` (picker) |

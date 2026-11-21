@@ -15,7 +15,7 @@ there.
 - Kiwi Tracker is a pet care and health tracker for households: a native iOS app (Swift, SwiftUI) here, a React web app to follow, and a shared Supabase backend. See `docs/architecture.md`.
 - Never change anything outside this folder. The Expo app's own checkout (`../kiwi-tracker`) and repo stay untouched: don't write, run, install or commit there.
 - The Expo app is the reference implementation. Read and run it only from `.reference/kiwi-tracker`, a git-ignored copy pinned to its frozen commit (`c6db92f`); copy anything this repo needs out of it.
-- Capabilities, flows, rules, copy, branding and empty, loading and error states match the reference; platform chrome uses native components. Follow `.claude/skills/port-feature/SKILL.md` to port a capability.
+- Capabilities, flows, rules, copy, branding and empty, loading and error states match the reference, except that copy naming a domain concept uses its `GLOSSARY.md` term; platform chrome uses native components. Follow `.claude/skills/port-feature/SKILL.md` to port a capability.
 - The apps are online-only: each household's pets, events and photos live in Supabase.
 - `docs/migration-plan.md` says which migration phase is current and what's left in it. Work within the current phase, and follow its ground rules.
 

@@ -45,6 +45,11 @@ Status: [Phase 2 — Accounts and households](docs/migration-plan.md).
 3. Sign in as `alex@kiwi.test` with password `kiwi-local-dev`. Other seeded
    accounts are listed in [supabase/seed.sql](supabase/seed.sql).
 
+To run against the shared project instead, copy `ios/Config/Local.xcconfig` to
+`ios/Config/Shared.xcconfig` (git-ignored), set the shared project's URL and
+publishable key from **Project Settings → API**, and use the
+`KiwiTracker Shared` scheme or `make run-shared`.
+
 Stop with `supabase stop`, then `colima stop`. Stop the Expo repo's stack
 first if it's running: both use the same containers and ports.
 
@@ -54,8 +59,7 @@ From `ios/`: `make lint`, `make build`, `make test`.
 
 ## Docs
 
-- [docs/architecture.md](docs/architecture.md): system and iOS design,
-  environments (including the `KiwiTracker Shared` scheme).
+- [docs/architecture.md](docs/architecture.md): system and iOS design.
 - [docs/supabase.md](docs/supabase.md): data model, local stack, schema
   changes.
 - [docs/migration-plan.md](docs/migration-plan.md): roadmap; tickets and bugs

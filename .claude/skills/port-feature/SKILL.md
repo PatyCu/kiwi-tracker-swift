@@ -16,8 +16,18 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
 ## 1. Read the reference
 
 - Find the capability's routes in `src/app`, its module in `src/modules/<area>`
-  and anything it uses from `src/shared`. The map from Expo folders to iOS
-  targets is in `docs/architecture.md#expo--ios-map`.
+  and anything it uses from `src/shared`. Its iOS home:
+
+  | Expo (`src/…`)                             | iOS (`ios/KiwiKit/Sources/…`)                               |
+  | ------------------------------------------ | ----------------------------------------------------------- |
+  | `app/` (Expo Router)                       | `KiwiFeatures/AppShell` (tabs, stacks, `Route`, URLs)        |
+  | `modules/*/model`, pure rule files         | `KiwiDomain`                                                |
+  | `modules/*/persistence`, `shared/supabase` | `KiwiData`                                                  |
+  | `modules/*/state` (providers)              | `KiwiFeatures/*/State` (`@Observable` models)               |
+  | `modules/*/forms` (hooks)                  | `KiwiFeatures/*/Forms` (`@Observable` form models)          |
+  | `modules/*/ui`                             | `KiwiFeatures/*/UI`                                         |
+  | `shared/theme`, `shared/ui`                | `KiwiDesign`                                                |
+  | `modules/pets/media`                       | `KiwiData` (cache, upload) + `KiwiFeatures/Pets` (picker)   |
 - Read its tests: they are the specification of its rules.
 - List what a person sees: each screen and sheet, every string, and the
   loading, empty, error and Retry states.
@@ -37,7 +47,8 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   asks for one.
 - Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
   operations and load and retry behavior.
-- Screens use native components. Copy every string verbatim from the reference.
+- Screens use native components. Copy every string verbatim from the reference,
+  except that one naming a domain concept uses its `GLOSSARY.md` term.
   Add `#Preview`s for loaded, empty, loading and error.
 
 ## 4. Compare side by side

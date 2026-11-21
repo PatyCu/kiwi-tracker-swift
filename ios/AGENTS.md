@@ -11,7 +11,7 @@ stack and checks. Architecture: `docs/architecture.md#ios-app`.
 - Only `KiwiData` imports Supabase, and `KiwiDomain` imports only Foundation (`make lint` checks both). `KiwiDomain`'s time-dependent rules take `now` and a `Calendar` as input.
 - Use native SwiftUI components for platform chrome (tabs, navigation, sheets, forms, pickers, alerts). A custom control needs a reason in `docs/architecture.md#native-components-and-parity`.
 - Colors come from `KiwiDesign`'s `Palette` (`make lint` flags literals). Text uses Dynamic Type text styles.
-- Copy is matched verbatim to the reference app.
+- Copy is matched verbatim to the reference app, except that copy naming a domain concept uses its `GLOSSARY.md` term.
 - Every screen has `#Preview`s for its loaded, empty, loading and error states, using `KiwiFeatures/PreviewSupport`.
 - Edit the Xcode project with Xcode's synchronized folders: add files on disk, don't hand-edit `project.pbxproj` unless a build setting requires it.
 
