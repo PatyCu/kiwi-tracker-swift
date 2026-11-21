@@ -36,6 +36,7 @@ reference they match.
 - Trunk-based development: scoped changes go to `main` unless a branch is
   requested.
 - Bugs are P0 — fix open bugs before new feature work.
-- Until iOS parity, the roadmap and known bugs live in
-  [docs/migration-plan.md](docs/migration-plan.md); after it, in Linear's Kiwi
-  Tracker project. Never in GitHub Issues or Projects.
+- Until iOS parity, the roadmap lives in
+  [docs/migration-plan.md](docs/migration-plan.md), and each feature's tickets
+  and the known bugs in [tracker/](docs/agents/issue-tracker.md); after it, in
+  Linear's Kiwi Tracker project. Never in GitHub Issues or Projects.

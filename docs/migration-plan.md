@@ -1,19 +1,21 @@
 # Migration plan
 
 Moving Kiwi Tracker from the Expo app to a native iOS app, a React web app and
-a backend owned by this repo. Until iOS parity (Phase 7) this file is the only
-tracker: what's done, what's next, and open bugs. Linear isn't used until then.
+a backend owned by this repo. Until iOS parity (Phase 7) this file is the
+roadmap, and `tracker/` holds each feature's tickets and the open bugs
+([how](agents/issue-tracker.md)). Linear isn't used until then.
 
 **Current phase:** 2 — Accounts and households
 
 ## How to use this file
 
-- One box per deliverable. Tick it in the same commit that finishes it.
+- One box per deliverable. When work on it starts, it gets a folder under `tracker/` with its tickets, linked from the box.
+- Tick a box in the same commit that finishes its last ticket.
 - `KIW-n` is the reference feature in Linear being ported.
 - Work the phases in order, top box first; a phase is done when every box is ticked and its exit check passes.
 - Update **Current phase** when a phase finishes.
 - Add a box only for work that's decided.
-- Log bugs under [Bugs](#bugs) when found; they come before the next box.
+- Log bugs in `tracker/bugs/` when found; they come before the next box.
 
 ## Ground rules
 
@@ -140,9 +142,3 @@ tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 - [ ] "Reference implementation" wording removed from docs
 
 **Exit:** nothing in this repo depends on `.reference/kiwi-tracker`, and it's deleted.
-
-## Bugs
-
-Until Linear resumes, open bugs live here; tick them with the fixing commit's hash.
-
-- None yet

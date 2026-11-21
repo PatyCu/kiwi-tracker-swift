@@ -48,8 +48,8 @@ there.
 - Treat build warnings, console errors and runtime warnings as part of the current task: resolve them before finishing, or explain the cause and the follow-up.
 - Validate changes on the local Supabase stack, never by experimenting on the shared project. Once that passes, apply the change's new migrations to the shared project, open the app on it and hand it over with what to check. The developer checks once there, and nothing is committed or pushed until they approve. Ask first only when a migration could lose data or break an app already on `main`, including the Expo app (a drop, a rename, a type change); additive migrations need no confirmation.
 - When phased delivery is requested, keep a visible checklist and, for each phase, complete implementation, automated validation, validation on the local stack, the developer's check on the shared project, and wrap-up, in that order.
-- Each Markdown document has a single, cohesive purpose; link across documents rather than inlining. Document a capability when it is done, not while it is planned; `docs/migration-plan.md` is the one planning document. The README is the contributor entry point: the current state and how to work on it today.
-- Until iOS parity, `docs/migration-plan.md` is the only roadmap and bug list ("the tracker"); don't use Linear, GitHub Issues or GitHub Projects. After parity, the tracker is Linear's Kiwi Tracker project: follow `.claude/skills/sync-feature-tracker/SKILL.md` and sync it before committing whenever a change alters what an app shows or can do.
+- Each Markdown document has a single, cohesive purpose; link across documents rather than inlining. Document a capability when it is done, not while it is planned; `docs/migration-plan.md` is the one planning document, with the work on each feature under `tracker/`. The README is the contributor entry point: the current state and how to work on it today.
+- Until iOS parity, the tracker is `docs/migration-plan.md` (the roadmap) plus the Markdown files under `tracker/` (each feature's tickets, and the bugs), as `docs/agents/issue-tracker.md` describes; don't use Linear, GitHub Issues or GitHub Projects. After parity, the tracker is Linear's Kiwi Tracker project: follow `.claude/skills/sync-feature-tracker/SKILL.md` and sync it before committing whenever a change alters what an app shows or can do.
 - Update the schema artifact (https://claude.ai/artifact/6RcgQyFvySTzAjBnq8NFuk) before committing whenever a migration changes the Supabase schema. The migrations stay the source of truth; read the artifact with the `Artifact` tool and republish it to the same URL.
 - Treat bugs as P0: log a bug in the tracker when it is found, and fix open bugs before starting new feature work unless the developer decides otherwise. Fixing bugs related to the current change is part of finishing it; log only unrelated bugs for later.
 - When the developer says "wrap up", follow `.claude/skills/wrap-up/SKILL.md`. For "what's next", follow `.claude/skills/next-task-prompt/SKILL.md`.
@@ -59,3 +59,17 @@ there.
 - Keep persisted health data backward-compatible or provide an explicit migration.
 - Do not silently discard user-entered data when storage operations fail.
 - Keep behavior consistent across iOS, web and the reference app unless a platform difference is intentional and documented in `docs/architecture.md`.
+
+## Agent skills
+
+### Issue tracker
+
+`docs/migration-plan.md` and local Markdown files under `tracker/` until iOS parity, then Linear's Kiwi Tracker project. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), as the `Status:` line of a `tracker/` file, then as Linear labels after parity. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` and `docs/adr/` at the repo root, created when needed. See `docs/agents/domain.md`.

@@ -9,7 +9,7 @@ Writes the prompt for the agent that picks up the next task. The developer revie
 
 ## 1. Find the next task
 
-Until iOS parity, the next task is the first open bug in `docs/migration-plan.md`, else the first unticked box in the current phase, skipping boxes this session finished. Don't edit the plan here.
+Until iOS parity, the next task is the lowest-numbered open bug in `tracker/bugs/`; else the first unfinished, unblocked ticket of the feature this session worked on; else the first unticked box in the current phase of `docs/migration-plan.md` (its first open ticket, if it has a `tracker/` folder). Skip work this session finished. Don't edit the plan or the tracker here.
 
 After parity, read the tracker's issues in Linear (see `.claude/skills/sync-feature-tracker/SKILL.md` for how it's organized). Don't change any issues.
 
