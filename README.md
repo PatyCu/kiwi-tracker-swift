@@ -9,11 +9,18 @@ Status: [Phase 2 — Accounts and households](docs/migration-plan.md).
 
 ## Prerequisites
 
-1. Install Xcode 27 with an iOS 26 simulator.
+1. Install Xcode 27 with the iOS 27 simulator runtime (`xcodebuild -downloadPlatform iOS`).
+   The app supports iOS 26; agents need iOS 27 to tap through the Simulator.
 2. Install Colima (Docker runtime) and the Supabase CLI:
 
    ```bash
    brew install colima docker supabase
+   ```
+
+3. Turn on the repo's pre-commit hook, which runs `make lint`:
+
+   ```bash
+   git config core.hooksPath .githooks
    ```
 
 ## Run
@@ -29,7 +36,7 @@ Status: [Phase 2 — Accounts and households](docs/migration-plan.md).
    ```
 
 2. Open the project, pick the `KiwiTracker` scheme and an iPhone simulator,
-   and press Run (⌘R).
+   and press Run (⌘R). Or run `make run` in `ios/`.
 
    ```bash
    open ios/KiwiTracker.xcodeproj
@@ -43,7 +50,7 @@ first if it's running: both use the same containers and ports.
 
 ## Checks
 
-From `ios/`: `make format-check`, `make build`, `make test`.
+From `ios/`: `make lint`, `make build`, `make test`.
 
 ## Docs
 

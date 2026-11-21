@@ -14,16 +14,15 @@ there.
 
 - Kiwi Tracker is a pet care and health tracker for households: a native iOS app (Swift, SwiftUI) here, a React web app to follow, and a shared Supabase backend. See `docs/architecture.md`.
 - Never change anything outside this folder. The Expo app's own checkout (`../kiwi-tracker`) and repo stay untouched: don't write, run, install or commit there.
-- The Expo app is the reference implementation. Read and run it only from `.reference/kiwi-tracker`, a git-ignored copy pinned to its frozen commit (`c6db92f`); copy anything this repo needs out of it.- Capabilities, flows, rules, copy, branding and empty, loading and error states match the reference; platform chrome uses native components. Follow `.claude/skills/port-feature/SKILL.md` to port a capability.
+- The Expo app is the reference implementation. Read and run it only from `.reference/kiwi-tracker`, a git-ignored copy pinned to its frozen commit (`c6db92f`); copy anything this repo needs out of it.
+- Capabilities, flows, rules, copy, branding and empty, loading and error states match the reference; platform chrome uses native components. Follow `.claude/skills/port-feature/SKILL.md` to port a capability.
 - The apps are online-only: each household's pets, events and photos live in Supabase.
 - `docs/migration-plan.md` says which migration phase is current and what's left in it. Work within the current phase, and follow its ground rules.
 
 ## Engineering principles
 
-- Prefer simple, explicit solutions and avoid premature abstractions.
 - Follow existing project patterns before introducing new ones.
 - Add only what the app uses now: no just-in-case columns, code, rules or docs.
-- Keep changes scoped to the requested task; do not modify unrelated files.
 - Explain significant architectural decisions and their trade-offs.
 - Prefer names that communicate responsibility or domain meaning without requiring project-specific knowledge.
 
@@ -38,7 +37,6 @@ there.
 
 ## Workflow
 
-- Inspect the relevant code and configuration before making changes.
 - After refactors, remove obsolete files, declarations, imports, and empty directories.
 - Use trunk-based development by default. When asked to commit and push without an explicit branch request, commit the scoped changes directly to `main` and push `main` upstream; create a separate branch only when explicitly requested.
 - Before asking a developer to repeat setup or authentication, verify whether the failure is caused by sandbox, keychain, network, or permission restrictions in the agent's execution environment.

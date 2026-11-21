@@ -42,6 +42,10 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
 
 ## 4. Compare side by side
 
+Required when the port adds or changes a screen's layout or a multi-step flow. For a
+section of native rows (a `Form` section, a single button), compare the copy and every
+state against the reference component and its test instead, and say so in the handover.
+
 - Run the reference on the iOS Simulator (`npm ci`, then `npm run ios`, in `.reference/kiwi-tracker`)
   and the native app on the local stack, signed in as the same seeded account.
 - Walk every flow from step 1 in both and compare screenshots: content, order,
