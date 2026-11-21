@@ -61,7 +61,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 - [x] Sign in with email and password (KIW-46)
 - [x] Show or hide the password (KIW-98)
-- [ ] Sign out from Settings
+- [x] Sign out from Settings — [tracker](../tracker/sign-out/)
 - [ ] Waiting for the household: loading, error with Retry, no-household screen (KIW-89)
 - [ ] Household alias on Today, Pets and Settings (KIW-88)
 - [ ] Household members by display name in Settings (KIW-91)

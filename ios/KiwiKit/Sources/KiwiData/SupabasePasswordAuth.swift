@@ -18,6 +18,10 @@ public struct SupabasePasswordAuth: PasswordAuth {
     }
   }
 
+  public func signOut() async throws {
+    try await auth.signOut(scope: .local)
+  }
+
   public func signedInUsers() -> AsyncStream<SignedInUser?> {
     let auth = auth
     return AsyncStream { continuation in

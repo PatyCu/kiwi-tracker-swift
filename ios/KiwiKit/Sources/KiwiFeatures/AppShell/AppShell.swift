@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The signed-in app: four tabs, each with its own navigation stack, opened
 /// from `kiwitracker://` URLs. Each tab shows a placeholder until its feature
-/// is ported.
+/// is ported. Expects the `SessionModel` in the environment.
 public struct AppShell: View {
   @State private var navigation: AppNavigation
 
@@ -32,7 +32,7 @@ public struct AppShell: View {
         }
       }
       tab(.settings) {
-        NavigationStack { PlaceholderScreen(tab: .settings) }
+        NavigationStack { SettingsScreen() }
       }
     }
     .tint(Palette.kiwi)
@@ -93,7 +93,7 @@ private struct PlaceholderScreen: View {
 private let previewPetID = UUID()
 
 #Preview("Today") {
-  AppShell()
+  AppShell().previewSession()
 }
 
 #Preview("Pet profile") {
@@ -103,9 +103,11 @@ private let previewPetID = UUID()
       petsPath: [.pet(previewPetID), .petProfile(previewPetID)]
     )
   )
+  .previewSession()
 }
 
 #Preview("Dark") {
   AppShell(navigation: AppNavigation(selectedTab: .calendar))
+    .previewSession()
     .preferredColorScheme(.dark)
 }

@@ -69,6 +69,14 @@ private func settle() async {
     #expect(!changed.withLock { $0 })
   }
 
+  @Test func signsOutThroughAuth() async throws {
+    let auth = RecordingPasswordAuth()
+
+    try await SessionModel(auth: auth).signOut()
+
+    #expect(auth.signOuts == 1)
+  }
+
   @Test func unsubscribesWhenObservingStops() async {
     let auth = RecordingPasswordAuth()
     let task = await observing(SessionModel(auth: auth), auth)

@@ -27,6 +27,9 @@ public protocol PasswordAuth: Sendable {
   /// Signs in and stores the session on the device; `signedInUsers()` then reports the user.
   func signIn(email: String, password: String) async throws(SignInError)
 
+  /// Ends the session on this device only; `signedInUsers()` then reports `nil`.
+  func signOut() async throws
+
   /// The stored user (or `nil`) right away, then the user after every sign-in, sign-out and
   /// token refresh. Ending the iteration unsubscribes.
   func signedInUsers() -> AsyncStream<SignedInUser?>

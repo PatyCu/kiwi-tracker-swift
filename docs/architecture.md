@@ -214,9 +214,11 @@ deselect a day, so it can't match the reference.
   launch is refreshed first, as supabase-js does; if that fails, the app
   shows sign-in. A build without valid Supabase settings shows "Sign-in is
   not available" with the reason instead of crashing.
+- Sign out in Settings ends the session on this device only (local scope),
+  with no confirmation, as in the Expo app. The sign-in form then starts
+  empty, and the next sign-in opens a new tab shell on Today.
 - Unlike AsyncStorage, the Keychain keeps the session when the app is
-  deleted, so reinstalling stays signed in. To see sign-in again in the
-  simulator, run `xcrun simctl keychain booted reset`.
+  deleted, so reinstalling stays signed in; sign out to see sign-in again.
 - Pet photos: scaled to 512px JPEG before upload, stored as
   `<pet_id>/<timestamp>.jpg`, shown through signed links valid for one hour
   and re-signed 10 minutes before expiry. Downloaded images are cached in

@@ -17,6 +17,11 @@ import Observation
     self.auth = auth
   }
 
+  /// Ends the session on this device; `observe()` then switches to signed out.
+  func signOut() async throws {
+    try await auth.signOut()
+  }
+
   /// Follows sign-in and sign-out until the calling task is cancelled.
   func observe() async {
     for await user in auth.signedInUsers() {

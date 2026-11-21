@@ -84,6 +84,27 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(await users.next() == alex)
   }
 
+  @Test func signsOutOnThisDeviceOnly() async throws {
+    let logout = Mutex<URLComponents?>(nil)
+    let backend = try RecordedAuthServer.backend { request, _ in
+      guard request.url?.path() == "/auth/v1/logout" else { return (200, sessionResponse()) }
+      logout.withLock {
+        $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
+      }
+      return (204, "")
+    }
+    let auth = SupabasePasswordAuth(backend: backend)
+    var users = auth.signedInUsers().makeAsyncIterator()
+    #expect(await users.next() == .some(nil))
+    try await auth.signIn(email: "alex@kiwi.test", password: "secret")
+    #expect(await users.next() == alex)
+
+    try await auth.signOut()
+
+    #expect(logout.withLock { $0 }?.queryItems == [URLQueryItem(name: "scope", value: "local")])
+    #expect(await users.next() == .some(nil))
+  }
+
   @Test func waitsForTheRefreshOfAnExpiredStoredSession() async throws {
     let (host, storage) = try await storeExpiredSession()
     let backend = try RecordedAuthServer.backend(host: host, storage: storage) { request, _ in

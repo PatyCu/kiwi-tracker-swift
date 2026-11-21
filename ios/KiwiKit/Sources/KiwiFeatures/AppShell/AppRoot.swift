@@ -48,9 +48,11 @@ private struct SessionRoot: View {
       case .signedOut:
         SignInScreen(auth: auth)
       case .signedIn:
+        // A new shell for each sign-in: every tab starts fresh on Today.
         AppShell()
       }
     }
+    .environment(session)
     .task { await session.observe() }
   }
 }
@@ -62,7 +64,7 @@ private struct SessionRoot: View {
 
   #Preview("Signed in") {
     AppRoot(
-      auth: PreviewPasswordAuth(user: SignedInUser(id: UUID(), email: "alex@kiwi.test"))
+      auth: PreviewPasswordAuth(user: .preview)
     )
   }
 

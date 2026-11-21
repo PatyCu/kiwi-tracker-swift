@@ -1,7 +1,8 @@
 #if DEBUG
   import KiwiDomain
 
-  /// Sign-in for previews: succeeds, fails with an error, or never finishes.
+  /// Sign-in for previews: succeeds, fails with an error, or never finishes. Sign-out always
+  /// succeeds, but the preview stays signed in.
   nonisolated struct PreviewPasswordAuth: PasswordAuth {
     enum Outcome {
       case succeeds
@@ -23,6 +24,8 @@
       case .staysSigningIn: try? await Task.sleep(for: .seconds(3600))
       }
     }
+
+    func signOut() async throws {}
 
     func signedInUsers() -> AsyncStream<SignedInUser?> {
       AsyncStream { $0.yield(user) }
