@@ -4,7 +4,7 @@ Where the engineering skills (`to-tickets`, `to-spec`, `triage`, `wayfinder`) re
 
 ## Until iOS parity: `docs/migration-plan.md` and `tracker/`
 
-[`docs/migration-plan.md`](../migration-plan.md) is the roadmap: phases, one box per feature, and each phase's exit check. The work on a feature, and every bug, lives as Markdown files under `tracker/` at the repo root, committed with the code.
+[`docs/migration-plan.md`](../migration-plan.md) is the roadmap: phases, one checklist line per feature, and each phase's exit check. The work on a feature, and every bug, lives as Markdown files under `tracker/` at the repo root, committed with the code.
 
 ```
 tracker/
@@ -18,15 +18,15 @@ tracker/
     └── 01-<slug>.md
 ```
 
-- **Feature folder**: created when work on a box starts, never ahead of it. The box then links to it: `- [ ] Session kept across launches (KIW-n) — [tracker](../tracker/session-persistence/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
+- **Feature folder**: created when work on a feature starts, never ahead of it. The feature's line in the plan then links to it: `- [ ] Sign out from Settings (KIW-n) — [tracker](../tracker/sign-out/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
 - **Ticket**: one file per piece of work, `issues/NN-<slug>.md`, numbered from `01` in delivery order, never one combined file. The title is the first heading; a `Status:` line follows it (and `Blocked by: NN, NN` when it waits on other tickets); then what to build and what done looks like. Discussion goes at the bottom under `## Comments`.
 - **Status**: one of the triage roles in [`triage-labels.md`](triage-labels.md), `in-progress` once work starts, or `done`, set in the commit that finishes it (`git log` on the file finds that commit). Decided work starts at `ready-for-agent` or `ready-for-human`.
 - **Bug**: `tracker/bugs/NN-<slug>.md`, numbered from `01`, with a `Status:` line, what goes wrong and where it was found. When fixed, `Status: done`. Open bugs come before the next ticket.
-- **Close a feature**: when its last ticket is `done`, tick its box in the plan in the same commit.
+- **Close a feature**: when its last ticket is `done`, tick it off in the plan in the same commit.
 
 ### When a skill says "publish to the issue tracker"
 
-Create the file under the feature's folder (creating the folder, and linking it from its box, if needed), or under `tracker/bugs/` for a bug. Add a box to the plan only for decided work that isn't there yet.
+Create the file under the feature's folder (creating the folder, and linking it from the feature's line in the plan, if needed), or under `tracker/bugs/` for a bug. Add a feature to the plan only for decided work that isn't there yet.
 
 ### When a skill says "fetch the relevant ticket"
 

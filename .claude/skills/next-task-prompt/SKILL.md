@@ -9,7 +9,7 @@ Writes the prompt for the agent that picks up the next task. The developer revie
 
 ## 1. Find the next task
 
-Until iOS parity, the next task is the lowest-numbered open bug in `tracker/bugs/`; else the first unfinished, unblocked ticket of the feature this session worked on; else the first unticked box in the current phase of `docs/migration-plan.md` (its first open ticket, if it has a `tracker/` folder). Skip work this session finished. Don't edit the plan or the tracker here.
+Until iOS parity, the next task is the lowest-numbered open bug in `tracker/bugs/`; else the first unfinished, unblocked ticket of the feature this session worked on; else the first unticked feature in the current phase of `docs/migration-plan.md` (its first open ticket, if it has a `tracker/` folder). Skip work this session finished. Don't edit the plan or the tracker here.
 
 After parity, read the tracker's issues in Linear (see `.claude/skills/sync-feature-tracker/SKILL.md` for how it's organized). Don't change any issues.
 
@@ -28,7 +28,7 @@ Write in first person, as the developer ("I want to…", "We decided…"). Keep 
 - What was deliberately left for this task or for later, so it isn't redone or pulled in early.
 - Pointers to the relevant files, docs or artifacts instead of copying their content.
 
-For each line, ask whether the next agent would lose real time or go the wrong way without it; leave it out otherwise. Base "done" on the plan box and its phase's exit check (the Linear issue after parity); if you think it needs more scope than that says, tell the developer outside the prompt.
+For each line, ask whether the next agent would lose real time or go the wrong way without it; leave it out otherwise. Base "done" on the plan's feature line and its phase's exit check (the Linear issue after parity); if you think it needs more scope than that says, tell the developer outside the prompt.
 
 Leave out anything the next agent does anyway: reading `AGENTS.md`, following repo rules, running checks, syncing the tracker. The prompt carries the developer's approval, so write requested actions as approved and never add "ask me first" for something the prompt asks for. Add a stop-and-ask only for a decision the prompt really leaves open.
 

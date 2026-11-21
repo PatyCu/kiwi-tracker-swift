@@ -21,7 +21,7 @@ Stop and report to the developer whenever a step fails. Don't skip ahead.
 
 ## 2. Sync the feature tracker
 
-Set `Status: done` on the `tracker/` tickets and bugs this work finishes, tick the plan boxes whose last ticket is now done in `docs/migration-plan.md`, and if that finishes the phase, update **Current phase**. See `docs/agents/issue-tracker.md`.
+Set `Status: done` on the `tracker/` tickets and bugs this work finishes, tick off the plan's features whose last ticket is now done in `docs/migration-plan.md`, and if that finishes the phase, update **Current phase**. See `docs/agents/issue-tracker.md`.
 
 After iOS parity, also sync Linear when `AGENTS.md` calls for it, following `.claude/skills/sync-feature-tracker/SKILL.md`. This step is the exception to stopping on failure: if Linear can't be updated, say which records are out of date and carry on.
 

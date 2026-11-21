@@ -1,42 +1,57 @@
 # Kiwi Tracker (native)
 
-A pet care and health tracker for households: log symptoms, diet changes and
-other events per pet, plan care in a calendar, and see an at-a-glance health
-status across all pets.
-
-This repository holds the native iOS app (Swift, SwiftUI) and, as their work
-starts, the React web app and the Supabase backend. The Expo app,
+Pet care and health tracker for households. This repo holds the native iOS app
+(SwiftUI) and the Supabase backend. The Expo app,
 [PatyCu/kiwi-tracker](https://github.com/PatyCu/kiwi-tracker), is the
-reference they match.
+reference it matches.
 
-> Status: Phase 1 (Foundation). The Supabase backend and the Xcode project
-> live here; the app shows no screens yet.
-
-## Docs
-
-- [docs/architecture.md](docs/architecture.md) — system design, iOS
-  architecture, environments and testing.
-- [docs/supabase.md](docs/supabase.md) — data model, accounts, local stack
-  and schema changes.
-- [docs/migration-plan.md](docs/migration-plan.md) — migration phases and
-  where we are.
-- [AGENTS.md](AGENTS.md) and [ios/AGENTS.md](ios/AGENTS.md) — engineering
-  principles, workflow and checks, for people and agents.
+Status: [Phase 2 — Accounts and households](docs/migration-plan.md).
 
 ## Prerequisites
 
-- Xcode 27 with an iOS 26 simulator.
-- The Supabase CLI and a Docker-compatible runtime (Colima); see
-  [docs/supabase.md](docs/supabase.md#local-development).
-- The reference app's pinned copy at `.reference/kiwi-tracker` (see
-  [Phase 0](docs/migration-plan.md#phase-0--decisions-and-setup)).
+1. Install Xcode 27 with an iOS 26 simulator.
+2. Install Colima (Docker runtime) and the Supabase CLI:
 
-## Contributing
+   ```bash
+   brew install colima docker supabase
+   ```
 
-- Trunk-based development: scoped changes go to `main` unless a branch is
-  requested.
-- Bugs are P0 — fix open bugs before new feature work.
-- Until iOS parity, the roadmap lives in
-  [docs/migration-plan.md](docs/migration-plan.md), and each feature's tickets
-  and the known bugs in [tracker/](docs/agents/issue-tracker.md); after it, in
-  Linear's Kiwi Tracker project. Never in GitHub Issues or Projects.
+## Run
+
+1. Start the backend from the repo root. It applies the migrations and seed.
+
+   ```bash
+   colima start --cpu 4 --memory 6
+   ```
+
+   ```bash
+   supabase start
+   ```
+
+2. Open the project, pick the `KiwiTracker` scheme and an iPhone simulator,
+   and press Run (⌘R).
+
+   ```bash
+   open ios/KiwiTracker.xcodeproj
+   ```
+
+3. Sign in as `alex@kiwi.test` with password `kiwi-local-dev`. Other seeded
+   accounts are listed in [supabase/seed.sql](supabase/seed.sql).
+
+Stop with `supabase stop`, then `colima stop`. Stop the Expo repo's stack
+first if it's running: both use the same containers and ports.
+
+## Checks
+
+From `ios/`: `make format-check`, `make build`, `make test`.
+
+## Docs
+
+- [docs/architecture.md](docs/architecture.md): system and iOS design,
+  environments (including the `KiwiTracker Shared` scheme).
+- [docs/supabase.md](docs/supabase.md): data model, local stack, schema
+  changes.
+- [docs/migration-plan.md](docs/migration-plan.md): roadmap; tickets and bugs
+  are under [tracker/](docs/agents/issue-tracker.md).
+- [AGENTS.md](AGENTS.md) and [ios/AGENTS.md](ios/AGENTS.md): engineering rules
+  and workflow.

@@ -9,13 +9,13 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 ## How to use this file
 
-- One box per deliverable. When work on it starts, it gets a folder under `tracker/` with its tickets, linked from the box.
-- Tick a box in the same commit that finishes its last ticket.
+- One checklist line per feature. When work on it starts, it gets a folder under `tracker/` with its tickets, linked from that line.
+- Tick a feature off in the same commit that finishes its last ticket.
 - `KIW-n` is the reference feature in Linear being ported.
-- Work the phases in order, top box first; a phase is done when every box is ticked and its exit check passes.
+- Work the phases in order, top feature first; a phase is done when every feature is ticked off and its exit check passes.
 - Update **Current phase** when a phase finishes.
-- Add a box only for work that's decided.
-- Log bugs in `tracker/bugs/` when found; they come before the next box.
+- Add a feature only for work that's decided.
+- Log bugs in `tracker/bugs/` when found; they come before the next feature.
 
 ## Ground rules
 
@@ -61,7 +61,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 - [x] Sign in with email and password (KIW-46)
 - [x] Show or hide the password (KIW-98)
-- [ ] Session kept across launches; sign out from Settings
+- [ ] Sign out from Settings
 - [ ] Waiting for the household: loading, error with Retry, no-household screen (KIW-89)
 - [ ] Household alias on Today, Pets and Settings (KIW-88)
 - [ ] Household members by display name in Settings (KIW-91)
