@@ -4,7 +4,7 @@ Moving Kiwi Tracker from the Expo app to a native iOS app, a React web app and
 a backend owned by this repo. Until iOS parity (Phase 7) this file is the only
 tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 
-**Current phase:** 1 — Foundation
+**Current phase:** 2 — Accounts and households
 
 ## How to use this file
 
@@ -50,8 +50,8 @@ tracker: what's done, what's next, and open bugs. Linear isn't used until then.
 - [x] Supabase client and generated Swift row types (`make db-types`)
 - [x] Palette, app icon and logo in `KiwiDesign`
 - [x] Shared components: load/error state with Retry, placeholder card, section header
-- [ ] App shell: four tabs with placeholders, `Route`, `kiwitracker://` URLs
-- [ ] `make format-check`, `make build`, `make test` pass
+- [x] App shell: four tabs with placeholders, `Route`, `kiwitracker://` URLs
+- [x] `make format-check`, `make build`, `make test` pass
 
 **Exit:** the app launches on the simulator against the local stack and shows the four tabs.
 

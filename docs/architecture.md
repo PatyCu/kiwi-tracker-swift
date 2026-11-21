@@ -161,7 +161,7 @@ sequenceDiagram
 | Pets and Calendar stacks            | One `NavigationStack` per tab, with a typed path of `Route` values (`.pet(petID)`, `.petProfile(petID)`, `.record(petID, recordID)`). |
 | `ModalSheet` (custom)               | `.sheet` with `presentationDetents`.                                          |
 | Confirm dialogs (`dialogs.ts`)      | `.confirmationDialog` / `.alert`.                                             |
-| `kiwitracker://` scheme             | Same URL scheme, handled with `onOpenURL` mapped to `Route`.                  |
+| `kiwitracker://` scheme             | Same URL scheme and paths, handled with `onOpenURL` mapped to the tab and its `Route` path, with parent screens under the last one so Back works. Any other URL shows a "Page not found" alert with "Return to Today". |
 | Root layout waits for the household | Root view switches on session and household state: sign-in, loading, no household, error with Retry, tabs. |
 
 Routes carry IDs, never objects, so required context stays explicit (pet
@@ -286,7 +286,7 @@ The same rules exist in Swift and TypeScript, so they can drift.
 
 | Expo (`src/…`)                           | iOS (`ios/KiwiKit/Sources/…`)                         |
 | ---------------------------------------- | ----------------------------------------------------- |
-| `app/` (Expo Router)                     | App target root view, `Route`, tab stacks             |
+| `app/` (Expo Router)                     | `KiwiFeatures/AppShell` (tabs, stacks, `Route`, URLs); the app target shows it |
 | `modules/*/model`, pure rule files       | `KiwiDomain`                                          |
 | `modules/*/persistence`, `shared/supabase` | `KiwiData`                                          |
 | `modules/*/state` (providers)            | `KiwiFeatures/*/State` (`@Observable` models)         |

@@ -38,6 +38,16 @@
                ReferencedContainer = "container:KiwiKit">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "KiwiFeaturesTests"
+               BuildableName = "KiwiFeaturesTests"
+               BlueprintName = "KiwiFeaturesTests"
+               ReferencedContainer = "container:KiwiKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

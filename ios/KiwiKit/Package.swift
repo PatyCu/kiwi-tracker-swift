@@ -34,5 +34,10 @@ let package = Package(
       dependencies: ["KiwiDomain", "KiwiDesign"],
       swiftSettings: mainActorByDefault
     ),
+    .testTarget(
+      name: "KiwiFeaturesTests",
+      dependencies: ["KiwiFeatures"],
+      swiftSettings: mainActorByDefault
+    ),
   ]
 )
