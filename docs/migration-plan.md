@@ -12,7 +12,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - One checklist line per feature. When work on it starts, it gets a folder under `tracker/` with its tickets, linked from that line.
 - Tick a feature off in the same commit that finishes its last ticket.
 - `KIW-n` is the reference feature in Linear being ported.
-- Work the phases in order, top feature first; a phase is done when every feature is ticked off and its exit check passes.
+- Work the phases in order, top feature first; a phase is done when every feature is ticked off and its exit check passes, on evidence its features' validation already gathered; walk only what they didn't cover.
 - Update **Current phase** when a phase finishes.
 - Add a feature only for work that's decided.
 - Log bugs in `tracker/bugs/` when found; they come before the next feature.

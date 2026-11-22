@@ -34,7 +34,7 @@ conventions of the part being changed ([iOS](ios/CONVENTIONS.md),
 
 ### Issue tracker
 
-`docs/migration-plan.md` and local Markdown files under `tracker/` until iOS parity, then Linear's Kiwi Tracker project. See `docs/agents/issue-tracker.md`.
+`docs/migration-plan.md` and local Markdown files under `tracker/` until iOS parity, then Linear's Kiwi Tracker project. Read `docs/agents/issue-tracker.md` before changing a `tracker/` file's `Status:` or a checkbox in the plan.
 
 ### Triage labels
 
