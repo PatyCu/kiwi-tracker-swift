@@ -4,9 +4,9 @@ import SwiftUI
 
 /// The signed-in app: four tabs, each with its own navigation stack, for the
 /// loaded `household`, which it also puts in the environment, its `members`,
-/// which Settings loads, and its `pets`, loaded since sign-in. Each tab shows a
-/// placeholder until its feature is ported. Expects the `SessionModel` in the
-/// environment.
+/// which Settings loads, and its `pets`, loaded since sign-in, which Today and
+/// Pets share. A tab shows a placeholder until its feature is ported. Expects
+/// the `SessionModel` in the environment.
 struct MainTabView: View {
   private let household: Household
   private let members: MembersModel
@@ -29,9 +29,7 @@ struct MainTabView: View {
     @Bindable var navigation = navigation
     TabView(selection: $navigation.selectedTab) {
       tab(.today) {
-        NavigationStack {
-          PlaceholderScreen(tab: .today, navigationTitle: todayTitle(for: household))
-        }
+        NavigationStack { TodayScreen(household: household, model: pets) }
       }
       tab(.pets) {
         NavigationStack(path: $navigation.petsPath) {
@@ -76,19 +74,15 @@ extension View {
 struct PlaceholderScreen: View {
   let title: String
   let systemImage: String
-  let navigationTitle: String
 
   init(title: String, systemImage: String) {
     self.title = title
     self.systemImage = systemImage
-    navigationTitle = title
   }
 
-  /// The tab's placeholder, titled with the tab's label unless `navigationTitle` is given.
-  init(tab: AppTab, navigationTitle: String? = nil) {
-    title = tab.title
-    systemImage = tab.systemImage
-    self.navigationTitle = navigationTitle ?? tab.title
+  /// The tab's placeholder, titled with the tab's label.
+  init(tab: AppTab) {
+    self.init(title: tab.title, systemImage: tab.systemImage)
   }
 
   var body: some View {
@@ -101,7 +95,7 @@ struct PlaceholderScreen: View {
       .padding()
     }
     .background(Palette.bg)
-    .navigationTitle(navigationTitle)
+    .navigationTitle(title)
   }
 }
 

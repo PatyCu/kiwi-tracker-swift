@@ -5,7 +5,8 @@ import SwiftUI
 
 /// The Pets tab, as the reference app's `PetsScreen`: the Household's Pets as a row of selector
 /// cards, the first selected by default, above a placeholder for the selected Pet's overview.
-/// Selecting a card changes the selection in place, without pushing a screen.
+/// Selecting a card changes the selection in place, without pushing a screen. With no Pets, the
+/// no-pets card.
 struct PetsScreen: View {
   let household: Household
   let model: PetsModel
@@ -23,8 +24,12 @@ struct PetsScreen: View {
         if let selected = selectedPet(selectedPetID, in: pets) {
           selector(pets: pets, selected: selected)
         } else {
-          // The no-pets card replaces this with KIW-84.
-          PlaceholderScreen(tab: .pets, navigationTitle: petsTitle(for: household))
+          ScrollView {
+            NoPetsCard(
+              description: "Add a pet to keep their profile, photo and health history together."
+            )
+            .padding()
+          }
         }
       }
     }

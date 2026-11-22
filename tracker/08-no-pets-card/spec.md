@@ -1,6 +1,6 @@
 # No pets yet card on Today and Pets (KIW-84)
 
-Status: ready-for-agent
+Status: in-progress
 
 ## Problem Statement
 
