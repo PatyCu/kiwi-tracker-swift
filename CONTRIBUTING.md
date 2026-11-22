@@ -40,9 +40,9 @@ change is checked against the [architecture principles](docs/architecture.md).
 - A new production dependency only with the developer's approval.
 - Build warnings, console errors and runtime warnings are part of the change:
   fix them, or explain their cause and the follow-up.
-- A decision that is hard to reverse, surprising without context and the result
-  of a real trade-off gets an ADR: `docs/adr/NNNN-<slug>.md`, a few sentences
-  on the context, the decision and why.
+- A decision that is hard to reverse or shapes the architecture (how modules,
+  data or systems fit together) gets an ADR: `docs/adr/NNNN-<slug>.md`, a few
+  sentences on the context, the decision and why.
 - Each Markdown document has one purpose; link to another document rather than
   copying from it. Document a capability when it's done, not while it's
   planned: `docs/migration-plan.md` is the one planning document.

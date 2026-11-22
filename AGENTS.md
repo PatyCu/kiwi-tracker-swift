@@ -43,3 +43,7 @@ The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready
 ### Domain docs
 
 Single-context: `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Prototypes
+
+A prototype only helps the developer decide. Once they have, delete it and its branch, and leave it out of specs, ADRs and the tracker unless they ask; this replaces the prototype skill's capture step.
