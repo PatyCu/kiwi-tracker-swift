@@ -3,12 +3,13 @@ import KiwiDomain
 import SwiftUI
 
 /// The Today tab, as the reference app's `TodayScreen`: loading or the error with Retry until the
-/// Household's Pets load, then the no-pets card when there are none. Today's content for a
-/// Household with Pets is still a placeholder.
+/// Household's Pets load, then the no-pets card, which adds the first Pet, when there are none.
+/// Today's content for a Household with Pets is still a placeholder.
 struct TodayScreen: View {
   let household: Household
   /// The Pets loaded since sign-in, shared with the Pets tab, so Retry here updates both.
   let model: PetsModel
+  @State private var addingPet = false
 
   var body: some View {
     Group {
@@ -20,7 +21,8 @@ struct TodayScreen: View {
       case .ready(let loaded) where loaded.isEmpty:
         ScrollView {
           NoPetsCard(
-            description: "Add a pet to see how they're doing today and log what happens."
+            description: "Add a pet to see how they're doing today and log what happens.",
+            onAdd: { addingPet = true }
           )
           .padding()
         }
@@ -38,6 +40,9 @@ struct TodayScreen: View {
     }
     .background(Palette.bg)
     .navigationTitle(todayTitle(for: household))
+    .sheet(isPresented: $addingPet) {
+      PetDetailsSheet(pets: model, householdID: household.id)
+    }
   }
 
   private func retry() {

@@ -18,6 +18,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "KiwiDomain", swiftSettings: strict),
+    .testTarget(name: "KiwiDomainTests", dependencies: ["KiwiDomain"], swiftSettings: strict),
     .target(
       name: "KiwiData",
       dependencies: ["KiwiDomain", .product(name: "Supabase", package: "supabase-swift")],

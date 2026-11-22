@@ -5,12 +5,15 @@
   extension Pet {
     /// The preview Household's Pets, sorted by name, as the seeded shared Household's.
     nonisolated static let previews = [
-      Pet(id: UUID(), name: "Kiwi", species: .cat),
+      Pet(
+        id: UUID(), name: "Kiwi", species: .cat, breed: "European shorthair",
+        birthDate: BirthDate(year: 2021, month: 4, day: 12)),
       Pet(id: UUID(), name: "Luna", species: .dog),
     ]
   }
 
-  /// The Pets for previews: loads them, fails, or never finishes.
+  /// The Pets for previews: loads them, fails, or never finishes. Saves answer after a moment
+  /// with the Pet as sent, fail, or never finish, as `save` says.
   nonisolated struct PreviewPetStore: PetStore {
     enum Outcome {
       case loads([Pet])
@@ -18,7 +21,14 @@
       case staysLoading
     }
 
+    enum SaveOutcome {
+      case saves
+      case fails
+      case staysSaving
+    }
+
     var outcome = Outcome.loads(Pet.previews)
+    var save = SaveOutcome.saves
 
     func loadPets() async throws(PetStoreError) -> [Pet] {
       switch outcome {
@@ -29,13 +39,32 @@
         return []
       }
     }
+
+    func addPet(_ details: PetDetails, to householdID: UUID) async throws(PetStoreError) -> Pet {
+      try await stored(details, id: UUID())
+    }
+
+    func updatePet(_ id: UUID, _ details: PetDetails) async throws(PetStoreError) -> Pet {
+      try await stored(details, id: id)
+    }
+
+    private func stored(_ details: PetDetails, id: UUID) async throws(PetStoreError) -> Pet {
+      try? await Task.sleep(for: .seconds(save == .staysSaving ? 3600 : 1))
+      if save == .fails { throw .couldNotSave }
+      return Pet(
+        id: id, name: details.name, species: details.species, breed: details.breed,
+        birthDate: details.birthDate)
+    }
   }
 
   extension PetsModel {
     /// Pets for previews, already loading from `PreviewPetStore`, as the app starts the load at
     /// sign-in.
-    static func preview(_ outcome: PreviewPetStore.Outcome = .loads(Pet.previews)) -> PetsModel {
-      let model = PetsModel(store: PreviewPetStore(outcome: outcome))
+    static func preview(
+      _ outcome: PreviewPetStore.Outcome = .loads(Pet.previews),
+      save: PreviewPetStore.SaveOutcome = .saves
+    ) -> PetsModel {
+      let model = PetsModel(store: PreviewPetStore(outcome: outcome, save: save))
       Task { await model.load() }
       return model
     }

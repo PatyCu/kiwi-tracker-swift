@@ -3,21 +3,26 @@ import KiwiDomain
 import SwiftUI
 
 /// One Pet in the Pets tab's selector: a paw avatar and the name, with a checkmark and a kiwi
-/// border when selected, as the reference app's `PetSelectorCard`.
+/// border when selected, and an Edit button under the name, as the reference app's
+/// `PetSelectorCard`. Selecting and editing are two sibling buttons, so editing never changes
+/// the selection.
 struct PetSelectorCard: View {
   let pet: Pet
   let isSelected: Bool
   let onSelect: () -> Void
+  let onEdit: () -> Void
 
   var body: some View {
-    Button(action: onSelect) {
-      HStack(alignment: .top, spacing: 10) {
-        Image(systemName: "pawprint.fill")
-          .font(.title3)
-          .foregroundStyle(Palette.kiwi)
-          .frame(width: 58, height: 58)
-          // A kiwi tint, so the avatar stands out on the selected card's surface too.
-          .background(Palette.kiwi.opacity(0.15), in: .rect(cornerRadius: 13))
+    HStack(alignment: .top, spacing: 10) {
+      Image(systemName: "pawprint.fill")
+        .font(.title3)
+        .foregroundStyle(Palette.kiwi)
+        .frame(width: 58, height: 58)
+        // A kiwi tint, so the avatar stands out on the selected card's surface too.
+        .background(Palette.kiwi.opacity(0.15), in: .rect(cornerRadius: 13))
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+      VStack(alignment: .leading, spacing: 4) {
         HStack(spacing: 4) {
           Text(pet.name)
             .font(.subheadline.weight(.heavy))
@@ -29,42 +34,63 @@ struct PetSelectorCard: View {
               .foregroundStyle(Palette.kiwi)
           }
         }
-        .padding(.top, 9)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        Button(action: onEdit) {
+          Text("Edit")
+            .font(.caption2)
+            .underline()
+            .foregroundStyle(Palette.muted)
+            .padding(.vertical, 4)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Edit \(pet.name)")
       }
-      .padding(9)
-      .frame(width: 172, alignment: .leading)
-      .frame(minHeight: 78)
-      .background(isSelected ? Palette.surface : Palette.surface2, in: .rect(cornerRadius: 17))
-      .overlay(
-        RoundedRectangle(cornerRadius: 17)
-          .strokeBorder(isSelected ? Palette.kiwi : Palette.line, lineWidth: isSelected ? 2 : 1)
-      )
-      .contentShape(.rect(cornerRadius: 17))
+      .padding(.top, 9)
+      .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .buttonStyle(.plain)
-    .accessibilityLabel(pet.name)
-    // VoiceOver announces the selection itself, as iOS does for a selected item.
-    .accessibilityAddTraits(isSelected ? .isSelected : [])
+    .padding(9)
+    .frame(width: 172, alignment: .leading)
+    .frame(minHeight: 78, alignment: .top)
+    // The whole card selects; the avatar and name let taps through to it.
+    .background {
+      Button(action: onSelect) {
+        Color.clear.contentShape(.rect(cornerRadius: 17))
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel(pet.name)
+      // VoiceOver announces the selection itself, as iOS does for a selected item.
+      .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+    .background(isSelected ? Palette.surface : Palette.surface2, in: .rect(cornerRadius: 17))
+    .overlay(
+      RoundedRectangle(cornerRadius: 17)
+        .strokeBorder(isSelected ? Palette.kiwi : Palette.line, lineWidth: isSelected ? 2 : 1)
+        .allowsHitTesting(false)
+    )
   }
 }
 
 #if DEBUG
-  private func previewCards() -> some View {
-    HStack(spacing: 10) {
-      PetSelectorCard(pet: Pet.previews[0], isSelected: true) {}
-      PetSelectorCard(pet: Pet.previews[1], isSelected: false) {}
+  private func previewRow() -> some View {
+    ScrollView(.horizontal) {
+      HStack(spacing: 10) {
+        PetSelectorCard(pet: Pet.previews[0], isSelected: true, onSelect: {}, onEdit: {})
+        PetSelectorCard(pet: Pet.previews[1], isSelected: false, onSelect: {}, onEdit: {})
+        AddPetCard {}
+      }
+      .padding()
     }
-    .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Palette.bg)
   }
 
   #Preview("Light") {
-    previewCards().preferredColorScheme(.light)
+    previewRow().preferredColorScheme(.light)
   }
 
   #Preview("Dark") {
-    previewCards().preferredColorScheme(.dark)
+    previewRow().preferredColorScheme(.dark)
   }
 #endif

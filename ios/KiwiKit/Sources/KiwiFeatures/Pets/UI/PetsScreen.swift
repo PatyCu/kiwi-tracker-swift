@@ -4,14 +4,16 @@ import KiwiDomain
 import SwiftUI
 
 /// The Pets tab, as the reference app's `PetsScreen`: the Household's Pets as a row of selector
-/// cards, the first selected by default, above a placeholder for the selected Pet's overview.
-/// Selecting a card changes the selection in place, without pushing a screen. With no Pets, the
-/// no-pets card.
+/// cards, the first selected by default, then the add card, above a placeholder for the selected
+/// Pet's overview. Selecting a card changes the selection in place, without pushing a screen; its
+/// Edit button opens the Pet's details sheet. With no Pets, the no-pets card.
 struct PetsScreen: View {
   let household: Household
   let model: PetsModel
   /// The chosen Pet; `selectedPet(_:in:)` falls back to the first.
   @State private var selectedPetID: UUID?
+  /// The details sheet open now, if any.
+  @State private var details: DetailsRequest?
 
   var body: some View {
     Group {
@@ -26,7 +28,8 @@ struct PetsScreen: View {
         } else {
           ScrollView {
             NoPetsCard(
-              description: "Add a pet to keep their profile, photo and health history together."
+              description: "Add a pet to keep their profile, photo and health history together.",
+              onAdd: { openDetails() }
             )
             .padding()
           }
@@ -35,6 +38,9 @@ struct PetsScreen: View {
     }
     .background(Palette.bg)
     .navigationTitle(petsTitle(for: household))
+    .sheet(item: $details) { request in
+      PetDetailsSheet(pets: model, householdID: household.id, editing: request.pet)
+    }
   }
 
   private func selector(pets: [Pet], selected: Pet) -> some View {
@@ -47,10 +53,14 @@ struct PetsScreen: View {
         ScrollView(.horizontal) {
           HStack(spacing: 10) {
             ForEach(pets) { pet in
-              PetSelectorCard(pet: pet, isSelected: pet.id == selected.id) {
-                selectedPetID = pet.id
-              }
+              PetSelectorCard(
+                pet: pet,
+                isSelected: pet.id == selected.id,
+                onSelect: { selectedPetID = pet.id },
+                onEdit: { openDetails(keeping: selected, editing: pet) }
+              )
             }
+            AddPetCard { openDetails(keeping: selected) }
           }
         }
         .scrollIndicators(.hidden)
@@ -67,9 +77,22 @@ struct PetsScreen: View {
     }
   }
 
+  /// Opens the details sheet. With `selected`, pins the Pet shown now, so a Pet added or renamed
+  /// to sort before it doesn't take its place.
+  private func openDetails(keeping selected: Pet? = nil, editing pet: Pet? = nil) {
+    if let selected { selectedPetID = selected.id }
+    details = DetailsRequest(pet: pet)
+  }
+
   private func retry() {
     Task { await model.load() }
   }
+}
+
+/// Opens the details sheet for adding a Pet, or for editing `pet`.
+private struct DetailsRequest: Identifiable {
+  let id = UUID()
+  let pet: Pet?
 }
 
 #if DEBUG

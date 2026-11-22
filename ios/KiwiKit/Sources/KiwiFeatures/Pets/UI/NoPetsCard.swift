@@ -1,11 +1,12 @@
 import KiwiDesign
 import SwiftUI
 
-/// Shown in place of a tab's content while the Household has no Pets, as the reference app's
-/// `NoPetsCard`. `description` says what adding a Pet unlocks on that tab. The reference's
-/// "Add your first pet" button arrives with the add-pet sheet in KIW-23.
+/// Shown in place of a tab's content while the Household has no Pets, with a way to add the
+/// first one, as the reference app's `NoPetsCard`. `description` says what adding a Pet unlocks
+/// on that tab.
 struct NoPetsCard: View {
   let description: String
+  let onAdd: () -> Void
 
   var body: some View {
     VStack(spacing: 8) {
@@ -23,6 +24,17 @@ struct NoPetsCard: View {
       Text(description)
         .font(.subheadline)
         .foregroundStyle(Palette.muted)
+      Button(action: onAdd) {
+        Text("Add your first pet")
+          .font(.subheadline.weight(.heavy))
+          .foregroundStyle(Palette.ink)
+          .padding(.horizontal, 20)
+          .padding(.vertical, 12)
+          .background(Palette.kiwi, in: .rect(cornerRadius: 14))
+          .contentShape(.rect(cornerRadius: 14))
+      }
+      .buttonStyle(.plain)
+      .padding(.top, 10)
     }
     .multilineTextAlignment(.center)
     .frame(maxWidth: .infinity)
@@ -35,10 +47,12 @@ struct NoPetsCard: View {
 
 #if DEBUG
   private func previewCard() -> some View {
-    NoPetsCard(description: "Add a pet to keep their profile, photo and health history together.")
-      .padding()
-      .frame(maxHeight: .infinity)
-      .background(Palette.bg)
+    NoPetsCard(
+      description: "Add a pet to keep their profile, photo and health history together."
+    ) {}
+    .padding()
+    .frame(maxHeight: .infinity)
+    .background(Palette.bg)
   }
 
   #Preview("Light") {

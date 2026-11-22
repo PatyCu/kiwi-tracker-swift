@@ -32,6 +32,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "KiwiDomainTests"
+               BuildableName = "KiwiDomainTests"
+               BlueprintName = "KiwiDomainTests"
+               ReferencedContainer = "container:KiwiKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "KiwiDataTests"
                BuildableName = "KiwiDataTests"
                BlueprintName = "KiwiDataTests"
