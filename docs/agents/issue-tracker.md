@@ -20,6 +20,7 @@ tracker/
 ```
 
 - **Feature folder**: `NN-<feature-slug>/`, created when work on a feature starts, never ahead of it. `NN` is two digits, one more than the highest feature folder so far (`bugs/` doesn't count). The feature's line in the plan then links to it: `- [ ] Sign out from Settings (KIW-n) — [tracker](../tracker/01-sign-out/)`. `KIW-n` is the reference feature in Linear being ported (read-only context).
+- **Spec**: `spec.md`, written by `/to-spec`. Its Implementation Decisions name only the fields, columns and cases the feature uses now. A feature that is one piece of work is just its spec, with a `Status:` line under the title and no `issues/`; the spec is then its only ticket.
 - **Ticket**: one file per piece of work, `issues/NN-<slug>.md`, numbered from `01` in delivery order, never one combined file. The title is the first heading; a `Status:` line follows it (and `Blocked by: NN, NN` when it waits on other tickets); then what to build and what done looks like. Discussion goes at the bottom under `## Comments`.
 - **Status**: one of the triage roles in [`triage-labels.md`](triage-labels.md), `in-progress` once work starts, or `done`, set in the commit that finishes it (`git log` on the file finds that commit). Decided work starts at `ready-for-agent` or `ready-for-human`.
 - **Bug**: `tracker/bugs/NN-<slug>.md`, numbered from `01`, with a `Status:` line, what goes wrong and where it was found. When fixed, `Status: done`. Open bugs come before the next ticket. A bug that gets a spec keeps it in the same file, under the `Status:` line.

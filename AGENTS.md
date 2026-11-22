@@ -28,6 +28,7 @@ conventions of the part being changed ([iOS](ios/CONVENTIONS.md),
 - When phased delivery is requested, keep a visible checklist and, for each phase, complete implementation, automated validation, validation on the local stack, the developer's check on the shared project, and wrap-up, in that order.
 - Update the schema artifact (https://claude.ai/artifact/6RcgQyFvySTzAjBnq8NFuk) before committing whenever a migration changes the Supabase schema. The migrations stay the source of truth; read the artifact with the `Artifact` tool and republish it to the same URL.
 - After iOS parity, sync Linear with `.claude/skills/sync-feature-tracker/SKILL.md` whenever `CONTRIBUTING.md` calls for a Linear update.
+- A feature goes `/grill-with-docs`, `/to-spec`, then `/implement`, each run by the developer. Running `/implement` approves the spec, so code starts only then; until then the work ends at the written spec.
 - When the developer says "wrap up", follow `.claude/skills/wrap-up/SKILL.md`. For "what's next", follow `.claude/skills/next-task-prompt/SKILL.md`.
 
 ## Agent skills

@@ -10,11 +10,16 @@ what it does and says; native components decide how the chrome looks. The
 parity rule is principles 1 and 2 in `docs/architecture.md`; its exceptions are
 ADRs in `docs/adr/`.
 
+Porting is code, so it runs under `/implement`, once the developer has approved
+the spec by running it (`AGENTS.md#workflow`).
+
 If `.reference/kiwi-tracker` is missing, recreate it as `docs/migration-plan.md`
 Phase 0 describes; never read or run `../kiwi-tracker` instead.
 
 ## 1. Read the reference
 
+- Read it with absolute paths or `git -C .reference/kiwi-tracker`, keeping the
+  working directory at the repo root.
 - Find the capability's routes in `src/app`, its module in `src/modules/<area>`
   and anything it uses from `src/shared`. Its iOS home:
 
@@ -42,9 +47,12 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
 
 ## 3. Data, state, UI
 
-- Stores in `KiwiData` read and write the same columns the reference does, with
-  the same validation before writing. No schema change unless the tracker item
-  asks for one.
+- Stores in `KiwiData` read and write the columns the reference does that this
+  feature uses, with the same validation before writing. No schema change unless
+  the tracker item asks for one.
+- The household load is the worked example of store, model and tests:
+  `SupabaseHouseholdStore`, `HouseholdModel`, `RecordingHouseholdStore` and
+  `HouseholdModelTests`.
 - Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
   operations and load and retry behavior.
 - Screens use native components. Copy every string verbatim from the reference,
