@@ -5,7 +5,7 @@ a backend owned by this repo. Until iOS parity (Phase 7) this file is the
 roadmap, and `tracker/` holds each feature's tickets and the open bugs
 ([how](agents/issue-tracker.md)). Linear isn't used until then.
 
-**Current phase:** 2 — Accounts and households
+**Current phase:** 3 — Pets
 
 ## How to use this file
 
