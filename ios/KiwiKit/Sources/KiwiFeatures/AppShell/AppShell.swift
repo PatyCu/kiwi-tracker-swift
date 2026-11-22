@@ -2,10 +2,10 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// The signed-in app: four tabs, each with its own navigation stack, opened
-/// from `kiwitracker://` URLs, for the loaded `household`, which it also puts in the
-/// environment, and its `members`, which Settings loads. Each tab shows a placeholder until its
-/// feature is ported. Expects the `SessionModel` in the environment.
+/// The signed-in app: four tabs, each with its own navigation stack, for the
+/// loaded `household`, which it also puts in the environment, and its `members`,
+/// which Settings loads. Each tab shows a placeholder until its feature is
+/// ported. Expects the `SessionModel` in the environment.
 struct AppShell: View {
   private let household: Household
   private let members: HouseholdMembersModel
@@ -46,10 +46,6 @@ struct AppShell: View {
     }
     .tint(Palette.kiwi)
     .environment(\.household, household)
-    .onOpenURL { navigation.open($0) }
-    .alert("Page not found", isPresented: $navigation.showsPageNotFound) {
-      Button("Return to Today") { navigation.returnToToday() }
-    }
   }
 
   private func tab(

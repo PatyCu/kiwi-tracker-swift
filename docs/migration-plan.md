@@ -48,7 +48,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Supabase client and generated Swift row types (`make db-types`)
 - [x] Palette, app icon and logo in `KiwiDesign`
 - [x] Shared components: load/error state with Retry, placeholder card, section header
-- [x] App shell: four tabs with placeholders, `Route`, `kiwitracker://` URLs
+- [x] App shell: four tabs with placeholders, `Route`
 - [x] `make format-check`, `make build`, `make test` pass
 
 **Exit:** the app launches on the simulator against the local stack and shows the four tabs.
