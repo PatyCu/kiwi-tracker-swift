@@ -27,3 +27,7 @@ _Avoid_: Username, nickname
 **Household alias**:
 What Members call their Household, shown in titles.
 _Avoid_: Household name
+
+**Pet**:
+An animal a Household cares for. It belongs to exactly one Household, and every Member sees and manages it. Its species is Cat, Dog or Other.
+_Avoid_: Animal, profile
