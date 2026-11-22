@@ -49,7 +49,7 @@ public struct SupabaseConfig: Equatable, Sendable {
 
 public struct SupabaseConfigError: Error, Equatable, CustomStringConvertible {
   private static let setupHint =
-    "Set it in the scheme's xcconfig in ios/Config and rebuild. See docs/architecture.md#environments."
+    "Set it in the scheme's xcconfig in ios/Config and rebuild. See README.md#run."
 
   public let description: String
 

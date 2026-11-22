@@ -1,4 +1,4 @@
-# iOS checks and tasks. Run from ios/. See ios/AGENTS.md.
+# iOS checks and tasks. Run from ios/. See ios/CONVENTIONS.md.
 
 PROJECT      := KiwiTracker.xcodeproj
 SCHEME       := KiwiTracker
@@ -21,7 +21,7 @@ format:
 format-check:
 	swift format lint --strict --recursive --parallel .
 
-# format-check plus the mechanical rules in ios/AGENTS.md.
+# format-check plus the mechanical rules in ios/CONVENTIONS.md.
 lint: format-check
 	scripts/check-conventions.sh
 
@@ -57,7 +57,7 @@ run run-shared:
 
 # Regenerates the Supabase row types from the local stack's schema.
 # Pinned to CLI 2.121.0: later CLIs emit supabase-swift v3 `@Table` types, and
-# KiwiData is on v2 (docs/architecture.md#ios-app).
+# KiwiData stays on stable v2 until v3 is released.
 SUPABASE_TYPEGEN_CLI := npx --yes supabase@2.121.0
 
 db-types:

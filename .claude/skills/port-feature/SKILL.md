@@ -7,8 +7,8 @@ description: Port a capability from the Expo reference app (.reference/kiwi-trac
 
 The Expo app at `.reference/kiwi-tracker` (pinned to `c6db92f`) is the reference. The iOS app matches
 what it does and says; native components decide how the chrome looks. The
-parity rule and its documented exceptions are in
-`docs/architecture.md#native-components-and-parity`.
+parity rule is principles 1 and 2 in `docs/architecture.md`; its exceptions are
+ADRs in `docs/adr/`.
 
 If `.reference/kiwi-tracker` is missing, recreate it as `docs/migration-plan.md`
 Phase 0 describes; never read or run `../kiwi-tracker` instead.
@@ -63,9 +63,10 @@ state against the reference component and its test instead, and say so in the ha
   copy, states and what each action does. Chrome may differ where a native
   component replaces a custom one; nothing else may.
 - Fix differences, or list the ones that are intentional for the developer to
-  confirm, and record confirmed ones in `docs/architecture.md`.
+  confirm, and record confirmed ones as ADRs in `docs/adr/`.
 
 ## 5. Hand over
 
-Continue with the root `AGENTS.md` workflow: checks, local validation, the
-developer's check on the shared project, tracker sync and wrap-up.
+Continue with `CONTRIBUTING.md#validate` and the root `AGENTS.md` workflow:
+checks, local validation, the developer's check on the shared project, tracker
+sync and wrap-up.

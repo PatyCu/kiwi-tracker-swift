@@ -5,13 +5,13 @@ description: Finish the current piece of work, from final checks to a clean work
 
 # Wrap up
 
-Takes finished work from the working tree to published and cleaned up. Follow the rules in `AGENTS.md`; this skill only orders the steps and doesn't restate those rules.
+Takes finished work from the working tree to published and cleaned up. Follow the rules in `CONTRIBUTING.md` and `AGENTS.md`; this skill only orders the steps and doesn't restate those rules.
 
 Stop and report to the developer whenever a step fails. Don't skip ahead.
 
 ## 1. Check the work is done
 
-- The developer has checked the change on the shared project and approved it, as `AGENTS.md` describes. If not, stop: set up that check instead.
+- The developer has checked the change on the shared project and approved it, as `CONTRIBUTING.md#validate` describes. If not, stop: set up that check instead.
 - Related bugs are part of done. If a bug caused by or tied to this change is still open, fix it first, or stop and ask the developer.
 - Match the checks to what changed. Any failure or warning stops the wrap-up.
   - **iOS code or config** (`ios/**`: `.swift`, `.xcconfig`, project, package or asset files): run `make lint`, `make build` and `make test` in `ios/`.
@@ -27,7 +27,7 @@ After iOS parity, also sync Linear when `AGENTS.md` calls for it, following `.cl
 
 ## 3. Commit
 
-One commit, one line, in the repo's style: `type: what changed, in plain words` (for example `feat: on iOS, edit an event's details from the event detail screen`). Types used here: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`. Make the line specific enough that the log alone says what changed. End the message with the attribution lines the environment asks for.
+One commit in the style `CONTRIBUTING.md#commit` describes (for example `feat: on iOS, edit an event's details from the event detail screen`). End the message with the attribution lines the environment asks for.
 
 ## 4. Publish
 

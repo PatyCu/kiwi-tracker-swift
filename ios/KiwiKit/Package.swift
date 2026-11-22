@@ -2,7 +2,7 @@
 
 import PackageDescription
 
-// Module boundaries: docs/architecture.md#modules.
+// Module boundaries: ios/CONVENTIONS.md#modules.
 let strict: [SwiftSetting] = [.treatAllWarnings(as: .error)]
 let mainActorByDefault: [SwiftSetting] = strict + [.defaultIsolation(MainActor.self)]
 

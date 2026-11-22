@@ -8,7 +8,7 @@ DerivedData/
 # Created when KiwiKit is resolved on its own; the Xcode project's lockfile is the one used
 ios/KiwiKit/Package.resolved
 
-# Shared Supabase project connection (see docs/architecture.md#environments)
+# Shared Supabase project connection (see README.md#run)
 ios/Config/Shared.xcconfig
 
 # Pinned copy of the Expo reference app (see AGENTS.md)

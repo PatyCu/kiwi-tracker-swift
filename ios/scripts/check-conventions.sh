@@ -1,5 +1,5 @@
 #!/bin/sh
-# The mechanical rules in ios/AGENTS.md. Run from ios/ by `make lint`.
+# The mechanical rules in ios/CONVENTIONS.md. Run from ios/ by `make lint`.
 status=0
 
 report() {

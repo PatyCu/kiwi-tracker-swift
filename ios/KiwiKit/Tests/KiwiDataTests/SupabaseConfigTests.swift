@@ -46,6 +46,6 @@ private let publishableKey = "sb_publishable_test"
     let error = #expect(throws: SupabaseConfigError.self) {
       try SupabaseConfig(url: nil, publishableKey: nil)
     }
-    #expect(error?.description.contains("docs/architecture.md#environments") == true)
+    #expect(error?.description.contains("README.md#run") == true)
   }
 }

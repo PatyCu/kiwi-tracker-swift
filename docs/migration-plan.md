@@ -20,12 +20,8 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 ## Ground rules
 
 - The Expo app is the reference until Phase 9: match it, don't redesign.
-- Nothing outside this folder changes: the Expo app and its repo stay untouched and keep working as they are.
 - Whatever we need from the Expo app is copied from `.reference/kiwi-tracker`, never used in place.
-- All apps share the Expo app's Supabase project (same accounts and data).
-- Parity needs no migrations; any later schema change stays additive until the Expo app is retired.
 - Each port ships with its rules' tests ported case for case.
-- Every feature goes through the normal workflow: local stack → developer's check on shared → wrap-up.
 
 ## Phase 0 — Decisions and setup
 
@@ -41,7 +37,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Linear paused until iOS parity, then back to the existing Kiwi Tracker project
 - [x] GitHub repo created (public) and `main` pushed
 
-**Exit:** every decision above is recorded in `docs/architecture.md`.
+**Exit:** every architecture decision above is recorded in [`docs/adr/`](adr/).
 
 ## Phase 1 — Foundation
 
@@ -116,7 +112,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 ## Phase 7 — iOS parity sign-off and release
 
-- [ ] Full side-by-side walkthrough of every screen and flow; differences fixed or documented
+- [ ] Full side-by-side walkthrough of every screen and flow; differences fixed or recorded as ADRs
 - [ ] VoiceOver and Dynamic Type pass on every screen
 - [ ] Fixed Expo bugs re-checked on iOS (KIW-5, KIW-6, KIW-7, KIW-99, KIW-100, KIW-105)
 - [ ] TestFlight build (iOS part of KIW-21)
@@ -127,7 +123,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 ## Phase 8 — Web app
 
-- [ ] `web/` with React, TypeScript, Vite, React Router, supabase-js, its own `AGENTS.md`
+- [ ] `web/` with React, TypeScript and supabase-js, its stack recorded as an ADR, its own `AGENTS.md` and `CONVENTIONS.md`
 - [ ] Domain rule cases moved to shared JSON fixtures, read by both test suites
 - [ ] Phases 2–6 ported to web, including wide layouts (sidebar navigation, month grid)
 - [ ] Screen-reader states on web (KIW-104)

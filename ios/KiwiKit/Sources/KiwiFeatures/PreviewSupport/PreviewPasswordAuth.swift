@@ -12,7 +12,7 @@
 
     static let setupError =
       "SUPABASE_URL is not set. Set it in the scheme's xcconfig in ios/Config and rebuild. "
-      + "See docs/architecture.md#environments."
+      + "See README.md#run."
 
     var outcome = Outcome.succeeds
     var user: SignedInUser?
