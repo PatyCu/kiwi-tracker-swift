@@ -20,7 +20,7 @@ The app loads the signed-in Account's Pets at sign-in. The Pets tab shows "Choos
 6. As a Member whose Pets are loading, I want to see loading, so that I know the tab isn't empty.
 7. As a Member whose Pets couldn't load, I want the error with Retry, so that I can try again.
 8. As a person signing in as another Account, I want to see only that Account's Household's Pets, never the previous Account's.
-9. As a Member using VoiceOver, I want each card read as the Pet's name, with ", selected pet" on the selected one.
+9. As a Member using VoiceOver, I want each card read as the Pet's name, and the selected one announced as selected.
 10. As a Member using Dynamic Type, I want the cards' text to scale.
 
 ## Implementation Decisions
@@ -34,6 +34,7 @@ The app loads the signed-in Account's Pets at sign-in. The Pets tab shows "Choos
 - **Selection**: tab state, not a route: the selected Pet's id, defaulting to the first Pet and falling back to it when the selected Pet is gone. `Route` is unchanged; `Route.pet` stays the pushed overview.
 - **Help line**: "pet" where the reference says "Choose the profile you want to manage.", since the glossary's term is Pet; confirmed by the developer.
 - **Avatar**: a kiwi tint behind the paw, where the reference uses the card's surface color and the selected card hides it; confirmed by the developer.
+- **VoiceOver**: the selected card is the Pet's name with iOS's Selected trait ("Selected, Kiwi, button"), where the reference's label adds ", selected pet"; confirmed by the developer.
 - **Title**: the navigation title stays "Pets in {alias}" (KIW-88); the help line is the first row of the content.
 
 ## Testing Decisions

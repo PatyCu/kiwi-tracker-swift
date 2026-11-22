@@ -43,7 +43,9 @@ struct PetSelectorCard: View {
       .contentShape(.rect(cornerRadius: 17))
     }
     .buttonStyle(.plain)
-    .accessibilityLabel(isSelected ? "\(pet.name), selected pet" : pet.name)
+    .accessibilityLabel(pet.name)
+    // VoiceOver announces the selection itself, as iOS does for a selected item.
+    .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 }
 
