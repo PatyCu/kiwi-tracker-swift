@@ -13,6 +13,14 @@ enum Appearance: CaseIterable, Hashable {
     }
   }
 
+  var systemImage: String {
+    switch self {
+    case .system: "circle.lefthalf.filled"
+    case .light: "sun.max"
+    case .dark: "moon"
+    }
+  }
+
   /// System is `nil`, so the app follows the device.
   var colorScheme: ColorScheme? {
     switch self {

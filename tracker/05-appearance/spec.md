@@ -8,13 +8,13 @@ iOS always follows the device's light or dark setting, with no way to choose. Th
 
 ## Solution
 
-Settings gains an **Appearance** section, first, above Household, with three rows: "System", "Light" and "Dark", the selected one checked. The choice applies at once to the whole app and lasts until the app quits; every launch starts at System, as in the reference.
+Settings gains an **Appearance** section, first, above Household, with three rows: "System", "Light" and "Dark", each with an icon and a radio button, the selected one filled. The choice applies at once to the whole app and lasts until the app quits; every launch starts at System, as in the reference.
 
 ## User Stories
 
 1. As a person using the app, I want to choose System, Light or Dark in Settings, so that the app looks the way I like regardless of the device's setting.
 2. As a person using the app, I want System selected by default, so that the app follows my device until I choose otherwise.
-3. As a person using the app, I want the selected choice checked, so that I can see which one is active.
+3. As a person using the app, I want the selected choice marked, so that I can see which one is active.
 4. As a person using the app, I want my choice to apply immediately, so that I see the result without leaving Settings.
 5. As a person using the app, I want the choice to apply everywhere: the tabs, Sign in, the waiting and no-household screens, and sheets, so that the app never mixes light and dark.
 6. As a person using the app on System, I want the app to switch when my device switches between light and dark, so that System really follows the device.
@@ -30,7 +30,7 @@ Settings gains an **Appearance** section, first, above Household, with three row
 - **Choice**: an `Appearance` value with the cases system, light and dark, labelled "System", "Light" and "Dark" in that order, verbatim from the reference.
 - **State**: held in memory at the app root (`AppRoot`, above the Session, as the reference's provider sits above its Session provider), so it covers the sign-in-unavailable, Sign in, waiting, no-household and tab screens and survives sign-out within a launch. Applied there with `.preferredColorScheme`, System being `nil`. Settings reads and changes it through the environment.
 - **No persistence and no KiwiData**: nothing is saved on the device or sent to Supabase; remembering the choice is logged in `tracker/after-parity.md`.
-- **Settings**: a native `Form` section titled "Appearance" first, above Household, with an inline `Picker` giving three rows and a checkmark on the selected one; no footer. This replaces the reference's custom radio card, as the parity policy allows (same UX, native chrome).
+- **Settings**: a native `Form` section titled "Appearance" first, above Household, with one row per choice: its icon and name, then a radio button, filled in kiwi when selected; no footer. The reference's radio buttons stay, with an icon added, as [ADR 0009](../../docs/adr/0009-radio-buttons-for-the-appearance-choice.md) records; a prototype compared them with a native checkmark list, segmented control and menu row (branch `prototype/appearance-variants`).
 
 ## Testing Decisions
 
