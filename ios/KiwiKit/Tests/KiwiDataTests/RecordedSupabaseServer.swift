@@ -11,11 +11,12 @@ final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
 
   private static let answers = Mutex<[String: Answer]>([:])
 
-  /// A backend whose requests `answer` handles, keeping its session in `storage`. The SDK keys
-  /// the stored session by host, so a later launch of the same app reuses the host.
+  /// A backend whose requests `answer` handles, keeping its session in `storage` and its
+  /// launch flag in `installDefaults`. The SDK keys the stored session by host.
   static func backend(
     host: String = newHost(),
     storage: some AuthLocalStorage = InMemorySessionStorage(),
+    installDefaults: UserDefaults? = nil,
     answer: @escaping Answer
   ) throws -> SupabaseBackend {
     answers.withLock { $0[host] = answer }
@@ -24,6 +25,7 @@ final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
     return SupabaseBackend(
       config: try SupabaseConfig(url: "http://\(host)", publishableKey: "sb_publishable_test"),
       sessionStorage: storage,
+      installDefaults: try installDefaults ?? Install.newDefaults(),
       urlSession: URLSession(configuration: configuration)
     )
   }
@@ -76,13 +78,67 @@ final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
   }
 }
 
-/// Keeps the session in memory instead of the Keychain.
+/// One install of the app, launched against the recorded server: the Keychain (`storage`)
+/// outlives the install, its UserDefaults don't. A later launch of the same install reuses all
+/// three.
+struct Install {
+  let host: String
+  let storage: InMemorySessionStorage
+  let defaults: UserDefaults
+
+  init(storage: InMemorySessionStorage = InMemorySessionStorage()) throws {
+    self.init(
+      host: RecordedSupabaseServer.newHost(), storage: storage, defaults: try Self.newDefaults())
+  }
+
+  private init(host: String, storage: InMemorySessionStorage, defaults: UserDefaults) {
+    self.host = host
+    self.storage = storage
+    self.defaults = defaults
+  }
+
+  func launch(
+    answer: @escaping RecordedSupabaseServer.Answer = { _, _ in (200, sessionResponse()) }
+  )
+    throws -> SupabaseBackend
+  {
+    try RecordedSupabaseServer.backend(
+      host: host, storage: storage, installDefaults: defaults, answer: answer)
+  }
+
+  /// The app deleted and installed again on the same device.
+  func reinstalled() throws -> Install {
+    Install(host: host, storage: storage, defaults: try Self.newDefaults())
+  }
+
+  /// A UserDefaults suite of its own, as iOS deletes the app's defaults with the app.
+  static func newDefaults() throws -> UserDefaults {
+    guard let defaults = UserDefaults(suiteName: "test.\(UUID().uuidString)") else {
+      throw URLError(.cannotCreateFile)
+    }
+    return defaults
+  }
+}
+
+/// Keeps the session in memory instead of the Keychain. Like `KeychainSessionStorage`, reading or
+/// removing a missing session isn't an error.
 final class InMemorySessionStorage: AuthLocalStorage {
   private let values = Mutex<[String: Data]>([:])
+  private let removalFails = Mutex(false)
+
+  /// Makes `remove` throw, as a Keychain error would.
+  var failsToRemove: Bool {
+    get { removalFails.withLock { $0 } }
+    set { removalFails.withLock { $0 = newValue } }
+  }
+  var isEmpty: Bool { values.withLock { $0.isEmpty } }
 
   func store(key: String, value: Data) throws { values.withLock { $0[key] = value } }
   func retrieve(key: String) throws -> Data? { values.withLock { $0[key] } }
-  func remove(key: String) throws { _ = values.withLock { $0.removeValue(forKey: key) } }
+  func remove(key: String) throws {
+    if failsToRemove { throw URLError(.cannotRemoveFile) }
+    _ = values.withLock { $0.removeValue(forKey: key) }
+  }
 }
 
 /// The local stack's answer to a password or refresh-token grant for alex@kiwi.test, trimmed to

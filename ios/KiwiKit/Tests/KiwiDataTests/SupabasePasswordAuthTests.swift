@@ -106,8 +106,7 @@ private func grantType(of request: URLRequest) -> String? {
   }
 
   @Test func waitsForTheRefreshOfAnExpiredStoredSession() async throws {
-    let (host, storage) = try await storeExpiredSession()
-    let backend = try RecordedSupabaseServer.backend(host: host, storage: storage) { request, _ in
+    let backend = try await installWithAnExpiredSession().launch { request, _ in
       #expect(grantType(of: request) == "refresh_token")
       return (200, sessionResponse())
     }
@@ -117,8 +116,7 @@ private func grantType(of request: URLRequest) -> String? {
   }
 
   @Test func reportsNoUserWhenAnExpiredStoredSessionCannotRefresh() async throws {
-    let (host, storage) = try await storeExpiredSession()
-    let backend = try RecordedSupabaseServer.backend(host: host, storage: storage) { _, _ in
+    let backend = try await installWithAnExpiredSession().launch { _, _ in
       throw URLError(.notConnectedToInternet)
     }
     var users = SupabasePasswordAuth(backend: backend).signedInUsers().makeAsyncIterator()
@@ -126,15 +124,14 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(await users.next() == .some(nil))
   }
 
-  /// Signs in as a previous launch would have, leaving a session that has since expired.
-  private func storeExpiredSession() async throws -> (String, InMemorySessionStorage) {
-    let host = RecordedSupabaseServer.newHost()
-    let storage = InMemorySessionStorage()
-    let previousLaunch = try RecordedSupabaseServer.backend(host: host, storage: storage) { _, _ in
+  /// An install whose previous launch signed in, leaving a session that has since expired.
+  private func installWithAnExpiredSession() async throws -> Install {
+    let install = try Install()
+    let previousLaunch = try install.launch { _, _ in
       (200, sessionResponse(expiresAt: .now.addingTimeInterval(-60)))
     }
     try await SupabasePasswordAuth(backend: previousLaunch)
       .signIn(email: "alex@kiwi.test", password: "secret")
-    return (host, storage)
+    return install
   }
 }
