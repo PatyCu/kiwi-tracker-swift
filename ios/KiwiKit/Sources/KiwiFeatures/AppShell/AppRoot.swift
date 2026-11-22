@@ -4,7 +4,8 @@ import SwiftUI
 
 /// The app's root: sign-in until someone is signed in, then their Household, then the tabs.
 /// Shows why sign-in is unavailable when the app can't set it up. The order follows the
-/// reference app's `RootStack`.
+/// reference app's `RootStack`. Holds the appearance above all of it, so the choice covers every
+/// screen and lasts through sign-out until the app quits.
 public struct AppRoot: View {
   private enum Setup {
     case ready(any PasswordAuth, any HouseholdStore)
@@ -12,6 +13,7 @@ public struct AppRoot: View {
   }
 
   private let setup: Setup
+  @State private var appearance = Appearance.system
 
   public init(auth: any PasswordAuth, households: any HouseholdStore) {
     setup = .ready(auth, households)
@@ -23,10 +25,14 @@ public struct AppRoot: View {
   }
 
   public var body: some View {
-    switch setup {
-    case .ready(let auth, let households): SessionRoot(auth: auth, households: households)
-    case .unavailable(let message): SignInUnavailableScreen(message: message)
+    Group {
+      switch setup {
+      case .ready(let auth, let households): SessionRoot(auth: auth, households: households)
+      case .unavailable(let message): SignInUnavailableScreen(message: message)
+      }
     }
+    .environment(\.appearance, $appearance)
+    .preferredColorScheme(appearance.colorScheme)
   }
 }
 

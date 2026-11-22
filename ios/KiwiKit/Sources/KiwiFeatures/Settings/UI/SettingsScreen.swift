@@ -1,13 +1,13 @@
 import KiwiDesign
 import SwiftUI
 
-/// The Settings tab, as the reference app's `SettingsScreen`. Appearance arrives with its own
-/// feature, above Household.
+/// The Settings tab, as the reference app's `SettingsScreen`.
 struct SettingsScreen: View {
   let members: HouseholdMembersModel
 
   var body: some View {
     Form {
+      AppearanceSection()
       HouseholdSection()
       MembersSection(model: members)
       AccountSection()
