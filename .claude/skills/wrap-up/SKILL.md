@@ -11,7 +11,7 @@ Stop and report to the developer whenever a step fails. Don't skip ahead.
 
 ## 1. Check the work is done
 
-- The developer has checked the change on the shared project and approved it, as `CONTRIBUTING.md#validate` describes. If not, stop: set up that check instead.
+- The developer's check on the shared project is done: they run it before saying "wrap up".
 - Related bugs are part of done. If a bug caused by or tied to this change is still open, fix it first, or stop and ask the developer.
 - Match the checks to what changed. Any failure or warning stops the wrap-up.
   - **iOS code or config** (`ios/**`: `.swift`, `.xcconfig`, project, package or asset files): run `make lint`, `make build` and `make test` in `ios/`.
@@ -38,7 +38,7 @@ Check the branch with `git branch --show-current`.
 
 ## 5. Confirm the shared project has the migrations
 
-Only when the published work adds files under `supabase/migrations/`. They were applied before the developer's check, so run `supabase db push --remote --dry-run`: it must list nothing. If it lists a migration, stop and tell the developer: their check ran without it.
+Only when the published work adds files under `supabase/migrations/`. They were applied to the shared project during validation, so run `supabase db push --remote --dry-run`: it must list nothing. If it lists a migration, stop and tell the developer the shared project is missing it.
 
 ## 6. Clean up
 

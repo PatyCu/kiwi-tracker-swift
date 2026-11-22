@@ -6,6 +6,7 @@ SIMULATOR    ?= iPhone 17 Pro
 DESTINATION  := platform=iOS Simulator,name=$(SIMULATOR),OS=latest
 DERIVED_DATA := .build/DerivedData
 TEST_RESULTS := .build/TestResults.xcresult
+TEST_LOG     := .build/test.log
 DB_TYPES     := KiwiKit/Sources/KiwiData/Generated/DatabaseTypes.swift
 
 # $(SIMULATOR) on the newest iOS runtime, by UDID, so an install never lands on
@@ -29,12 +30,20 @@ build:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -destination '$(DESTINATION)' -quiet build
 	@echo "Build succeeded."
 
+# Prints compile errors (not xcodebuild's command lines), each failing test with its failure
+# messages, and the pass and fail counts. The full log is in $(TEST_LOG).
 test:
-	rm -rf $(TEST_RESULTS)
-	xcodebuild -project $(PROJECT) -scheme $(SCHEME) -destination '$(DESTINATION)' -quiet \
-		-resultBundlePath $(TEST_RESULTS) $(if $(ONLY),-only-testing:$(ONLY)) test; status=$$?; \
-	xcrun xcresulttool get test-results summary --path $(TEST_RESULTS) | \
+	@rm -rf $(TEST_RESULTS)
+	@xcodebuild -project $(PROJECT) -scheme $(SCHEME) -destination '$(DESTINATION)' -quiet \
+		-resultBundlePath $(TEST_RESULTS) $(if $(ONLY),-only-testing:$(ONLY)) test > $(TEST_LOG) 2>&1; \
+	status=$$?; \
+	grep -E '^[^ ]+:[0-9]+:[0-9]+: error:' $(TEST_LOG) | sort -u; \
+	xcrun xcresulttool get test-results tests --path $(TEST_RESULTS) 2>/dev/null | \
+		jq -r '.. | objects | select(.nodeType == "Test Case" and .result == "Failed") | \
+			"FAILED \(.nodeIdentifier // .name)", (.children[]? | select(.nodeType == "Failure Message") | "  \(.name)")'; \
+	xcrun xcresulttool get test-results summary --path $(TEST_RESULTS) 2>/dev/null | \
 		jq -r '"Tests \(.result): \(.passedTests) passed, \(.failedTests) failed, \(.skippedTests) skipped."'; \
+	if [ $$status -ne 0 ] && ! grep -qiE 'error:|test failed' $(TEST_LOG); then tail -20 $(TEST_LOG); fi; \
 	exit $$status
 
 # Builds a scheme and opens it on $(SIMULATOR): `run` uses the local stack,

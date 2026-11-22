@@ -50,11 +50,14 @@ Info.plist. The code lives in the local package `KiwiKit`:
 
 ## Tests
 
-| Target         | What                                                              | With                   |
-| -------------- | ----------------------------------------------------------------- | ---------------------- |
-| `KiwiDomain`   | Every rule, with the reference's test cases and names.             | No mocks               |
-| `KiwiData`     | Row ↔ model and error mapping.                                    | Recorded JSON payloads |
-| `KiwiFeatures` | Model state transitions: load, retry, a failed save keeps input.  | In-memory stores       |
+| Target         | What                                                             | With                                              |
+| -------------- | ---------------------------------------------------------------- | ------------------------------------------------- |
+| `KiwiDomain`   | Every rule, with the reference's test cases and names.           | No mocks                                          |
+| `KiwiData`     | Row ↔ model and error mapping, Session restore and clearing.     | Recorded JSON payloads, in-memory Session storage |
+| `KiwiFeatures` | Model state transitions: load, retry, a failed save keeps input. | In-memory stores                                  |
+
+KiwiKit's tests run outside the app, so the Keychain refuses them
+(`errSecMissingEntitlement`): code that touches it is checked on the simulator.
 
 ## Project
 
@@ -72,6 +75,6 @@ Run from `ios/`:
 ```bash
 make lint    # swift format lint --strict, plus scripts/check-conventions.sh
 make build   # xcodebuild, warnings are errors
-make test    # Swift Testing for KiwiKit; prints the pass and fail counts
+make test    # Swift Testing for KiwiKit; prints compile errors, failing tests and the counts
 make test ONLY=KiwiFeaturesTests/TodayScreenTests   # one suite (or Target/Suite/test)
 ```

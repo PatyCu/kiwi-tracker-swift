@@ -53,7 +53,6 @@ change is checked against the [architecture principles](docs/architecture.md).
 2. Validate on the local stack, never by experimenting on the shared project.
 3. Apply the change's new migrations to the shared project, and have the
    developer check the change there once (the `KiwiTracker Shared` scheme).
-   Nothing is committed or pushed until they approve.
 
 ### Change the schema
 
