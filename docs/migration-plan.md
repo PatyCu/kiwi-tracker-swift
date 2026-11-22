@@ -68,6 +68,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 ## Phase 3 — Pets
 
 - [x] Pets list and multi-pet support (KIW-22) — [tracker](../tracker/06-pets-list/)
+- [ ] Consistent UI names from the glossary and iOS terms — [tracker](../tracker/07-ui-names/)
 - [ ] No pets yet card on Today and Pets (KIW-84)
 - [ ] Add a pet and edit its profile (KIW-23)
 - [ ] Pet selector cards with editing (KIW-25)

@@ -31,3 +31,15 @@ _Avoid_: Household name
 **Pet**:
 An animal a Household cares for. It belongs to exactly one Household, and every Member sees and manages it. Its species is Cat, Dog or Other.
 _Avoid_: Animal, profile
+
+**Event**:
+Something about a Pet on a date: either a Pet event or a Calendar event.
+_Avoid_: Record, activity, entry
+
+**Pet event**:
+An Event logged about a Pet after it happened: a Symptom, a Diet change or Other.
+_Avoid_: Log, record
+
+**Calendar event**:
+An Event scheduled for a Pet, such as a vet visit, a vaccine or a medicine. It stays a Calendar event after its date and never becomes a Pet event.
+_Avoid_: Appointment, reminder
