@@ -4,22 +4,24 @@ import SwiftUI
 
 /// The signed-in app: four tabs, each with its own navigation stack, opened
 /// from `kiwitracker://` URLs, for the loaded `household`, which it also puts in the
-/// environment. Each tab shows a placeholder until its feature is ported. Expects the
-/// `SessionModel` in the environment.
-public struct AppShell: View {
+/// environment, and its `members`, which Settings loads. Each tab shows a placeholder until its
+/// feature is ported. Expects the `SessionModel` in the environment.
+struct AppShell: View {
   private let household: Household
+  private let members: HouseholdMembersModel
   @State private var navigation: AppNavigation
 
-  public init(household: Household) {
-    self.init(household: household, navigation: AppNavigation())
-  }
-
-  init(household: Household, navigation: AppNavigation) {
+  init(
+    household: Household,
+    members: HouseholdMembersModel,
+    navigation: AppNavigation = AppNavigation()
+  ) {
     self.household = household
+    self.members = members
     _navigation = State(initialValue: navigation)
   }
 
-  public var body: some View {
+  var body: some View {
     @Bindable var navigation = navigation
     TabView(selection: $navigation.selectedTab) {
       tab(.today) {
@@ -39,7 +41,7 @@ public struct AppShell: View {
         }
       }
       tab(.settings) {
-        NavigationStack { SettingsScreen() }
+        NavigationStack { SettingsScreen(members: members) }
       }
     }
     .tint(Palette.kiwi)
@@ -106,12 +108,13 @@ private struct PlaceholderScreen: View {
 private let previewPetID = UUID()
 
 #Preview("Today") {
-  AppShell(household: .preview).previewSession()
+  AppShell(household: .preview, members: .preview()).previewSession()
 }
 
 #Preview("Pet profile") {
   AppShell(
     household: .preview,
+    members: .preview(),
     navigation: AppNavigation(
       selectedTab: .pets,
       petsPath: [.pet(previewPetID), .petProfile(previewPetID)]
@@ -121,7 +124,11 @@ private let previewPetID = UUID()
 }
 
 #Preview("Dark") {
-  AppShell(household: .preview, navigation: AppNavigation(selectedTab: .calendar))
-    .previewSession()
-    .preferredColorScheme(.dark)
+  AppShell(
+    household: .preview,
+    members: .preview(),
+    navigation: AppNavigation(selectedTab: .calendar)
+  )
+  .previewSession()
+  .preferredColorScheme(.dark)
 }

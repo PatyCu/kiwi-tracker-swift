@@ -103,7 +103,7 @@ flowchart TD
 | Target         | Holds                                                                                                                                                                   | May import                       |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `KiwiDomain`   | Models, pure rules, validation, store protocols.                                                          | Foundation                 |
-| `KiwiData`     | The Supabase client, one store per table or bucket implementing the domain protocols, row mapping, the pet photo cache. | `KiwiDomain`, Supabase     |
+| `KiwiData`     | The Supabase client, one store per domain concept (whatever tables or bucket hold it, as the reference app's stores) implementing the domain protocols, row mapping, the pet photo cache. | `KiwiDomain`, Supabase     |
 | `KiwiDesign`   | Palette, typography, shared components.                                                                   | SwiftUI                    |
 | `KiwiFeatures` | One folder per product area, each with `UI`, `State`, `Forms`.                                            | `KiwiDomain`, `KiwiDesign` |
 

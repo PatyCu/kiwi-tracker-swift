@@ -4,9 +4,12 @@ import SwiftUI
 /// The Settings tab, as the reference app's `SettingsScreen`. Appearance arrives with its own
 /// feature, above Household.
 struct SettingsScreen: View {
+  let members: HouseholdMembersModel
+
   var body: some View {
     Form {
       HouseholdSection()
+      MembersSection(model: members)
       AccountSection()
     }
     .scrollContentBackground(.hidden)
@@ -17,15 +20,19 @@ struct SettingsScreen: View {
 
 #if DEBUG
   #Preview("Signed in") {
-    NavigationStack { SettingsScreen() }
-      .environment(\.household, .preview)
-      .previewSession()
+    NavigationStack {
+      SettingsScreen(members: .preview())
+    }
+    .environment(\.household, .preview)
+    .previewSession()
   }
 
   #Preview("Dark") {
-    NavigationStack { SettingsScreen() }
-      .environment(\.household, .preview)
-      .previewSession()
-      .preferredColorScheme(.dark)
+    NavigationStack {
+      SettingsScreen(members: .preview())
+    }
+    .environment(\.household, .preview)
+    .previewSession()
+    .preferredColorScheme(.dark)
   }
 #endif

@@ -4,7 +4,7 @@
   import SwiftUI
 
   extension SignedInUser {
-    static let preview = SignedInUser(id: UUID(), email: "alex@kiwi.test")
+    nonisolated static let preview = SignedInUser(id: UUID(), email: "alex@kiwi.test")
   }
 
   extension View {

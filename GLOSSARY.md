@@ -17,8 +17,12 @@ The group of Accounts that share pets. Each Account belongs to at most one. Hous
 _Avoid_: Family, home, team
 
 **Member**:
-An Account in a Household, known there by its display name, never by its email.
+An Account in a Household, known there by its **Display name**, never by its email.
 _Avoid_: User, owner
+
+**Display name**:
+What a Member is called in their Household. Set by hand, never in the app.
+_Avoid_: Username, nickname
 
 **Household alias**:
 What Members call their Household, shown in titles.

@@ -13,14 +13,17 @@ public struct Household: Equatable, Sendable {
   }
 }
 
-/// Why the Household couldn't be read.
+/// Why the Household or its Members couldn't be read.
 public enum HouseholdStoreError: Error, Equatable, Sendable {
   /// Supabase couldn't be reached or the query failed.
   case couldNotLoad
 }
 
-/// Reads the signed-in Account's Household.
+/// Reads the signed-in Account's Household and its Members.
 public protocol HouseholdStore: Sendable {
   /// The signed-in Account's Household, or `nil` when it isn't in one yet.
   func loadHousehold() async throws(HouseholdStoreError) -> Household?
+  /// The Members of the signed-in Account's Household, the Account included, sorted by Display
+  /// name.
+  func loadMembers() async throws(HouseholdStoreError) -> [Member]
 }

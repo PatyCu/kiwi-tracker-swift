@@ -53,7 +53,7 @@ private struct SessionRoot: View {
       case .signedIn(let user):
         // A new Household and shell for each sign-in: a new Account never sees the previous
         // Household, and every tab starts fresh on Today.
-        HouseholdRoot(store: households, email: user.email).id(user.id)
+        HouseholdRoot(store: households, user: user).id(user.id)
       }
     }
     .environment(session)
@@ -66,10 +66,13 @@ private struct SessionRoot: View {
 private struct HouseholdRoot: View {
   let email: String
   @State private var household: HouseholdModel
+  /// Loaded by Settings, not here, so a failure never keeps the tabs closed.
+  @State private var members: HouseholdMembersModel
 
-  init(store: any HouseholdStore, email: String) {
-    self.email = email
+  init(store: any HouseholdStore, user: SignedInUser) {
+    email = user.email
     _household = State(initialValue: HouseholdModel(store: store))
+    _members = State(initialValue: HouseholdMembersModel(store: store, signedInAccountID: user.id))
   }
 
   var body: some View {
@@ -84,7 +87,7 @@ private struct HouseholdRoot: View {
       case .missing:
         NoHouseholdScreen(email: email, onCheckAgain: reload) { SignOutButton() }
       case .ready(let loaded):
-        AppShell(household: loaded)
+        AppShell(household: loaded, members: members)
       }
     }
     .task { await household.load() }

@@ -64,7 +64,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Sign out from Settings — [tracker](../tracker/01-sign-out/)
 - [x] Waiting for the household: loading, error with Retry, no-household screen (KIW-89) — [tracker](../tracker/02-waiting-for-household/)
 - [x] Household alias on Today, Pets and Settings (KIW-88) — [tracker](../tracker/03-household-alias/)
-- [ ] Household members by display name in Settings (KIW-91)
+- [x] Household members by display name in Settings (KIW-91) — [tracker](../tracker/04-household-members/)
 - [ ] Appearance setting: System, Light, Dark (KIW-41)
 
 **Exit:** every seeded account signs in and sees its own household, or the no-household screen.

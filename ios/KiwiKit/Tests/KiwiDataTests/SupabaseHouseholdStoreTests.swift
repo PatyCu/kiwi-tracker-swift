@@ -64,4 +64,64 @@ import Testing
       try await SupabaseHouseholdStore(backend: backend).loadHousehold()
     }
   }
+
+  @Test func returnsTheHouseholdsMembersSortedByDisplayName() async throws {
+    let sent = Mutex<URLComponents?>(nil)
+    let backend = try RecordedSupabaseServer.backend { request, _ in
+      sent.withLock {
+        $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
+      }
+      return (
+        200,
+        #"""
+        [{"user_id": "11111111-1111-4111-8111-111111111111", "display_name": "Alex"},
+         {"user_id": "33333333-3333-4333-8333-333333333333", "display_name": "Sam"}]
+        """#
+      )
+    }
+
+    let members = try await SupabaseHouseholdStore(backend: backend).loadMembers()
+
+    #expect(
+      members == [
+        Member(
+          accountID: try #require(UUID(uuidString: "11111111-1111-4111-8111-111111111111")),
+          displayName: "Alex"
+        ),
+        Member(
+          accountID: try #require(UUID(uuidString: "33333333-3333-4333-8333-333333333333")),
+          displayName: "Sam"
+        ),
+      ]
+    )
+    let request = try #require(sent.withLock { $0 })
+    #expect(request.path == "/rest/v1/household_members")
+    #expect(
+      Set(request.queryItems ?? [])
+        == [
+          URLQueryItem(name: "select", value: "user_id,display_name"),
+          URLQueryItem(name: "order", value: "display_name.asc.nullslast"),
+        ]
+    )
+  }
+
+  @Test func trimsSpacesFromBothEndsOfADisplayName() async throws {
+    let backend = try RecordedSupabaseServer.backend { _, _ in
+      (200, #"[{"user_id": "11111111-1111-4111-8111-111111111111", "display_name": " Alex \n"}]"#)
+    }
+
+    let members = try await SupabaseHouseholdStore(backend: backend).loadMembers()
+
+    #expect(members.map(\.displayName) == ["Alex"])
+  }
+
+  @Test func throwsWhenTheMembersQueryFails() async throws {
+    let backend = try RecordedSupabaseServer.backend { _, _ in
+      (500, #"{"code": "XX000", "message": "Recorded error"}"#)
+    }
+
+    await #expect(throws: HouseholdStoreError.couldNotLoad) {
+      try await SupabaseHouseholdStore(backend: backend).loadMembers()
+    }
+  }
 }
