@@ -14,7 +14,8 @@ the exception.
    reading its code. ([ADR 0001](adr/0001-native-rebuild-with-a-behavior-reference.md))
 2. **Platform-native.** Each client uses its platform's own components and
    conventions for its chrome. A custom control, or any other intentional
-   difference from the reference, needs an ADR.
+   difference from the reference, is confirmed by the developer and recorded
+   in the feature's spec.
 
 ## System
 

@@ -63,7 +63,7 @@ state against the reference component and its test instead, and say so in the ha
   copy, states and what each action does. Chrome may differ where a native
   component replaces a custom one; nothing else may.
 - Fix differences, or list the ones that are intentional for the developer to
-  confirm, and record confirmed ones as ADRs in `docs/adr/`.
+  confirm, and record confirmed ones in the feature's spec in `tracker/`.
 
 ## 5. Hand over
 

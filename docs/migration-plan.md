@@ -112,7 +112,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 ## Phase 7 — iOS parity sign-off and release
 
-- [ ] Full side-by-side walkthrough of every screen and flow; differences fixed or recorded as ADRs
+- [ ] Full side-by-side walkthrough of every screen and flow; differences fixed or confirmed as intentional
 - [ ] VoiceOver and Dynamic Type pass on every screen
 - [ ] Fixed Expo bugs re-checked on iOS (KIW-5, KIW-6, KIW-7, KIW-99, KIW-100, KIW-105)
 - [ ] TestFlight build (iOS part of KIW-21)
