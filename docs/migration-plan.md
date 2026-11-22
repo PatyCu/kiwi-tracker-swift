@@ -69,7 +69,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 - [x] Pets list and multi-pet support (KIW-22) — [tracker](../tracker/06-pets-list/)
 - [x] Consistent UI names from the glossary and iOS terms — [tracker](../tracker/07-ui-names/)
-- [ ] No pets yet card on Today and Pets (KIW-84) — [tracker](../tracker/08-no-pets-card/)
+- [x] No pets yet card on Today and Pets (KIW-84) — [tracker](../tracker/08-no-pets-card/)
 - [ ] Add a pet and edit its details (KIW-23)
 - [ ] Pet selector cards with editing (KIW-25)
 - [ ] Pet photo from the library: 512px upload, signed links, on-device cache (KIW-24)

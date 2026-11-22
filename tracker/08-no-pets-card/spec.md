@@ -1,6 +1,6 @@
 # No pets yet card on Today and Pets (KIW-84)
 
-Status: in-progress
+Status: done
 
 ## Problem Statement
 
