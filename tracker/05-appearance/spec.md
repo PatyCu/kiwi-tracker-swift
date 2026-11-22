@@ -30,7 +30,7 @@ Settings gains an **Appearance** section, first, above Household, with three row
 - **Choice**: an `Appearance` value with the cases system, light and dark, labelled "System", "Light" and "Dark" in that order, verbatim from the reference.
 - **State**: held in memory at the app root (`AppRoot`, above the Session, as the reference's provider sits above its Session provider), so it covers the sign-in-unavailable, Sign in, waiting, no-household and tab screens and survives sign-out within a launch. Applied there with `.preferredColorScheme`, System being `nil`. Settings reads and changes it through the environment.
 - **No persistence and no KiwiData**: nothing is saved on the device or sent to Supabase; remembering the choice is logged in `tracker/after-parity.md`.
-- **Settings**: a native `Form` section titled "Appearance" first, above Household, with one row per choice: its icon and name, then a radio button, filled in kiwi when selected; no footer. The reference's radio buttons stay, with an icon added, as [ADR 0009](../../docs/adr/0009-radio-buttons-for-the-appearance-choice.md) records; a prototype compared them with a native checkmark list, segmented control and menu row (branch `prototype/appearance-variants`).
+- **Settings**: a native `Form` section titled "Appearance" first, above Household, with one row per choice: its icon and name, then a radio button, filled in kiwi when selected; no footer. The reference's radio buttons stay, with an icon added, as [ADR 0009](../../docs/adr/0009-radio-buttons-for-the-appearance-choice.md) records.
 
 ## Testing Decisions
 
