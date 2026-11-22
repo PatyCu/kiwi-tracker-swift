@@ -55,8 +55,13 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   `HouseholdModelTests`.
 - Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
   operations and load and retry behavior.
+- Name types from `GLOSSARY.md` and the suffix list in `ios/CONVENTIONS.md`
+  (UI), translating the reference's names: `SymptomModal` → `SymptomSheet`,
+  `TimelineEvents` → `PetEventsSection`.
 - Screens use native components. Copy every string verbatim from the reference,
-  except that one naming a domain concept uses its `GLOSSARY.md` term.
+  except that copy naming a domain concept or a UI piece uses its `GLOSSARY.md`
+  term or its CONVENTIONS name. These names aren't differences to confirm or
+  record (step 4).
   Add `#Preview`s for loaded, empty, loading and error.
 
 ## 4. Compare side by side

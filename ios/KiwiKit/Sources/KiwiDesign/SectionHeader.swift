@@ -90,41 +90,39 @@ private struct PressedOpacityButtonStyle: ButtonStyle {
   }
 }
 
-private struct SectionHeaderPreview: View {
-  var body: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      SectionHeader("Overview", compact: true)
-      SectionHeader(
-        "Upcoming care",
-        action: SectionAction(
-          label: "Schedule",
-          accessibilityLabel: "Schedule calendar event",
-          systemImage: "plus",
-          action: {}
-        )
+private func previewHeaders() -> some View {
+  VStack(alignment: .leading, spacing: 0) {
+    SectionHeader("Overview", compact: true)
+    SectionHeader(
+      "Upcoming care",
+      action: SectionAction(
+        label: "Schedule",
+        accessibilityLabel: "Schedule calendar event",
+        systemImage: "plus",
+        action: {}
       )
-      SectionHeader("More")
-      SectionActionButton(
-        SectionAction(
-          label: "Edit",
-          accessibilityLabel: "Edit Kiwi",
-          systemImage: "square.and.pencil",
-          action: {}
-        )
+    )
+    SectionHeader("More")
+    SectionActionButton(
+      SectionAction(
+        label: "Edit",
+        accessibilityLabel: "Edit Kiwi",
+        systemImage: "square.and.pencil",
+        action: {}
       )
-    }
-    .padding()
-    .frame(maxHeight: .infinity, alignment: .top)
-    .background(Palette.bg)
+    )
   }
+  .padding()
+  .frame(maxHeight: .infinity, alignment: .top)
+  .background(Palette.bg)
 }
 
 #Preview("Light") {
-  SectionHeaderPreview()
+  previewHeaders()
     .preferredColorScheme(.light)
 }
 
 #Preview("Dark") {
-  SectionHeaderPreview()
+  previewHeaders()
     .preferredColorScheme(.dark)
 }

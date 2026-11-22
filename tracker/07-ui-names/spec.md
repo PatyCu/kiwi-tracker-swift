@@ -1,6 +1,6 @@
 # Consistent UI names from the glossary and iOS terms
 
-Status: ready-for-agent
+Status: done
 
 ## Problem Statement
 

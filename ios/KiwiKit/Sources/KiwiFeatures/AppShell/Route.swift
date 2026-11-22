@@ -27,7 +27,7 @@ nonisolated public enum AppTab: Hashable, CaseIterable, Sendable {
 /// A screen pushed onto a tab's navigation stack. Routes carry IDs, never
 /// objects, so each screen loads what it shows.
 nonisolated public enum Route: Hashable, Sendable {
-  case pet(UUID)
-  case petProfile(UUID)
-  case record(petID: UUID, recordID: UUID)
+  case petOverview(UUID)
+  case petDetails(UUID)
+  case petEvent(petID: UUID, petEventID: UUID)
 }

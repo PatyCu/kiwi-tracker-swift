@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The Kiwi Tracker logo, as the reference app's `BrandLogo`.
-public struct BrandLogo: View {
+public struct LogoImage: View {
   private let size: CGFloat
 
   public init(size: CGFloat = 44) {
@@ -18,5 +18,5 @@ public struct BrandLogo: View {
 }
 
 #Preview {
-  BrandLogo()
+  LogoImage()
 }

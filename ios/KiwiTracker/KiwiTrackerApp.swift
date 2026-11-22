@@ -4,19 +4,19 @@ import SwiftUI
 
 @main
 struct KiwiTrackerApp: App {
-  private let root: AppRoot
+  private let root: RootView
 
   init() {
     do {
       let backend = SupabaseBackend(config: try SupabaseConfig(bundle: .main))
-      root = AppRoot(
+      root = RootView(
         auth: SupabasePasswordAuth(backend: backend),
         households: SupabaseHouseholdStore(backend: backend),
         pets: SupabasePetStore(backend: backend)
       )
     } catch {
       // The message names the missing or invalid key, as the reference's setup error does.
-      root = AppRoot(signInUnavailable: error.description)
+      root = RootView(signInUnavailable: error.description)
     }
   }
 

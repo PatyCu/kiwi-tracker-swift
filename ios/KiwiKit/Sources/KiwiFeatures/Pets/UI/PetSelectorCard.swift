@@ -50,23 +50,21 @@ struct PetSelectorCard: View {
 }
 
 #if DEBUG
-  private struct PetSelectorCardPreview: View {
-    var body: some View {
-      HStack(spacing: 10) {
-        PetSelectorCard(pet: Pet.previews[0], isSelected: true) {}
-        PetSelectorCard(pet: Pet.previews[1], isSelected: false) {}
-      }
-      .padding()
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(Palette.bg)
+  private func previewCards() -> some View {
+    HStack(spacing: 10) {
+      PetSelectorCard(pet: Pet.previews[0], isSelected: true) {}
+      PetSelectorCard(pet: Pet.previews[1], isSelected: false) {}
     }
+    .padding()
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Palette.bg)
   }
 
   #Preview("Light") {
-    PetSelectorCardPreview().preferredColorScheme(.light)
+    previewCards().preferredColorScheme(.light)
   }
 
   #Preview("Dark") {
-    PetSelectorCardPreview().preferredColorScheme(.dark)
+    previewCards().preferredColorScheme(.dark)
   }
 #endif

@@ -6,7 +6,7 @@ import SwiftUI
 /// Shows why sign-in is unavailable when the app can't set it up. The order follows the
 /// reference app's `RootStack`. Holds the appearance above all of it, so the choice covers every
 /// screen and lasts through sign-out until the app quits.
-public struct AppRoot: View {
+public struct RootView: View {
   private enum Setup {
     case ready(any PasswordAuth, any HouseholdStore, any PetStore)
     case unavailable(String)
@@ -28,7 +28,7 @@ public struct AppRoot: View {
     Group {
       switch setup {
       case .ready(let auth, let households, let pets):
-        SessionRoot(auth: auth, households: households, pets: pets)
+        SessionView(auth: auth, households: households, pets: pets)
       case .unavailable(let message): SignInUnavailableScreen(message: message)
       }
     }
@@ -38,7 +38,7 @@ public struct AppRoot: View {
 }
 
 /// Switches on who is signed in.
-private struct SessionRoot: View {
+private struct SessionView: View {
   let auth: any PasswordAuth
   let households: any HouseholdStore
   let pets: any PetStore
@@ -62,7 +62,7 @@ private struct SessionRoot: View {
       case .signedIn(let user):
         // A new Household, Pets and shell for each sign-in: a new Account never sees the
         // previous Household or its Pets, and every tab starts fresh on Today.
-        HouseholdRoot(households: households, pets: pets, user: user).id(user.id)
+        HouseholdView(households: households, pets: pets, user: user).id(user.id)
       }
     }
     .environment(session)
@@ -74,18 +74,18 @@ private struct SessionRoot: View {
 /// the no-household screen. Saving pets and the screen titles need the Household. The Pets load
 /// alongside it, as the reference's `PetsProvider` loads per user, and the Pets tab waits for
 /// them.
-private struct HouseholdRoot: View {
+private struct HouseholdView: View {
   let email: String
   @State private var household: HouseholdModel
   /// Loaded by Settings, not here, so a failure never keeps the tabs closed.
-  @State private var members: HouseholdMembersModel
+  @State private var members: MembersModel
   @State private var pets: PetsModel
 
   init(households: any HouseholdStore, pets: any PetStore, user: SignedInUser) {
     email = user.email
     _household = State(initialValue: HouseholdModel(store: households))
     _members = State(
-      initialValue: HouseholdMembersModel(store: households, signedInAccountID: user.id))
+      initialValue: MembersModel(store: households, signedInAccountID: user.id))
     _pets = State(initialValue: PetsModel(store: pets))
   }
 
@@ -101,7 +101,7 @@ private struct HouseholdRoot: View {
       case .missing:
         NoHouseholdScreen(email: email, onCheckAgain: reload) { SignOutButton() }
       case .ready(let loaded):
-        AppShell(household: loaded, members: members, pets: pets)
+        MainTabView(household: loaded, members: members, pets: pets)
       }
     }
     .task { await household.load() }
@@ -125,8 +125,8 @@ extension View {
 }
 
 #if DEBUG
-  private func signedIn(_ outcome: PreviewHouseholdStore.Outcome) -> AppRoot {
-    AppRoot(
+  private func signedIn(_ outcome: PreviewHouseholdStore.Outcome) -> RootView {
+    RootView(
       auth: PreviewPasswordAuth(user: .preview),
       households: PreviewHouseholdStore(outcome: outcome),
       pets: PreviewPetStore()
@@ -134,7 +134,7 @@ extension View {
   }
 
   #Preview("Signed out") {
-    AppRoot(
+    RootView(
       auth: PreviewPasswordAuth(), households: PreviewHouseholdStore(), pets: PreviewPetStore())
   }
 
@@ -155,6 +155,6 @@ extension View {
   }
 
   #Preview("Sign-in unavailable") {
-    AppRoot(signInUnavailable: PreviewPasswordAuth.setupError)
+    RootView(signInUnavailable: PreviewPasswordAuth.setupError)
   }
 #endif

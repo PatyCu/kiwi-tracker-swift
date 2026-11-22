@@ -8,7 +8,7 @@
   }
 
   extension View {
-    /// Puts a session signed in as `user` in the environment, as `AppRoot` does.
+    /// Puts a session signed in as `user` in the environment, as `RootView` does.
     func previewSession(_ user: SignedInUser = .preview) -> some View {
       modifier(PreviewSessionModifier(user: user))
     }

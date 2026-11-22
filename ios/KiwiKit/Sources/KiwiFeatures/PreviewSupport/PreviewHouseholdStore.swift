@@ -49,12 +49,12 @@
     }
   }
 
-  extension HouseholdMembersModel {
+  extension MembersModel {
     /// Members for previews, loaded from `PreviewHouseholdStore` for `SignedInUser.preview`.
     static func preview(_ outcome: PreviewHouseholdStore.Outcome = .loads(.preview))
-      -> HouseholdMembersModel
+      -> MembersModel
     {
-      HouseholdMembersModel(
+      MembersModel(
         store: PreviewHouseholdStore(outcome: outcome),
         signedInAccountID: SignedInUser.preview.id
       )

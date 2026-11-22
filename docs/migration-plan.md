@@ -70,10 +70,10 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Pets list and multi-pet support (KIW-22) — [tracker](../tracker/06-pets-list/)
 - [ ] Consistent UI names from the glossary and iOS terms — [tracker](../tracker/07-ui-names/)
 - [ ] No pets yet card on Today and Pets (KIW-84)
-- [ ] Add a pet and edit its profile (KIW-23)
+- [ ] Add a pet and edit its details (KIW-23)
 - [ ] Pet selector cards with editing (KIW-25)
 - [ ] Pet photo from the library: 512px upload, signed links, on-device cache (KIW-24)
-- [ ] Pet overview page (KIW-26)
+- [ ] Pet overview screen (KIW-26)
 
 **Exit:** pets and photos added on iOS show up in the Expo app, and the reverse.
 
@@ -86,7 +86,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [ ] Date and time pickers (KIW-31)
 - [ ] Current diet from diet history (KIW-32)
 - [ ] Per-pet timeline (KIW-34)
-- [ ] Event detail screen (KIW-35)
+- [ ] Pet event details screen (KIW-35)
 - [ ] Edit an event (KIW-33)
 - [ ] Change an event's date and time (KIW-36)
 - [ ] Delete an event (KIW-37)

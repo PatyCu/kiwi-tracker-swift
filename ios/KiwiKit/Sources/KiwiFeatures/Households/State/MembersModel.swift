@@ -4,7 +4,7 @@ import Observation
 
 /// The signed-in Account's Household Members, as the reference app's `useHouseholdMembers`. One
 /// model per sign-in, loaded apart from the Household so a failure never keeps the tabs closed.
-@Observable final class HouseholdMembersModel {
+@Observable final class MembersModel {
   enum State: Equatable {
     case loading
     case ready([Member])

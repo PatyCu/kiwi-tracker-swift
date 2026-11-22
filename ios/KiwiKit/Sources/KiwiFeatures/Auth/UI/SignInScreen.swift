@@ -23,7 +23,7 @@ struct SignInScreen: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 0) {
-        AppIdentity()
+        AppNameLabel()
         Text("Sign in")
           .font(.largeTitle.weight(.heavy))
           .foregroundStyle(Palette.text)

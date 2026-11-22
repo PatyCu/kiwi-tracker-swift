@@ -9,13 +9,15 @@ the exception.
 
 1. **The reference defines behavior, not structure.** Until it's retired, every
    client matches the Expo app's capabilities, flows, rules, copy, branding and
-   empty, loading and error states. Its code structure, libraries and
-   workarounds don't carry over. Say the reference does something only after
-   reading its code. ([ADR 0001](adr/0001-native-rebuild-with-a-behavior-reference.md))
+   empty, loading and error states. Its code structure, libraries, workarounds
+   and names don't carry over: names, and copy naming a domain concept or a UI
+   piece, come from the glossary and the client's conventions. Say the
+   reference does something only after reading its code. ([ADR 0001](adr/0001-native-rebuild-with-a-behavior-reference.md))
 2. **Platform-native.** Each client uses its platform's own components and
    conventions for its chrome. A custom control, or any other intentional
    difference from the reference, is confirmed by the developer and recorded
-   in the feature's spec.
+   in the feature's spec. Names and copy that principle 1 sets aren't such
+   differences.
 
 ## System
 

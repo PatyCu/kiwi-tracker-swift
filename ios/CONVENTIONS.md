@@ -31,7 +31,7 @@ Info.plist. The code lives in the local package `KiwiKit`:
   client, and `KiwiDomain` imports only Foundation (`make lint` checks both).
 - `KiwiDomain`'s time-dependent rules take `now` and a `Calendar` as input.
 - A `KiwiFeatures` folder doesn't reach into another's `State` or `Forms`:
-  shared needs move to `KiwiDomain` or `KiwiDesign`, or `AppRoot` hands them in.
+  shared needs move to `KiwiDomain` or `KiwiDesign`, or `RootView` hands them in.
 - The app target builds the live stores and models once and puts them in the
   SwiftUI environment. Previews and tests use in-memory stores with fixture
   data.
@@ -44,7 +44,33 @@ Info.plist. The code lives in the local package `KiwiKit`:
 - Colors come from `KiwiDesign`'s `Palette`, each with a light and a dark value
   (`make lint` flags literals). Text uses Dynamic Type text styles.
 - Copy matches the reference app verbatim, except that copy naming a domain
-  concept uses its [GLOSSARY.md](../GLOSSARY.md) term.
+  concept or a UI piece uses its [GLOSSARY.md](../GLOSSARY.md) term or its
+  name here: "Kiwi's details", "Edit details", "Pet event details", "Add pet
+  event".
+- A UI type is named `<glossary term><suffix>`, never after the reference's
+  type (`make lint` checks the suffix of every `View` in `KiwiFeatures` and
+  `KiwiDesign`):
+
+  | Suffix    | Kind of piece                                                      |
+  | --------- | ------------------------------------------------------------------ |
+  | `Screen`  | A tab's root or a pushed screen                                    |
+  | `Sheet`   | A sheet (the reference's `Modal`)                                  |
+  | `Section` | A titled group in a screen                                         |
+  | `Header`  | A section's title row                                              |
+  | `Card`    | A boxed tile                                                       |
+  | `Row`     | One line of a list                                                 |
+  | `Field`   | One form input                                                     |
+  | `Picker`  | A choice made with a SwiftUI `Picker`                              |
+  | `Button`  | A button                                                           |
+  | `Label`   | An icon with text                                                  |
+  | `Image`   | An image                                                           |
+  | `View`    | Only the app's containers and the loading and load-error stand-ins |
+
+  State and form models end in `Model` and `Form`. An entity's attributes are
+  its details (`PetDetailsScreen`, `PetEventDetailsScreen`). Types, routes and
+  copy name the kind of Event: Pet event or Calendar event, never "event"
+  alone. `PetSelector` sets the Pets tab's selected Pet; `PetPicker` sets a Pet
+  event's or a Calendar event's Pet.
 - Every screen has `#Preview`s for its loaded, empty, loading and error states,
   using `KiwiFeatures/PreviewSupport`.
 

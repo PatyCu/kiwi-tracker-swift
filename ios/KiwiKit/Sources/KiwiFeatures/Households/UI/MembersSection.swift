@@ -5,7 +5,7 @@ import SwiftUI
 /// Who is in the signed-in Account's Household, by Display name, as the Members row of the
 /// reference app's `HouseholdSection`. iOS gives them their own section, a row each.
 struct MembersSection: View {
-  let model: HouseholdMembersModel
+  let model: MembersModel
   private let loadError: LocalizedStringResource = "Could not load the members."
 
   var body: some View {

@@ -62,7 +62,7 @@ private let samsHome = Household(id: UUID(), alias: "Sam's home")
     #expect(model.state == .ready(alexsHome))
   }
 
-  /// The app makes a new model for each sign-in (`AppRoot`), so the next Account starts from
+  /// The app makes a new model for each sign-in (`RootView`), so the next Account starts from
   /// loading and never sees the previous Household.
   @Test func loadsAgainForADifferentAccountInsteadOfShowingThePreviousHousehold() async {
     let alexsModel = HouseholdModel(store: RecordingHouseholdStore(.success(alexsHome)))

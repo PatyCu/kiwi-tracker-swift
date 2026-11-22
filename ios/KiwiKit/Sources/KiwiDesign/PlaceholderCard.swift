@@ -39,31 +39,29 @@ public struct PlaceholderCard: View {
   }
 }
 
-private struct PlaceholderCardPreview: View {
-  var body: some View {
-    VStack(spacing: 12) {
-      PlaceholderCard(
-        title: "No overdue items",
-        description: "Overdue care will appear here when calendar events are implemented."
-      )
-      PlaceholderCard(
-        title: "Nothing scheduled in the next 7 days",
-        description: "Scheduled vet visits, vaccines and medicines will show here.",
-        systemImage: "pawprint"
-      )
-    }
-    .padding()
-    .frame(maxHeight: .infinity)
-    .background(Palette.bg)
+private func previewCards() -> some View {
+  VStack(spacing: 12) {
+    PlaceholderCard(
+      title: "No overdue items",
+      description: "Overdue care will appear here when calendar events are implemented."
+    )
+    PlaceholderCard(
+      title: "Nothing scheduled in the next 7 days",
+      description: "Scheduled vet visits, vaccines and medicines will show here.",
+      systemImage: "pawprint"
+    )
   }
+  .padding()
+  .frame(maxHeight: .infinity)
+  .background(Palette.bg)
 }
 
 #Preview("Light") {
-  PlaceholderCardPreview()
+  previewCards()
     .preferredColorScheme(.light)
 }
 
 #Preview("Dark") {
-  PlaceholderCardPreview()
+  previewCards()
     .preferredColorScheme(.dark)
 }

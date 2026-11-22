@@ -7,15 +7,15 @@ import SwiftUI
 /// which Settings loads, and its `pets`, loaded since sign-in. Each tab shows a
 /// placeholder until its feature is ported. Expects the `SessionModel` in the
 /// environment.
-struct AppShell: View {
+struct MainTabView: View {
   private let household: Household
-  private let members: HouseholdMembersModel
+  private let members: MembersModel
   private let pets: PetsModel
   @State private var navigation: AppNavigation
 
   init(
     household: Household,
-    members: HouseholdMembersModel,
+    members: MembersModel,
     pets: PetsModel,
     navigation: AppNavigation = AppNavigation()
   ) {
@@ -63,9 +63,10 @@ extension View {
   fileprivate func routeDestinations() -> some View {
     navigationDestination(for: Route.self) { route in
       switch route {
-      case .pet: PlaceholderScreen(title: "Pet", systemImage: "pawprint")
-      case .petProfile: PlaceholderScreen(title: "Profile", systemImage: "person.text.rectangle")
-      case .record: PlaceholderScreen(title: "Event detail", systemImage: "list.bullet.rectangle")
+      case .petOverview: PlaceholderScreen(title: "Pet overview", systemImage: "pawprint")
+      case .petDetails: PlaceholderScreen(title: "Details", systemImage: "person.text.rectangle")
+      case .petEvent:
+        PlaceholderScreen(title: "Pet event details", systemImage: "list.bullet.rectangle")
       }
     }
   }
@@ -107,23 +108,23 @@ struct PlaceholderScreen: View {
 private let previewPetID = UUID()
 
 #Preview("Today") {
-  AppShell(household: .preview, members: .preview(), pets: .preview()).previewSession()
+  MainTabView(household: .preview, members: .preview(), pets: .preview()).previewSession()
 }
 
-#Preview("Pet profile") {
-  AppShell(
+#Preview("Pet details") {
+  MainTabView(
     household: .preview,
     members: .preview(), pets: .preview(),
     navigation: AppNavigation(
       selectedTab: .pets,
-      petsPath: [.pet(previewPetID), .petProfile(previewPetID)]
+      petsPath: [.petOverview(previewPetID), .petDetails(previewPetID)]
     )
   )
   .previewSession()
 }
 
 #Preview("Dark") {
-  AppShell(
+  MainTabView(
     household: .preview,
     members: .preview(), pets: .preview(),
     navigation: AppNavigation(selectedTab: .calendar)

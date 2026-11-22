@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The Settings tab, as the reference app's `SettingsScreen`.
 struct SettingsScreen: View {
-  let members: HouseholdMembersModel
+  let members: MembersModel
 
   var body: some View {
     Form {

@@ -4,7 +4,7 @@ Status: done
 
 The iOS app opens `kiwitracker://` URLs to tabs, pets, profiles and records
 (`AppDestination(url:)` in `KiwiFeatures/AppShell/Route.swift`, `onOpenURL` in
-`AppShell.swift`, the scheme in `ios/KiwiTracker/Info.plist`), with each parent
+`MainTabView.swift`, the scheme in `ios/KiwiTracker/Info.plist`), with each parent
 screen under the last one so Back works.
 
 Found while reviewing `docs/architecture.md`, which said this matched the Expo

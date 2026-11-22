@@ -8,9 +8,9 @@ import Testing
 private let alex = Member(accountID: UUID(), displayName: "Alex")
 private let sam = Member(accountID: UUID(), displayName: "Sam")
 
-@Suite struct HouseholdMembersModelTests {
+@Suite struct MembersModelTests {
   @Test func showsTheHouseholdsMembersByName() async {
-    let model = HouseholdMembersModel(
+    let model = MembersModel(
       store: RecordingHouseholdStore(members: [.success([alex, sam])]),
       signedInAccountID: alex.accountID
     )
@@ -21,7 +21,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
   }
 
   @Test func marksOnlyTheSignedInAccountAsYou() {
-    let model = HouseholdMembersModel(
+    let model = MembersModel(
       store: RecordingHouseholdStore(),
       signedInAccountID: alex.accountID
     )
@@ -32,7 +32,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
 
   @Test func saysSoWhenTheMembersCannotBeLoadedAndRetries() async {
     let store = RecordingHouseholdStore(members: [.failure(.couldNotLoad), .success([alex])])
-    let model = HouseholdMembersModel(store: store, signedInAccountID: alex.accountID)
+    let model = MembersModel(store: store, signedInAccountID: alex.accountID)
     await model.loadOnce()
     #expect(model.state == .failed)
 
@@ -44,7 +44,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
 
   @Test func loadsOnlyOnceWhenSettingsOpensAgain() async {
     let store = RecordingHouseholdStore(members: [.success([alex])])
-    let model = HouseholdMembersModel(store: store, signedInAccountID: alex.accountID)
+    let model = MembersModel(store: store, signedInAccountID: alex.accountID)
 
     await model.loadOnce()
     await model.loadOnce()
@@ -66,7 +66,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
         for await _ in release.stream { break }
       }
     }
-    let model = HouseholdMembersModel(store: store, signedInAccountID: alex.accountID)
+    let model = MembersModel(store: store, signedInAccountID: alex.accountID)
     let earlier = Task { await model.loadOnce() }
     while store.memberLoads == 0 { await Task.yield() }
 

@@ -1,12 +1,12 @@
 import SwiftUI
 
 /// The logo next to the app's name, as the reference app's `AppIdentity`.
-public struct AppIdentity: View {
+public struct AppNameLabel: View {
   public init() {}
 
   public var body: some View {
     HStack(spacing: 10) {
-      BrandLogo(size: 48)
+      LogoImage(size: 48)
       Text("Kiwi Tracker")
         .font(.title2.weight(.heavy))
         .foregroundStyle(Palette.text)
@@ -17,5 +17,5 @@ public struct AppIdentity: View {
 }
 
 #Preview {
-  AppIdentity()
+  AppNameLabel()
 }
