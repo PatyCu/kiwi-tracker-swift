@@ -8,15 +8,15 @@ import SwiftUI
 /// screen and lasts through sign-out until the app quits.
 public struct AppRoot: View {
   private enum Setup {
-    case ready(any PasswordAuth, any HouseholdStore)
+    case ready(any PasswordAuth, any HouseholdStore, any PetStore)
     case unavailable(String)
   }
 
   private let setup: Setup
   @State private var appearance = Appearance.system
 
-  public init(auth: any PasswordAuth, households: any HouseholdStore) {
-    setup = .ready(auth, households)
+  public init(auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore) {
+    setup = .ready(auth, households, pets)
   }
 
   /// For a build that can't offer sign-in; `message` says why.
@@ -27,7 +27,8 @@ public struct AppRoot: View {
   public var body: some View {
     Group {
       switch setup {
-      case .ready(let auth, let households): SessionRoot(auth: auth, households: households)
+      case .ready(let auth, let households, let pets):
+        SessionRoot(auth: auth, households: households, pets: pets)
       case .unavailable(let message): SignInUnavailableScreen(message: message)
       }
     }
@@ -40,11 +41,13 @@ public struct AppRoot: View {
 private struct SessionRoot: View {
   let auth: any PasswordAuth
   let households: any HouseholdStore
+  let pets: any PetStore
   @State private var session: SessionModel
 
-  init(auth: any PasswordAuth, households: any HouseholdStore) {
+  init(auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore) {
     self.auth = auth
     self.households = households
+    self.pets = pets
     _session = State(initialValue: SessionModel(auth: auth))
   }
 
@@ -57,9 +60,9 @@ private struct SessionRoot: View {
       case .signedOut:
         SignInScreen(auth: auth)
       case .signedIn(let user):
-        // A new Household and shell for each sign-in: a new Account never sees the previous
-        // Household, and every tab starts fresh on Today.
-        HouseholdRoot(store: households, user: user).id(user.id)
+        // A new Household, Pets and shell for each sign-in: a new Account never sees the
+        // previous Household or its Pets, and every tab starts fresh on Today.
+        HouseholdRoot(households: households, pets: pets, user: user).id(user.id)
       }
     }
     .environment(session)
@@ -68,17 +71,22 @@ private struct SessionRoot: View {
 }
 
 /// Waits for the signed-in Account's Household: loading, then the tabs, an error with Retry, or
-/// the no-household screen. Saving pets and the screen titles need the Household.
+/// the no-household screen. Saving pets and the screen titles need the Household. The Pets load
+/// alongside it, as the reference's `PetsProvider` loads per user, and the Pets tab waits for
+/// them.
 private struct HouseholdRoot: View {
   let email: String
   @State private var household: HouseholdModel
   /// Loaded by Settings, not here, so a failure never keeps the tabs closed.
   @State private var members: HouseholdMembersModel
+  @State private var pets: PetsModel
 
-  init(store: any HouseholdStore, user: SignedInUser) {
+  init(households: any HouseholdStore, pets: any PetStore, user: SignedInUser) {
     email = user.email
-    _household = State(initialValue: HouseholdModel(store: store))
-    _members = State(initialValue: HouseholdMembersModel(store: store, signedInAccountID: user.id))
+    _household = State(initialValue: HouseholdModel(store: households))
+    _members = State(
+      initialValue: HouseholdMembersModel(store: households, signedInAccountID: user.id))
+    _pets = State(initialValue: PetsModel(store: pets))
   }
 
   var body: some View {
@@ -93,14 +101,18 @@ private struct HouseholdRoot: View {
       case .missing:
         NoHouseholdScreen(email: email, onCheckAgain: reload) { SignOutButton() }
       case .ready(let loaded):
-        AppShell(household: loaded, members: members)
+        AppShell(household: loaded, members: members, pets: pets)
       }
     }
     .task { await household.load() }
+    .task { await pets.load() }
   }
 
+  /// Retry and "Check again" reload the Pets too: they likely failed with the Household, and an
+  /// Account just added to a Household has its Pets now.
   private func reload() {
     Task { await household.load() }
+    Task { await pets.load() }
   }
 }
 
@@ -116,12 +128,14 @@ extension View {
   private func signedIn(_ outcome: PreviewHouseholdStore.Outcome) -> AppRoot {
     AppRoot(
       auth: PreviewPasswordAuth(user: .preview),
-      households: PreviewHouseholdStore(outcome: outcome)
+      households: PreviewHouseholdStore(outcome: outcome),
+      pets: PreviewPetStore()
     )
   }
 
   #Preview("Signed out") {
-    AppRoot(auth: PreviewPasswordAuth(), households: PreviewHouseholdStore())
+    AppRoot(
+      auth: PreviewPasswordAuth(), households: PreviewHouseholdStore(), pets: PreviewPetStore())
   }
 
   #Preview("Signed in") {

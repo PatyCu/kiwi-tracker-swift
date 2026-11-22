@@ -1,6 +1,6 @@
 # Pets list and multi-pet support (KIW-22)
 
-Status: ready-for-agent
+Status: done
 
 ## Problem Statement
 
@@ -8,7 +8,7 @@ The iOS Pets tab is a placeholder. In the reference app, a Household's Members s
 
 ## Solution
 
-The app loads the signed-in Account's Pets at sign-in. The Pets tab shows "Choose the profile you want to manage." above a horizontal row of selector cards, one per Pet sorted by name: a paw avatar, the name, and a checkmark on the selected card. The first Pet is selected by default, and tapping a card selects it without pushing a screen. Below the cards, a placeholder card holds the place for the overview. While the Pets load the tab shows loading, and when the load fails it shows the error with Retry.
+The app loads the signed-in Account's Pets at sign-in. The Pets tab shows "Choose the pet you want to manage." above a horizontal row of selector cards, one per Pet sorted by name: a paw avatar, the name, and a checkmark on the selected card. The first Pet is selected by default, and tapping a card selects it without pushing a screen. Below the cards, a placeholder card holds the place for the overview. While the Pets load the tab shows loading, and when the load fails it shows the error with Retry.
 
 ## User Stories
 
@@ -27,11 +27,13 @@ The app loads the signed-in Account's Pets at sign-in. The Pets tab shows "Choos
 
 - **Glossary**: **Pet** added.
 - **Scope**: this feature leaves out what later Phase 3 features add to the same screen: the no-pets card (KIW-84), the add card and the profile sheet (KIW-23), the cards' Edit link (KIW-25), photos (KIW-24) and the overview (KIW-26). A Household without Pets keeps the placeholder screen until KIW-84.
-- **KiwiDomain**: `Pet` with an id, a name, a species (`PetSpecies`: Cat, Dog, Other), and an optional breed, birth date and photo path, as the reference's `Pet`. `PetStore.loadPets()` with the error cases `couldNotLoad` and `invalidData`.
-- **KiwiData**: `SupabasePetStore` reads `id, name, species, breed, birth_date, photo_path` from `pets`, ordered by name, then id. Access rules return only the Household's Pets. An unknown species fails the whole load with `invalidData`, as the reference does, rather than guessing. Empty breed, birth date and photo path become `nil`.
-- **State**: `PetsModel` with loading, ready and failed states, created per sign-in next to `HouseholdModel` in `AppRoot`, so a new Account never sees the previous Pets. Its load starts at sign-in, alongside the Household, as the reference's `PetsProvider` loads per user. Calling it again is Retry, and only the latest load counts.
+- **KiwiDomain**: `Pet` with an id, a name and a species (`PetSpecies`: Cat, Dog, Other). `PetStore.loadPets()` with the error cases `couldNotLoad` and `invalidData`.
+- **KiwiData**: `SupabasePetStore` reads `id, name, species` from `pets`, ordered by name, then id. Access rules return only the Household's Pets. An unknown species fails the whole load with `invalidData`, as the reference does, rather than guessing.
+- **State**: `PetsModel` with loading, ready and failed states, created per sign-in next to `HouseholdModel` in `AppRoot`, so a new Account never sees the previous Pets. Its load starts at sign-in, alongside the Household, as the reference's `PetsProvider` loads per user. Calling it again is Retry, and only the latest load counts. The Household's Retry and "Check again" reload the Pets too, so an Account just added to a Household sees its Pets.
 - **Waiting**: the Pets tab waits for the Pets only. The reference also waits for events and calendar events, and Phases 4 and 6 add those loads when their data arrives.
 - **Selection**: tab state, not a route: the selected Pet's id, defaulting to the first Pet and falling back to it when the selected Pet is gone. `Route` is unchanged; `Route.pet` stays the pushed overview.
+- **Help line**: "pet" where the reference says "Choose the profile you want to manage.", since the glossary's term is Pet; confirmed by the developer.
+- **Avatar**: a kiwi tint behind the paw, where the reference uses the card's surface color and the selected card hides it; confirmed by the developer.
 - **Title**: the navigation title stays "Pets in {alias}" (KIW-88); the help line is the first row of the content.
 
 ## Testing Decisions

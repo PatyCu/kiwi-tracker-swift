@@ -3,21 +3,25 @@ import KiwiDomain
 import SwiftUI
 
 /// The signed-in app: four tabs, each with its own navigation stack, for the
-/// loaded `household`, which it also puts in the environment, and its `members`,
-/// which Settings loads. Each tab shows a placeholder until its feature is
-/// ported. Expects the `SessionModel` in the environment.
+/// loaded `household`, which it also puts in the environment, its `members`,
+/// which Settings loads, and its `pets`, loaded since sign-in. Each tab shows a
+/// placeholder until its feature is ported. Expects the `SessionModel` in the
+/// environment.
 struct AppShell: View {
   private let household: Household
   private let members: HouseholdMembersModel
+  private let pets: PetsModel
   @State private var navigation: AppNavigation
 
   init(
     household: Household,
     members: HouseholdMembersModel,
+    pets: PetsModel,
     navigation: AppNavigation = AppNavigation()
   ) {
     self.household = household
     self.members = members
+    self.pets = pets
     _navigation = State(initialValue: navigation)
   }
 
@@ -31,8 +35,7 @@ struct AppShell: View {
       }
       tab(.pets) {
         NavigationStack(path: $navigation.petsPath) {
-          PlaceholderScreen(tab: .pets, navigationTitle: petsTitle(for: household))
-            .routeDestinations()
+          PetsScreen(household: household, model: pets).routeDestinations()
         }
       }
       tab(.calendar) {
@@ -69,7 +72,7 @@ extension View {
 }
 
 /// Stands in for a screen that hasn't been ported yet.
-private struct PlaceholderScreen: View {
+struct PlaceholderScreen: View {
   let title: String
   let systemImage: String
   let navigationTitle: String
@@ -104,13 +107,13 @@ private struct PlaceholderScreen: View {
 private let previewPetID = UUID()
 
 #Preview("Today") {
-  AppShell(household: .preview, members: .preview()).previewSession()
+  AppShell(household: .preview, members: .preview(), pets: .preview()).previewSession()
 }
 
 #Preview("Pet profile") {
   AppShell(
     household: .preview,
-    members: .preview(),
+    members: .preview(), pets: .preview(),
     navigation: AppNavigation(
       selectedTab: .pets,
       petsPath: [.pet(previewPetID), .petProfile(previewPetID)]
@@ -122,7 +125,7 @@ private let previewPetID = UUID()
 #Preview("Dark") {
   AppShell(
     household: .preview,
-    members: .preview(),
+    members: .preview(), pets: .preview(),
     navigation: AppNavigation(selectedTab: .calendar)
   )
   .previewSession()

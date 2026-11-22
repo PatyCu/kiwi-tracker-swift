@@ -11,7 +11,8 @@ struct KiwiTrackerApp: App {
       let backend = SupabaseBackend(config: try SupabaseConfig(bundle: .main))
       root = AppRoot(
         auth: SupabasePasswordAuth(backend: backend),
-        households: SupabaseHouseholdStore(backend: backend)
+        households: SupabaseHouseholdStore(backend: backend),
+        pets: SupabasePetStore(backend: backend)
       )
     } catch {
       // The message names the missing or invalid key, as the reference's setup error does.
