@@ -77,21 +77,21 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 
 **Exit:** pets and photos added on iOS show up in the Expo app, and the reverse.
 
-## Phase 4 — Event logging
+## Phase 4 — Pet event logging
 
 - [ ] Log a symptom (KIW-27)
 - [ ] Log a diet change (KIW-28)
-- [ ] Log another event (KIW-29)
+- [ ] Log an Other pet event (KIW-29)
 - [ ] Quick Log (KIW-30)
 - [ ] Date and time pickers (KIW-31)
 - [ ] Current diet from diet history (KIW-32)
 - [ ] Per-pet timeline (KIW-34)
 - [ ] Pet event details screen (KIW-35)
-- [ ] Edit an event (KIW-33)
-- [ ] Change an event's date and time (KIW-36)
-- [ ] Delete an event (KIW-37)
+- [ ] Edit a pet event (KIW-33)
+- [ ] Change a pet event's date and time (KIW-36)
+- [ ] Delete a pet event (KIW-37)
 
-**Exit:** every event type round-trips between iOS and the Expo app with the same fields.
+**Exit:** every pet event type round-trips between iOS and the Expo app with the same fields.
 
 ## Phase 5 — Health status and Today
 
@@ -105,7 +105,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [ ] Calendar tab: compact month, selected day's list, Monday-first (KIW-102)
 - [ ] Add a calendar event (KIW-20)
 - [ ] Open a calendar event's details (KIW-108)
-- [ ] Filter by pet and event type (KIW-109)
+- [ ] Filter by pet and calendar event type (KIW-109)
 - [ ] Mobile tweaks: "‹ Month ›", deselect day, "+" in the month card (KIW-110)
 - [ ] Upcoming care, next 7 days, on Today and Up next (KIW-11)
 
