@@ -140,33 +140,44 @@ private struct PetPhotoButton: View {
   var body: some View {
     let label = photo == nil ? "Add photo" : "Change photo"
     PhotosPicker(selection: $selection, matching: .images) {
-      VStack(spacing: 8) {
-        Group {
-          if let photo, let image = UIImage(data: photo) {
-            Image(uiImage: image)
-              .resizable()
-              .scaledToFill()
-          } else {
-            Image(systemName: "camera")
-              .font(.title)
-              .foregroundStyle(Palette.kiwi)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-              .background(Palette.surface2)
-          }
-        }
-        .frame(width: 92, height: 92)
-        .clipShape(.rect(cornerRadius: 28))
-        Text(label)
-          .font(.footnote.bold())
-          .foregroundStyle(Palette.kiwi)
-      }
-      .frame(maxWidth: .infinity)
-      .contentShape(.rect)
+      PetPhotoLabel(photo: photo, label: label)
     }
     .buttonStyle(.plain)
     .accessibilityElement(children: .ignore)
     .accessibilityLabel(label)
     .accessibilityAddTraits(.isButton)
+  }
+}
+
+/// The photo button's content: the photo at 92pt, or a camera placeholder, with `label` under
+/// it. Nonisolated, since the picker builds its label outside the main actor.
+nonisolated private struct PetPhotoLabel: View {
+  let photo: Data?
+  let label: String
+
+  var body: some View {
+    VStack(spacing: 8) {
+      Group {
+        if let photo, let image = UIImage(data: photo) {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+        } else {
+          Image(systemName: "camera")
+            .font(.title)
+            .foregroundStyle(Palette.kiwi)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Palette.surface2)
+        }
+      }
+      .frame(width: 92, height: 92)
+      .clipShape(.rect(cornerRadius: 28))
+      Text(label)
+        .font(.footnote.bold())
+        .foregroundStyle(Palette.kiwi)
+    }
+    .frame(maxWidth: .infinity)
+    .contentShape(.rect)
   }
 }
 
