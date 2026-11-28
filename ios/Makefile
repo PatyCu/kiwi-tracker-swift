@@ -33,6 +33,7 @@ build:
 # Prints compile errors (not xcodebuild's command lines), each failing test with its failure
 # messages, and the pass and fail counts. The full log is in $(TEST_LOG).
 test:
+	@mkdir -p .build
 	@rm -rf $(TEST_RESULTS)
 	@xcodebuild -project $(PROJECT) -scheme $(SCHEME) -destination '$(DESTINATION)' -quiet \
 		-resultBundlePath $(TEST_RESULTS) $(if $(ONLY),-only-testing:$(ONLY)) test > $(TEST_LOG) 2>&1; \
