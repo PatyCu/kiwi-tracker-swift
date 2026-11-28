@@ -18,3 +18,4 @@ decided it.
 | SET | Settings and Appearance | [settings.md](settings.md) |
 | PET | Pets and their details | [pets.md](pets.md) |
 | PHOTO | Pet photos | [pet-photos.md](pet-photos.md) |
+| EVT | Pet events, the current diet and the timeline | [pet-events.md](pet-events.md) |
