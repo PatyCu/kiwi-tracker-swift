@@ -48,6 +48,13 @@ _Avoid_: Food, product
 A Pet's Diet items not yet ended.
 _Avoid_: Diet, menu
 
+**Pet status**:
+How much attention a Pet needs right now, worked out from its recent Symptoms and Diet changes. **Red**: urgent attention. **Amber**: something is going on, keep an eye on it. **Green**: everything is fine, business as usual.
+_Avoid_: health status
+
+**Reason**:
+One recent Pet event behind a Pet's amber or red Pet status.
+
 **Calendar event**:
 An Event scheduled for a Pet, such as a vet visit, a vaccine or a medicine. It stays a Calendar event after its date and never becomes a Pet event.
 _Avoid_: Appointment, reminder

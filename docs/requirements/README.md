@@ -19,3 +19,5 @@ decided it.
 | PET | Pets and their details | [pets.md](pets.md) |
 | PHOTO | Pet photos | [pet-photos.md](pet-photos.md) |
 | EVT | Pet events, the current diet and the timeline | [pet-events.md](pet-events.md) |
+| STAT | Pet status | [pet-status.md](pet-status.md) |
+| TODAY | The Today tab | [today.md](today.md) |
