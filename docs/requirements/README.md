@@ -22,3 +22,4 @@ decided it.
 | STAT | Pet status | [pet-status.md](pet-status.md) |
 | TODAY | The Today tab | [today.md](today.md) |
 | CAL | Calendar and Calendar events | [calendar.md](calendar.md) |
+| APP | The app shell: tabs, routing, app-wide states | [app-shell.md](app-shell.md) |
