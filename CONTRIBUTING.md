@@ -68,8 +68,8 @@ change is checked against the [architecture principles](docs/architecture.md).
 2. Write the SQL, following the [Supabase conventions](supabase/CONVENTIONS.md).
 3. Rebuild the local database from scratch with all migrations and the seed:
    `supabase db reset`.
-4. Check the change: `supabase db lint` for schema errors, and Studio or the
-   seeded Accounts for access rules. Update `supabase/seed.sql` if the new
+4. Check the change: `supabase db lint` for schema errors, and
+   `supabase test db` for access rules. Update `supabase/seed.sql` if the new
    schema needs local data, and regenerate the iOS row types (`make db-types`
    in `ios/`).
 

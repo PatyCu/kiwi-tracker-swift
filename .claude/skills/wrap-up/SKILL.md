@@ -15,7 +15,7 @@ Stop and report to the developer whenever a step fails. Don't skip ahead.
 - Related bugs are part of done. If a bug caused by or tied to this change is still open, fix it first, or stop and ask the developer.
 - Match the checks to what changed. Any failure or warning stops the wrap-up.
   - **iOS code or config** (`ios/**`: `.swift`, `.xcconfig`, project, package or asset files): run `make lint`, `make build` and `make test` in `ios/`.
-  - **Migrations or seed** (`supabase/**`): `supabase db reset` and `supabase db lint` pass, and the iOS row types were regenerated (`make db-types` in `ios/`).
+  - **Supabase** (`supabase/**`: migrations, seed or tests): `supabase db reset`, `supabase db lint` and `supabase test db` pass, and after a migration the iOS row types were regenerated (`make db-types` in `ios/`).
   - **Only docs or skills** (`.md` files): no build checks apply; reread the changed files for broken links.
 - Review `git status` and `git diff`. Commit only files that belong to this task. Point out unrelated or unexpected changes and leave them out unless the developer says to include them.
 

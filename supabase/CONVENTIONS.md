@@ -15,8 +15,16 @@ applied: [CONTRIBUTING.md](../CONTRIBUTING.md#change-the-schema).
   Changing who can reach a pet changes that function, not the stored rows or
   photo paths.
 - Public sign-up stays off (`enable_signup = false` in `config.toml`).
+- Each table's access rules, as [docs/supabase.md](../docs/supabase.md) states
+  them, have pgTAP tests in `tests/`, one case per rule, role and operation
+  (the [testing principle](../docs/architecture.md)). A migration that changes
+  a policy or grant changes its tests in the same change. Each test file runs
+  in a transaction it rolls back, creates its own Accounts, Households and
+  Pets instead of relying on `seed.sql`, and acts as the `authenticated` or
+  `anon` role, with an Account's JWT claims when signed in. Plain pgTAP, no helper extension.
 
 ## Checks
 
-From the repo root: `supabase db reset`, then `supabase db lint`. After a schema
-change, regenerate the iOS row types with `make db-types` in `ios/`.
+From the repo root: `supabase db reset`, `supabase db lint`, then
+`supabase test db`. After a schema change, regenerate the iOS row types with
+`make db-types` in `ios/`.

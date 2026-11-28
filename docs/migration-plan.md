@@ -72,7 +72,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] No pets yet card on Today and Pets (KIW-84) — [tracker](../tracker/08-no-pets-card/)
 - [x] Add a pet and edit its details (KIW-23) — [tracker](../tracker/09-add-pet/)
 - [x] Pet selector cards with editing (KIW-25), folded into KIW-23
-- [ ] A test suite that protects what the specs promise, with database access tests — [tracker](../tracker/10-test-suite/)
+- [x] A test suite that protects what the specs promise, with database access tests — [tracker](../tracker/10-test-suite/)
 - [ ] Pet photo from the library: 512px upload, signed links, on-device cache (KIW-24)
 - [ ] Pet overview screen (KIW-26)
 

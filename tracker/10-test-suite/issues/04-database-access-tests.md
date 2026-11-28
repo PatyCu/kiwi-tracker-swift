@@ -1,6 +1,6 @@
 # Database access tests
 
-Status: ready-for-agent
+Status: done
 Blocked by: 01
 
 Row-level security is the only authorization layer (ADR 0003), so it gets automatic tests. This ticket covers user stories 27–36 of the spec and its "Database tests", "Supabase conventions" and "Wrap-up" decisions.
@@ -22,10 +22,11 @@ Row-level security is the only authorization layer (ADR 0003), so it gets automa
 - Wrap-up runs `supabase test db`, after a reset, for any change under `supabase/`.
 - Storage (`pet-photos`) policies are out of scope (KIW-24).
 
-- [ ] `supabase db reset && supabase test db` passes on the local stack, with one case per rule, role and operation that the rule constrains.
-- [ ] Where the database disagrees with `docs/supabase.md`, the case is logged under `tracker/bugs/`, not bent to pass.
-- [ ] No migration and no schema change.
+- [x] `supabase db reset && supabase test db` passes on the local stack, with one case per rule, role and operation that the rule constrains.
+- [x] Where the database disagrees with `docs/supabase.md`, the case is logged under `tracker/bugs/`, not bent to pass.
+- [x] No migration and no schema change.
 
 ## Comments
 
 - 2026-11-28 (from 01): Principle 14 in `docs/architecture.md` ends by linking to the iOS conventions only. Add the Supabase conventions' link there once they carry the pgTAP rules.
+- 2026-11-28: 56 cases in `supabase/tests/`, one file per table. The database matched `docs/supabase.md` everywhere, so no bug was logged. A copy of the pets file with a permissive policy failed 5 of its 13 cases. Principle 14 now links to the Supabase conventions.

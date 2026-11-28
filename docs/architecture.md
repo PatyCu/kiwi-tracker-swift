@@ -65,5 +65,6 @@ the exception.
     spec lists, through the unit's public interface, the way its caller sees
     it. A test stays only if a plausible wrong change that still compiles would
     make it fail, so a refactor that keeps the behavior keeps every test
-    green. The [iOS conventions](../ios/CONVENTIONS.md#tests) say how the app's
-    tests apply this.
+    green. The [iOS conventions](../ios/CONVENTIONS.md#tests) and the
+    [Supabase conventions](../supabase/CONVENTIONS.md) say how the app's and
+    the database's tests apply this.

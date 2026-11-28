@@ -1,6 +1,6 @@
 # A test suite that protects what the specs promise
 
-Status: ready-for-agent
+Status: done
 
 ## Problem Statement
 
