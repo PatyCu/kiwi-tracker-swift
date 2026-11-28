@@ -1,6 +1,6 @@
 # Add a pet and edit its details (KIW-23)
 
-Status: in-progress
+Status: done
 
 ## Problem Statement
 
