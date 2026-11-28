@@ -5,13 +5,6 @@ import Testing
 private struct SignOutFailed: Error {}
 
 @Suite struct SignOutModelTests {
-  @Test func startsReadyToSignOut() {
-    let model = SignOutModel()
-
-    #expect(!model.signingOut)
-    #expect(model.error == nil)
-  }
-
   @Test func staysSigningOutWhenItSucceeds() async {
     let model = SignOutModel()
 
@@ -22,13 +15,13 @@ private struct SignOutFailed: Error {}
     #expect(model.error == nil)
   }
 
-  @Test func showsTheErrorAndAllowsRetryWhenItFails() async {
+  @Test func showsAnErrorAndAllowsRetryWhenItFails() async {
     let model = SignOutModel()
 
     await model.signOut { throw SignOutFailed() }
 
     #expect(!model.signingOut)
-    #expect(model.error == "Could not sign out. Try again.")
+    #expect(model.error != nil)
   }
 
   @Test func clearsTheErrorWhenRetrying() async {

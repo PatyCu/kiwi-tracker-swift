@@ -8,7 +8,7 @@ import Testing
 @Suite struct SupabaseHouseholdStoreTests {
   @Test func returnsTheSignedInAccountsHousehold() async throws {
     let sent = Mutex<URLComponents?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, _ in
+    let backend = try StubSupabaseServer.backend { request, _ in
       sent.withLock {
         $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
       }
@@ -30,7 +30,7 @@ import Testing
   }
 
   @Test func trimsSpacesFromBothEndsOfTheAlias() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       (200, #"[{"id": "22222222-2222-4222-8222-222222222222", "alias": "  The Burrow \n"}]"#)
     }
 
@@ -40,14 +40,14 @@ import Testing
   }
 
   @Test func returnsNilWhenTheAccountIsNotInAHousehold() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in (200, "[]") }
+    let backend = try StubSupabaseServer.backend { _, _ in (200, "[]") }
 
     #expect(try await SupabaseHouseholdStore(backend: backend).loadHousehold() == nil)
   }
 
   @Test func throwsWhenTheQueryFails() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
-      (500, #"{"code": "XX000", "message": "Recorded error"}"#)
+    let backend = try StubSupabaseServer.backend { _, _ in
+      (500, #"{"code": "XX000", "message": "Stub error"}"#)
     }
 
     await #expect(throws: HouseholdStoreError.couldNotLoad) {
@@ -56,7 +56,7 @@ import Testing
   }
 
   @Test func throwsWhenSupabaseCannotBeReached() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
     }
 
@@ -67,7 +67,7 @@ import Testing
 
   @Test func returnsTheHouseholdsMembersSortedByDisplayName() async throws {
     let sent = Mutex<URLComponents?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, _ in
+    let backend = try StubSupabaseServer.backend { request, _ in
       sent.withLock {
         $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
       }
@@ -106,7 +106,7 @@ import Testing
   }
 
   @Test func trimsSpacesFromBothEndsOfADisplayName() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       (200, #"[{"user_id": "11111111-1111-4111-8111-111111111111", "display_name": " Alex \n"}]"#)
     }
 
@@ -116,8 +116,8 @@ import Testing
   }
 
   @Test func throwsWhenTheMembersQueryFails() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
-      (500, #"{"code": "XX000", "message": "Recorded error"}"#)
+    let backend = try StubSupabaseServer.backend { _, _ in
+      (500, #"{"code": "XX000", "message": "Stub error"}"#)
     }
 
     await #expect(throws: HouseholdStoreError.couldNotLoad) {

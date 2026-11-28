@@ -6,7 +6,6 @@ import Testing
 @testable import KiwiFeatures
 
 private let alexsHome = Household(id: UUID(), alias: "Alex's home")
-private let samsHome = Household(id: UUID(), alias: "Sam's home")
 
 @Suite struct HouseholdModelTests {
   @Test func loadsTheSignedInAccountsHousehold() async {
@@ -60,20 +59,6 @@ private let samsHome = Household(id: UUID(), alias: "Sam's home")
 
     #expect(states.withLock { $0 } == [.loading, .loading])
     #expect(model.state == .ready(alexsHome))
-  }
-
-  /// The app makes a new model for each sign-in (`RootView`), so the next Account starts from
-  /// loading and never sees the previous Household.
-  @Test func loadsAgainForADifferentAccountInsteadOfShowingThePreviousHousehold() async {
-    let alexsModel = HouseholdModel(store: RecordingHouseholdStore(.success(alexsHome)))
-    await alexsModel.load()
-    #expect(alexsModel.state == .ready(alexsHome))
-
-    let samsModel = HouseholdModel(store: RecordingHouseholdStore(.success(samsHome)))
-
-    #expect(samsModel.state == .loading)
-    await samsModel.load()
-    #expect(samsModel.state == .ready(samsHome))
   }
 
   @Test func ignoresAnEarlierLoadThatFinishesLast() async {

@@ -4,9 +4,9 @@ import Synchronization
 
 @testable import KiwiData
 
-/// Answers a backend's requests with recorded Supabase responses. Each test uses its own
+/// Answers a backend's requests with hand-written Supabase responses. Each test uses its own
 /// host, so tests running in parallel don't share answers.
-final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
+final class StubSupabaseServer: URLProtocol, @unchecked Sendable {
   typealias Answer = @Sendable (URLRequest, Data) throws -> (status: Int, body: String)
 
   private static let answers = Mutex<[String: Answer]>([:])
@@ -21,7 +21,7 @@ final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
   ) throws -> SupabaseBackend {
     answers.withLock { $0[host] = answer }
     let configuration = URLSessionConfiguration.ephemeral
-    configuration.protocolClasses = [RecordedSupabaseServer.self]
+    configuration.protocolClasses = [StubSupabaseServer.self]
     return SupabaseBackend(
       config: try SupabaseConfig(url: "http://\(host)", publishableKey: "sb_publishable_test"),
       sessionStorage: storage,
@@ -78,7 +78,7 @@ final class RecordedSupabaseServer: URLProtocol, @unchecked Sendable {
   }
 }
 
-/// One install of the app, launched against the recorded server: the Keychain (`storage`)
+/// One install of the app, launched against the stub server: the Keychain (`storage`)
 /// outlives the install, its UserDefaults don't. A later launch of the same install reuses all
 /// three.
 struct Install {
@@ -88,7 +88,7 @@ struct Install {
 
   init(storage: InMemorySessionStorage = InMemorySessionStorage()) throws {
     self.init(
-      host: RecordedSupabaseServer.newHost(), storage: storage, defaults: try Self.newDefaults())
+      host: StubSupabaseServer.newHost(), storage: storage, defaults: try Self.newDefaults())
   }
 
   private init(host: String, storage: InMemorySessionStorage, defaults: UserDefaults) {
@@ -98,11 +98,11 @@ struct Install {
   }
 
   func launch(
-    answer: @escaping RecordedSupabaseServer.Answer = { _, _ in (200, sessionResponse()) }
+    answer: @escaping StubSupabaseServer.Answer = { _, _ in (200, sessionResponse()) }
   )
     throws -> SupabaseBackend
   {
-    try RecordedSupabaseServer.backend(
+    try StubSupabaseServer.backend(
       host: host, storage: storage, installDefaults: defaults, answer: answer)
   }
 
@@ -163,5 +163,5 @@ func sessionResponse(expiresAt: Date = .now.addingTimeInterval(3600)) -> String 
 /// 2024-01-01, which names the error in `code`.
 func errorResponse(code: String?) -> String {
   let code = code.map { #""code": "\#($0)", "# } ?? ""
-  return #"{\#(code)"message": "Recorded error"}"#
+  return #"{\#(code)"message": "Stub error"}"#
 }

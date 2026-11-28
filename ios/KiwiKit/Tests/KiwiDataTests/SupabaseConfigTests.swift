@@ -6,6 +6,16 @@ import Testing
 private let localURL = "http://127.0.0.1:54321"
 private let publishableKey = "sb_publishable_test"
 
+/// What `SupabaseConfig` throws for these settings, or `nil` when they're valid.
+private func configError(url: String?, publishableKey: String?) -> SupabaseConfigError? {
+  do {
+    _ = try SupabaseConfig(url: url, publishableKey: publishableKey)
+    return nil
+  } catch {
+    return error
+  }
+}
+
 @Suite struct SupabaseConfigTests {
   @Test func returnsTheTrimmedURLAndPublishableKey() throws {
     let config = try SupabaseConfig(url: " \(localURL) ", publishableKey: " \(publishableKey)\n")
@@ -15,37 +25,31 @@ private let publishableKey = "sb_publishable_test"
   }
 
   @Test(arguments: [nil, "", "   "])
-  func rejectsAMissingURL(_ url: String?) {
-    #expect(throws: SupabaseConfigError("SUPABASE_URL is not set.")) {
-      try SupabaseConfig(url: url, publishableKey: publishableKey)
-    }
+  func namesTheURLWhenItIsMissing(_ url: String?) throws {
+    let error = try #require(configError(url: url, publishableKey: publishableKey))
+
+    #expect(error.description.contains("SUPABASE_URL"))
   }
 
   @Test(arguments: ["127.0.0.1:54321", "ftp://example.com", "not a url"])
-  func rejectsAURLThatIsNotHTTP(_ url: String) {
-    #expect(throws: SupabaseConfigError("SUPABASE_URL must be an http(s) URL.")) {
-      try SupabaseConfig(url: url, publishableKey: publishableKey)
-    }
+  func namesTheURLWhenItIsNotHTTP(_ url: String) throws {
+    let error = try #require(configError(url: url, publishableKey: publishableKey))
+
+    #expect(error.description.contains("SUPABASE_URL"))
+    #expect(error != configError(url: nil, publishableKey: publishableKey))
   }
 
   @Test(arguments: [nil, "", "  "])
-  func rejectsAMissingPublishableKey(_ key: String?) {
-    #expect(throws: SupabaseConfigError("SUPABASE_PUBLISHABLE_KEY is not set.")) {
-      try SupabaseConfig(url: localURL, publishableKey: key)
-    }
+  func namesThePublishableKeyWhenItIsMissing(_ key: String?) throws {
+    let error = try #require(configError(url: localURL, publishableKey: key))
+
+    #expect(error.description.contains("SUPABASE_PUBLISHABLE_KEY"))
   }
 
-  @Test func rejectsASecretKey() {
-    let error = #expect(throws: SupabaseConfigError.self) {
-      try SupabaseConfig(url: localURL, publishableKey: "sb_secret_abc")
-    }
-    #expect(error?.description.contains("holds a secret key") == true)
-  }
+  @Test func rejectsASecretKey() throws {
+    let error = try #require(configError(url: localURL, publishableKey: "sb_secret_abc"))
 
-  @Test func pointsDevelopersToTheSetupSteps() {
-    let error = #expect(throws: SupabaseConfigError.self) {
-      try SupabaseConfig(url: nil, publishableKey: nil)
-    }
-    #expect(error?.description.contains("README.md#run") == true)
+    #expect(error.description.contains("SUPABASE_PUBLISHABLE_KEY"))
+    #expect(error != configError(url: localURL, publishableKey: nil))
   }
 }

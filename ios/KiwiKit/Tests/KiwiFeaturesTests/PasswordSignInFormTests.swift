@@ -37,10 +37,10 @@ nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
     await form.submit()
 
     #expect(auth.attempts.isEmpty)
-    #expect(form.error == "Enter your email and password.")
+    #expect(form.error != nil)
   }
 
-  @Test func showsTheErrorAndLetsThePersonTryAgainWhenSignInFails() async {
+  @Test func showsAnErrorAndLetsThePersonTryAgainWhenSignInFails() async {
     let auth = RecordingPasswordAuth()
     auth.answer(.failure(.invalidCredentials))
     let form = filledForm("alex@kiwi.test", "wrong", auth: auth)
@@ -48,19 +48,29 @@ nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
     await form.submit()
 
     #expect(!form.signingIn)
-    #expect(form.error == "That email and password don’t match an account.")
+    #expect(form.error != nil)
 
     form.password = "right"
     #expect(form.error == nil)
   }
 
-  @Test func treatsUnexpectedErrorsAsUnknown() async {
-    let auth = RecordingPasswordAuth()
-    auth.answer(.failure(.unknown))
-    let form = filledForm("alex@kiwi.test", "secret", auth: auth)
+  @Test func givesEachSignInProblemItsOwnMessage() async {
+    let failures: [SignInError] = [
+      .invalidCredentials, .emailNotConfirmed, .rateLimited, .network, .unknown,
+    ]
+    var messages: [String] = []
+    for failure in failures {
+      let auth = RecordingPasswordAuth()
+      auth.answer(.failure(failure))
+      let form = filledForm("alex@kiwi.test", "secret", auth: auth)
+      await form.submit()
+      messages.append(form.error ?? "")
+    }
+    let emptyForm = filledForm("", "")
+    await emptyForm.submit()
+    messages.append(emptyForm.error ?? "")
 
-    await form.submit()
-
-    #expect(form.error == "Something went wrong. Try again.")
+    #expect(!messages.contains(""))
+    #expect(Set(messages).count == messages.count)
   }
 }

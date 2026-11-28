@@ -50,8 +50,8 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   feature uses, with the same validation before writing. No schema change unless
   the tracker item asks for one.
 - The household load is the worked example of store, model and tests:
-  `SupabaseHouseholdStore` and `SupabaseHouseholdStoreTests` (over the stub
-  server), `HouseholdModel`, `RecordingHouseholdStore` and
+  `SupabaseHouseholdStore` and `SupabaseHouseholdStoreTests` (over
+  `StubSupabaseServer`), `HouseholdModel`, `RecordingHouseholdStore` and
   `HouseholdModelTests`.
 - Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
   operations and load and retry behavior.

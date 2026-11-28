@@ -2,8 +2,6 @@ import Foundation
 import KiwiDomain
 import Testing
 
-/// The reference's pet details rules: `usePetProfileForm`'s validation, `savePetProfile`'s
-/// trimming, and the date of birth as a calendar day.
 @Suite struct PetDetailsTests {
   @Test func trimsTheNameAndBreedAndSavesAnEmptyBreedAsNone() {
     #expect(

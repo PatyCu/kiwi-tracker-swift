@@ -20,13 +20,13 @@ private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async ->
   return (model, store)
 }
 
-/// The reference's `usePetProfileForm`, `savePetProfile` and selector cases, and the sheet's rules.
 @Suite struct PetDetailsFormTests {
-  @Test func validatesAndSubmitsPetDetailsFormValues() async {
+  @Test func addsANewPetToTheHouseholdAsOneRecord() async {
     let (pets, store) = await loadedPets([kiwi])
     let form = PetDetailsForm(pets: pets, householdID: household.id)
-    form.name = " Miso "
+    form.name = " Murri "
     form.species = .dog
+    form.breed = "  "
     form.birthDate = BirthDate(year: 2020, month: 3, day: 5)
 
     await form.save()
@@ -35,23 +35,12 @@ private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async ->
       store.saves == [
         .add(
           PetDetails(
-            name: "Miso", species: .dog, birthDate: BirthDate(year: 2020, month: 3, day: 5)),
+            name: "Murri", species: .dog, birthDate: BirthDate(year: 2020, month: 3, day: 5)),
           to: household.id)
       ])
-    #expect(!form.isOpen)
-  }
-
-  @Test func addsANewPetToTheHouseholdAsOneRecord() async {
-    let (pets, store) = await loadedPets([kiwi])
-    let form = PetDetailsForm(pets: pets, householdID: household.id)
-    form.name = " Murri "
-    form.breed = "  "
-
-    await form.save()
-
-    #expect(store.saves == [.add(PetDetails(name: "Murri", species: .cat), to: household.id)])
     guard case .ready(let loaded) = pets.state else { Issue.record("Pets not ready"); return }
     #expect(loaded.map(\.name) == ["Kiwi", "Murri"])
+    #expect(!form.isOpen)
   }
 
   @Test func refusesToEditAPetThatIsNoLongerInTheList() async {
@@ -79,7 +68,7 @@ private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async ->
     #expect(selectedPet(nil, in: loaded)?.name == "Miso")
   }
 
-  @Test func opensTheExistingPetsDetailsFromThePetSelectorCard() async {
+  @Test func opensWithThePetsDetailsWhenEditing() async {
     let (pets, _) = await loadedPets([kiwi, luna])
     let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwi)
 
@@ -90,40 +79,21 @@ private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async ->
     #expect(form.birthDate == BirthDate(year: 2021, month: 4, day: 12))
   }
 
-  @Test func opensEmptyWithCatWhenAdding() async {
-    let (pets, _) = await loadedPets([kiwi])
-    let form = PetDetailsForm(pets: pets, householdID: household.id)
-
-    #expect(form.editing == nil)
-    #expect(form.name.isEmpty && form.breed.isEmpty && form.birthDate == nil)
-    #expect(form.species == .cat)
-  }
-
-  @Test(arguments: ["", "   "])
-  func cannotSaveWithoutAName(name: String) async {
-    let (pets, store) = await loadedPets([kiwi])
-    let form = PetDetailsForm(pets: pets, householdID: household.id)
-    form.name = name
-
-    #expect(!form.canSave)
-    await form.save()
-    #expect(store.saves.isEmpty)
-  }
-
-  @Test func cannotSaveADateOfBirthAfterToday() async {
+  /// The invalid cases live in `PetDetailsTests`. A date after the form's today shows the form
+  /// checks against the clock and calendar it was given.
+  @Test func blocksSaveWhileTheDetailsAreInvalid() async {
     let (pets, store) = await loadedPets([kiwi])
     let form = PetDetailsForm(
       pets: pets, householdID: household.id, now: { today }, calendar: madrid)
     form.name = "Miso"
-
     form.birthDate = BirthDate(year: 2026, month: 11, day: 23)
+
     #expect(!form.canSave)
     await form.save()
     #expect(store.saves.isEmpty)
+    #expect(form.isOpen)
 
     form.birthDate = BirthDate(year: 2026, month: 11, day: 22)
-    #expect(form.canSave)
-    form.birthDate = nil
     #expect(form.canSave)
   }
 

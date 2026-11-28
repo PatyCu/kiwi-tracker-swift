@@ -5,11 +5,10 @@ import Testing
 
 @testable import KiwiData
 
-/// The reference's `petStore` load and write cases.
 @Suite struct SupabasePetStoreTests {
   @Test func loadsTheHouseholdsPetsByName() async throws {
     let sent = Mutex<URLComponents?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, _ in
+    let backend = try StubSupabaseServer.backend { request, _ in
       sent.withLock {
         $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
       }
@@ -54,7 +53,7 @@ import Testing
   }
 
   @Test func reportsAnUnknownSpeciesInsteadOfGuessing() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       (
         200,
         #"""
@@ -70,8 +69,8 @@ import Testing
   }
 
   @Test func wrapsAFailedLoadInATypedError() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
-      (500, #"{"code": "XX000", "message": "Recorded error"}"#)
+    let backend = try StubSupabaseServer.backend { _, _ in
+      (500, #"{"code": "XX000", "message": "Stub error"}"#)
     }
 
     await #expect(throws: PetStoreError.couldNotLoad) {
@@ -80,7 +79,7 @@ import Testing
   }
 
   @Test func throwsWhenSupabaseCannotBeReached() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
     }
 
@@ -92,7 +91,7 @@ import Testing
   @Test func addsAPetToTheGivenHouseholdAsOneRow() async throws {
     let householdID = try #require(UUID(uuidString: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"))
     let sent = Mutex<(URLRequest, Data)?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, body in
+    let backend = try StubSupabaseServer.backend { request, body in
       sent.withLock { $0 = (request, body) }
       return (201, kiwiRow)
     }
@@ -120,7 +119,7 @@ import Testing
 
   @Test func savesOnePetByIDAndClearsFieldsLeftEmpty() async throws {
     let sent = Mutex<(URLRequest, Data)?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, body in
+    let backend = try StubSupabaseServer.backend { request, body in
       sent.withLock { $0 = (request, body) }
       return (
         200,
@@ -147,8 +146,8 @@ import Testing
   }
 
   @Test func wrapsAFailedWriteInATypedError() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
-      (403, #"{"code": "42501", "message": "Recorded error"}"#)
+    let backend = try StubSupabaseServer.backend { _, _ in
+      (403, #"{"code": "42501", "message": "Stub error"}"#)
     }
     let store = SupabasePetStore(backend: backend)
     let kiwi = try storedKiwi()

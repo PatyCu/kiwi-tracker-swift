@@ -18,7 +18,7 @@ private func grantType(of request: URLRequest) -> String? {
 @Suite struct SupabasePasswordAuthTests {
   @Test func signsInWithTheEmailAndPassword() async throws {
     let sent = Mutex<(path: String?, grantType: String?, body: [String: String])?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, body in
+    let backend = try StubSupabaseServer.backend { request, body in
       let fields = (try? JSONDecoder().decode([String: String].self, from: body)) ?? [:]
       sent.withLock { $0 = (request.url?.path(), grantType(of: request), fields) }
       return (200, sessionResponse())
@@ -44,7 +44,7 @@ private func grantType(of request: URLRequest) -> String? {
   func mapsTheErrorReturnedBySupabase(status: Int, code: String?, expected: SignInError)
     async throws
   {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       (status, errorResponse(code: code))
     }
 
@@ -55,7 +55,7 @@ private func grantType(of request: URLRequest) -> String? {
   }
 
   @Test func mapsAFailedRequestToNetwork() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in
+    let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
     }
 
@@ -66,7 +66,7 @@ private func grantType(of request: URLRequest) -> String? {
   }
 
   @Test func wrapsOtherErrorsThrownByTheClient() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in (200, "not json") }
+    let backend = try StubSupabaseServer.backend { _, _ in (200, "not json") }
 
     await #expect(throws: SignInError.unknown) {
       try await SupabasePasswordAuth(backend: backend)
@@ -75,7 +75,7 @@ private func grantType(of request: URLRequest) -> String? {
   }
 
   @Test func reportsTheStoredUserAndLaterChanges() async throws {
-    let backend = try RecordedSupabaseServer.backend { _, _ in (200, sessionResponse()) }
+    let backend = try StubSupabaseServer.backend { _, _ in (200, sessionResponse()) }
     let auth = SupabasePasswordAuth(backend: backend)
     var users = auth.signedInUsers().makeAsyncIterator()
 
@@ -86,7 +86,7 @@ private func grantType(of request: URLRequest) -> String? {
 
   @Test func signsOutOnThisDeviceOnly() async throws {
     let logout = Mutex<URLComponents?>(nil)
-    let backend = try RecordedSupabaseServer.backend { request, _ in
+    let backend = try StubSupabaseServer.backend { request, _ in
       guard request.url?.path() == "/auth/v1/logout" else { return (200, sessionResponse()) }
       logout.withLock {
         $0 = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }

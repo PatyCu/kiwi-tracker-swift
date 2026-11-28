@@ -92,7 +92,7 @@ Tests apply the principle that
 | Target         | What                                                             | With                                              |
 | -------------- | ---------------------------------------------------------------- | ------------------------------------------------- |
 | `KiwiDomain`   | Every rule, with the behaviors its spec lists.                   | No mocks                                          |
-| `KiwiData`     | Row ↔ model and error mapping, Session restore and clearing.     | Recorded JSON payloads, in-memory Session storage |
+| `KiwiData`     | Row ↔ model and error mapping, Session restore and clearing.     | Stub JSON payloads, in-memory Session storage     |
 | `KiwiFeatures` | Model state transitions: load, retry, a failed save keeps input. | In-memory stores                                  |
 
 KiwiKit's tests run outside the app, so the Keychain refuses them
@@ -115,5 +115,5 @@ Run from `ios/`:
 make lint    # swift format lint --strict, plus scripts/check-conventions.sh
 make build   # xcodebuild, warnings are errors
 make test    # Swift Testing for KiwiKit; prints compile errors, failing tests and the counts
-make test ONLY=KiwiFeaturesTests/TodayScreenTests   # one suite (or Target/Suite/test)
+make test ONLY=KiwiFeaturesTests/PetsModelTests     # one suite (or Target/Suite/test)
 ```

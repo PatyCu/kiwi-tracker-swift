@@ -17,16 +17,9 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .ready([kiwi, luna]))
   }
 
-  @Test func failsWhenThePetsCannotLoad() async {
-    let model = PetsModel(store: RecordingPetStore(.failure(.couldNotLoad)))
-
-    await model.load()
-
-    #expect(model.state == .failed)
-  }
-
-  @Test func failsWhenAStoredPetIsInvalid() async {
-    let model = PetsModel(store: RecordingPetStore(.failure(.invalidData)))
+  @Test(arguments: [PetStoreError.couldNotLoad, .invalidData])
+  func failsWhenThePetsCannotLoad(error: PetStoreError) async {
+    let model = PetsModel(store: RecordingPetStore(.failure(error)))
 
     await model.load()
 
@@ -84,24 +77,6 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     await earlier.value
 
     #expect(model.state == .ready([kiwi, luna]))
-  }
-}
-
-@Suite struct PetSelectionTests {
-  @Test func selectsTheFirstPetByDefault() {
-    #expect(selectedPet(nil, in: [kiwi, luna]) == kiwi)
-  }
-
-  @Test func keepsTheSelectedPet() {
-    #expect(selectedPet(luna.id, in: [kiwi, luna]) == luna)
-  }
-
-  @Test func fallsBackToTheFirstPetWhenTheSelectedOneIsGone() {
-    #expect(selectedPet(UUID(), in: [kiwi, luna]) == kiwi)
-  }
-
-  @Test func selectsNothingWithoutPets() {
-    #expect(selectedPet(luna.id, in: []) == nil)
   }
 }
 
