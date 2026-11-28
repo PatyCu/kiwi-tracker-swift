@@ -14,6 +14,8 @@ struct PetsScreen: View {
   @State private var selectedPetID: UUID?
   /// The details sheet open now, if any.
   @State private var details: DetailsRequest?
+  /// The Pet whose details saved but whose photo didn't, once its sheet has closed.
+  @State private var photoNotSaved: String?
 
   var body: some View {
     Group {
@@ -39,8 +41,11 @@ struct PetsScreen: View {
     .background(Palette.bg)
     .navigationTitle(petsTitle(for: household))
     .sheet(item: $details) { request in
-      PetDetailsSheet(pets: model, householdID: household.id, editing: request.pet)
+      PetDetailsSheet(pets: model, householdID: household.id, editing: request.pet) {
+        photoNotSaved = $0
+      }
     }
+    .photoNotSavedAlert($photoNotSaved)
   }
 
   private func selector(pets: [Pet], selected: Pet) -> some View {
@@ -55,6 +60,7 @@ struct PetsScreen: View {
             ForEach(pets) { pet in
               PetSelectorCard(
                 pet: pet,
+                pets: model,
                 isSelected: pet.id == selected.id,
                 onSelect: { selectedPetID = pet.id },
                 onEdit: { openDetails(keeping: selected, editing: pet) }

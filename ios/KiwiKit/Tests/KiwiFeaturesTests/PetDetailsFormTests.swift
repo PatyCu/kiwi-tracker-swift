@@ -1,5 +1,7 @@
 import Foundation
+import ImageIO
 import KiwiDomain
+import Synchronization
 import Testing
 
 @testable import KiwiFeatures
@@ -10,14 +12,27 @@ private let kiwi = Pet(
   birthDate: BirthDate(year: 2021, month: 4, day: 12))
 private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
 
-/// The Pets of `store`, loaded with `pets`.
-private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async -> (
-  PetsModel, RecordingPetStore
-) {
+/// Kiwi with a stored photo, at `oldPhoto`.
+private let kiwiWithPhoto = Pet(
+  id: kiwi.id, name: "Kiwi", species: .cat, breed: kiwi.breed, birthDate: kiwi.birthDate,
+  photoPath: oldPhoto)
+nonisolated private let oldPhoto = "kiwi/old.jpg"
+nonisolated private let storedPhoto = Data("stored photo".utf8)
+
+/// The Pets of `store`, loaded with `pets`, with their photos in `photos`.
+private func loadedPets(
+  _ pets: [Pet], store: RecordingPetStore? = nil, photos: RecordingPetPhotoStore? = nil
+) async -> (PetsModel, RecordingPetStore) {
   let store = store ?? RecordingPetStore(.success(pets))
-  let model = PetsModel(store: store)
+  let model = PetsModel(store: store, photos: photos ?? RecordingPetPhotoStore())
   await model.load()
   return (model, store)
+}
+
+/// The loaded Pet named `name`.
+private func pet(named name: String, in pets: PetsModel) -> Pet? {
+  guard case .ready(let loaded) = pets.state else { return nil }
+  return loaded.first { $0.name == name }
 }
 
 @Suite struct PetDetailsFormTests {
@@ -187,6 +202,196 @@ private func loadedPets(_ pets: [Pet], store: RecordingPetStore? = nil) async ->
 
     #expect(store.saves.count == 1)
     #expect(!form.isOpen)
+  }
+}
+
+@Suite struct PetDetailsFormPhotoTests {
+  @Test func uploadsANewPetsPhotoAfterAddingItAndRecordsWhereItIsStored() async throws {
+    let photos = RecordingPetPhotoStore()
+    let (pets, store) = await loadedPets([], photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    form.name = "Miso"
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+    let picked = try #require(form.pickedPhoto)
+
+    await form.save()
+
+    let miso = try #require(pet(named: "Miso", in: pets))
+    #expect(photos.uploads == [miso.id])
+    #expect(
+      store.saves == [
+        .add(PetDetails(name: "Miso", species: .cat), to: household.id),
+        .photoPath("\(miso.id)/1.jpg", of: miso.id),
+      ])
+    #expect(photos.files["\(miso.id)/1.jpg"] == picked)
+    #expect(photos.removals.isEmpty)
+    #expect(miso.photoPath == "\(miso.id)/1.jpg")
+    #expect(form.photoNotSavedFor == nil)
+    #expect(!form.isOpen)
+  }
+
+  @Test func showsAPhotoJustSavedWithoutFetchingIt() async throws {
+    let photos = RecordingPetPhotoStore()
+    let (pets, _) = await loadedPets([], photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    form.name = "Miso"
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    let miso = try #require(pet(named: "Miso", in: pets))
+    await pets.loadPhoto(at: miso.photoPath)
+    #expect(pets.photo(at: miso.photoPath) == form.pickedPhoto)
+    #expect(photos.fetches.isEmpty)
+  }
+
+  @Test func pointsThePetAtItsNewPhotoBeforeDeletingTheFileItReplaces() async throws {
+    let store = RecordingPetStore(.success([kiwiWithPhoto]))
+    let pointedFirst = Mutex<Bool?>(nil)
+    let pointing = RecordingPetStore.Save.photoPath("\(kiwi.id)/1.jpg", of: kiwi.id)
+    let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto]) { path in
+      guard path == oldPhoto else { return }
+      pointedFirst.withLock { $0 = store.saves.contains(pointing) }
+    }
+    let (pets, _) = await loadedPets([kiwiWithPhoto], store: store, photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    #expect(photos.removals == [oldPhoto])
+    #expect(pointedFirst.withLock { $0 } == true)
+    #expect(pet(named: "Kiwi", in: pets)?.photoPath == "\(kiwi.id)/1.jpg")
+    #expect(form.photoNotSavedFor == nil)
+  }
+
+  @Test func keepsTheShownPhotoWhenTheDetailsAreSavedWithoutANewPhoto() async throws {
+    let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
+    let (pets, store) = await loadedPets([kiwiWithPhoto], photos: photos)
+    await pets.loadPhoto(at: kiwiWithPhoto.photoPath)
+    let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    form.name = "Kiwi II"
+
+    await form.save()
+
+    let saved = try #require(pet(named: "Kiwi II", in: pets))
+    #expect(saved.photoPath == oldPhoto)
+    #expect(pets.photo(at: saved.photoPath) == storedPhoto)
+    #expect(photos.uploads.isEmpty)
+    #expect(store.saves.count == 1)
+  }
+
+  @Test func doesNotUploadThePhotoWhenTheDetailsAreNotSaved() async {
+    let store = RecordingPetStore(.success([]))
+    store.saveFails = true
+    let photos = RecordingPetPhotoStore()
+    let (pets, _) = await loadedPets([], store: store, photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    form.name = "Miso"
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    #expect(photos.uploads.isEmpty)
+    #expect(form.failure == .notAdded)
+    #expect(form.isOpen)
+    #expect(form.pickedPhoto != nil)
+  }
+
+  @Test func returnsTheSavedPetWhenOnlyItsPhotoFailsSoItIsNeverAddedTwice() async throws {
+    let photos = RecordingPetPhotoStore()
+    photos.fail(.couldNotUpload)
+    let (pets, store) = await loadedPets([], photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    form.name = " Miso "
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    let miso = try #require(pet(named: "Miso", in: pets))
+    #expect(miso.photoPath == nil)
+    #expect(store.saves == [.add(PetDetails(name: "Miso", species: .cat), to: household.id)])
+    #expect(!form.isOpen)
+    #expect(form.failure == nil)
+    #expect(form.photoNotSavedFor == "Miso")
+  }
+
+  @Test func keepsThePreviousPhotoAndDeletesTheNewFileWhenThePetCannotPointToIt() async {
+    let store = RecordingPetStore(.success([kiwiWithPhoto]))
+    store.photoPathFails = true
+    let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
+    let (pets, _) = await loadedPets([kiwiWithPhoto], store: store, photos: photos)
+    await pets.loadPhoto(at: kiwiWithPhoto.photoPath)
+    let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    #expect(photos.removals == ["\(kiwi.id)/1.jpg"])
+    #expect(pets.state == .ready([kiwiWithPhoto]))
+    #expect(pets.photo(at: kiwiWithPhoto.photoPath) == storedPhoto)
+    #expect(form.photoNotSavedFor == "Kiwi")
+    #expect(!form.isOpen)
+  }
+
+  @Test func stillSavesTheNewPhotoWhenTheReplacedFileCannotBeDeleted() async {
+    let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
+    photos.fail(.couldNotRemove)
+    let (pets, _) = await loadedPets([kiwiWithPhoto], photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+
+    await form.save()
+
+    #expect(pet(named: "Kiwi", in: pets)?.photoPath == "\(kiwi.id)/1.jpg")
+    #expect(form.photoNotSavedFor == nil)
+    #expect(!form.isOpen)
+  }
+
+  @Test func showsThePickedPhotoAsStoredAndSavesOnlyTheLastOne() async throws {
+    let photos = RecordingPetPhotoStore()
+    let (pets, _) = await loadedPets([], photos: photos)
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    form.name = "Miso"
+
+    await form.pickPhoto(testPhoto(width: 300, height: 300))
+    let first = try #require(form.shownPhoto)
+    await form.pickPhoto(testPhoto(width: 3000, height: 4000))
+    let last = try #require(form.shownPhoto)
+    await form.save()
+
+    #expect(imageProperties(of: first)[kCGImagePropertyPixelWidth] as? Int == 300)
+    #expect(imageProperties(of: last)[kCGImagePropertyPixelWidth] as? Int == 512)
+    #expect(photos.files.values.map { $0 } == [last])
+  }
+
+  @Test(arguments: [Data("not a photo".utf8), nil])
+  func reportsAPhotoThatCannotBeReadAndKeepsTheSheetAsItWas(data: Data?) async throws {
+    let (pets, _) = await loadedPets([])
+    let form = PetDetailsForm(pets: pets, householdID: household.id)
+    await form.pickPhoto(testPhoto(width: 900, height: 900))
+    let picked = try #require(form.pickedPhoto)
+
+    await form.pickPhoto(data)
+
+    #expect(form.failure == .photoNotSelected)
+    #expect(form.pickedPhoto == picked)
+    #expect(form.isOpen)
+  }
+
+  @Test func opensWithTheStoredPhotoAndNothingPickedAfterACancelledPick() async {
+    let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
+    let (pets, _) = await loadedPets([kiwiWithPhoto], photos: photos)
+    let cancelled = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    await cancelled.loadStoredPhoto()
+    await cancelled.pickPhoto(testPhoto(width: 900, height: 900))
+
+    let reopened = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwiWithPhoto)
+    await reopened.loadStoredPhoto()
+
+    #expect(reopened.pickedPhoto == nil)
+    #expect(reopened.shownPhoto == storedPhoto)
+    #expect(photos.uploads.isEmpty)
   }
 }
 

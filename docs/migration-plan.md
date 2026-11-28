@@ -73,7 +73,7 @@ roadmap, and `tracker/` holds each feature's tickets and the open bugs
 - [x] Add a pet and edit its details (KIW-23) — [tracker](../tracker/09-add-pet/)
 - [x] Pet selector cards with editing (KIW-25), folded into KIW-23
 - [x] A test suite that protects what the specs promise, with database access tests — [tracker](../tracker/10-test-suite/)
-- [ ] Pet photo from the library: 512px upload, signed links, on-device cache (KIW-24)
+- [ ] Pet photo from the library: 512px upload, on-device cache (KIW-24) — [tracker](../tracker/11-pet-photo/)
 - [ ] Pet overview screen (KIW-26)
 
 **Exit:** pets and photos added on iOS show up in the Expo app, and the reverse.

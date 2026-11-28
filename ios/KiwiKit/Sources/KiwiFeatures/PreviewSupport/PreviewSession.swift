@@ -18,7 +18,9 @@
     @State private var session: SessionModel
 
     init(user: SignedInUser) {
-      _session = State(initialValue: SessionModel(auth: PreviewPasswordAuth(user: user)))
+      _session = State(
+        initialValue: SessionModel(
+          auth: PreviewPasswordAuth(user: user), photos: PreviewPetPhotoStore()))
     }
 
     func body(content: Content) -> some View {

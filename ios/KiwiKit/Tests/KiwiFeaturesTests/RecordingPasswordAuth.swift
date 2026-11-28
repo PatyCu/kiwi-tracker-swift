@@ -1,8 +1,8 @@
 import KiwiDomain
 import Synchronization
 
-/// Sign-in for tests: records the attempts, answers with `result`, counts sign-outs, and lets the
-/// test emit users.
+/// Sign-in for tests: records the attempts, answers with `result`, counts sign-outs, which fail
+/// while `signOutFails` is set, and lets the test emit users.
 nonisolated final class RecordingPasswordAuth: PasswordAuth {
   private struct State {
     var result: Result<Void, SignInError> = .success(())
@@ -10,6 +10,7 @@ nonisolated final class RecordingPasswordAuth: PasswordAuth {
     var continuation: AsyncStream<SignedInUser?>.Continuation?
     var unsubscribed = false
     var signOuts = 0
+    var signOutFails = false
   }
 
   private let state = Mutex(State())
@@ -18,6 +19,10 @@ nonisolated final class RecordingPasswordAuth: PasswordAuth {
   var unsubscribed: Bool { state.withLock { $0.unsubscribed } }
   var signOuts: Int { state.withLock { $0.signOuts } }
   var subscribed: Bool { state.withLock { $0.continuation != nil } }
+  var signOutFails: Bool {
+    get { state.withLock { $0.signOutFails } }
+    set { state.withLock { $0.signOutFails = newValue } }
+  }
 
   func answer(_ result: Result<Void, SignInError>) {
     state.withLock { $0.result = result }
@@ -37,7 +42,11 @@ nonisolated final class RecordingPasswordAuth: PasswordAuth {
   }
 
   func signOut() async throws {
-    state.withLock { $0.signOuts += 1 }
+    let fails = state.withLock {
+      $0.signOuts += 1
+      return $0.signOutFails
+    }
+    if fails { throw SignOutFailed() }
   }
 
   func signedInUsers() -> AsyncStream<SignedInUser?> {
@@ -48,3 +57,5 @@ nonisolated final class RecordingPasswordAuth: PasswordAuth {
     return stream
   }
 }
+
+struct SignOutFailed: Error {}

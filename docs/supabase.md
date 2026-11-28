@@ -22,7 +22,9 @@ only the dashboard can create households or change memberships.
 
 Each pet has at most one photo, stored under its own name,
 `<pet_id>/<timestamp>.jpg`, with that path in `pets.photo_path`; a new photo
-replaces the file. Because the bucket is private, clients show photos through
-signed links, and anyone holding a link can open the photo until it expires,
-so removing someone from a household cuts off its photos only when their
-links expire.
+replaces the file. The bucket is private: iOS downloads photos by path through
+the signed-in session, and the Expo app shows them through signed links, which
+anyone holding one can open until it expires, so removing someone from a
+household cuts off its photos there only when their links expire. Either app
+keeps a photo it has shown on the device, so a removed member keeps those
+copies until they sign out.

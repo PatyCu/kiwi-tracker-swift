@@ -4,7 +4,7 @@ import Supabase
 
 /// The signed-in Account's Household's Pets in the `pets` table.
 public struct SupabasePetStore: PetStore {
-  private static let columns = "id, name, species, breed, birth_date"
+  private static let columns = "id, name, species, breed, birth_date, photo_path"
   private let backend: SupabaseBackend
 
   public init(backend: SupabaseBackend) {
@@ -53,6 +53,18 @@ public struct SupabasePetStore: PetStore {
     }
   }
 
+  /// Updates `photo_path` alone, so a photo saved after the details never undoes another change.
+  public func setPhotoPath(_ path: String, of id: UUID) async throws(PetStoreError) -> Pet {
+    try await write {
+      try await backend.client.from("pets")
+        .update(["photo_path": path])
+        .eq("id", value: id)
+        .select(Self.columns)
+        .single()
+        .execute().value
+    }
+  }
+
   /// Runs a write that answers with the stored row. A stored row the app can't read is reported
   /// as not saved too: the Pet can't be shown as saved.
   private func write(_ request: () async throws -> PetRow) async throws(PetStoreError) -> Pet {
@@ -71,10 +83,12 @@ private struct PetRow: Decodable {
   let species: String
   let breed: String?
   let birthDate: String?
+  let photoPath: String?
 
   enum CodingKeys: String, CodingKey {
     case id, name, species, breed
     case birthDate = "birth_date"
+    case photoPath = "photo_path"
   }
 
   func pet() throws(PetStoreError) -> Pet {
@@ -86,7 +100,7 @@ private struct PetRow: Decodable {
     }
     return Pet(
       id: id, name: name, species: species, breed: breed.flatMap { $0.isEmpty ? nil : $0 },
-      birthDate: birthDay)
+      birthDate: birthDay, photoPath: photoPath.flatMap { $0.isEmpty ? nil : $0 })
   }
 }
 

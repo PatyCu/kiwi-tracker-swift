@@ -10,6 +10,8 @@ struct TodayScreen: View {
   /// The Pets loaded since sign-in, shared with the Pets tab, so Retry here updates both.
   let model: PetsModel
   @State private var addingPet = false
+  /// The Pet whose details saved but whose photo didn't, once its sheet has closed.
+  @State private var photoNotSaved: String?
 
   var body: some View {
     Group {
@@ -41,8 +43,9 @@ struct TodayScreen: View {
     .background(Palette.bg)
     .navigationTitle(todayTitle(for: household))
     .sheet(isPresented: $addingPet) {
-      PetDetailsSheet(pets: model, householdID: household.id)
+      PetDetailsSheet(pets: model, householdID: household.id) { photoNotSaved = $0 }
     }
+    .photoNotSavedAlert($photoNotSaved)
   }
 
   private func retry() {

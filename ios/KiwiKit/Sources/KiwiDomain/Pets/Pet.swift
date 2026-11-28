@@ -1,22 +1,27 @@
 import Foundation
 
 /// An animal a Household cares for; every Member sees and manages it. It has a name and a
-/// species, and may have a breed and a date of birth.
+/// species, and may have a breed, a date of birth and a photo.
 public struct Pet: Equatable, Identifiable, Sendable {
   public let id: UUID
   public let name: String
   public let species: PetSpecies
   public let breed: String?
   public let birthDate: BirthDate?
+  /// Where the Pet's photo is in the Household's photo storage; `nil` when it has none. Every new
+  /// photo gets a new path.
+  public let photoPath: String?
 
   public init(
-    id: UUID, name: String, species: PetSpecies, breed: String? = nil, birthDate: BirthDate? = nil
+    id: UUID, name: String, species: PetSpecies, breed: String? = nil, birthDate: BirthDate? = nil,
+    photoPath: String? = nil
   ) {
     self.id = id
     self.name = name
     self.species = species
     self.breed = breed
     self.birthDate = birthDate
+    self.photoPath = photoPath
   }
 
   /// What a Member entered for this Pet.
@@ -119,4 +124,7 @@ public protocol PetStore: Sendable {
   func addPet(_ details: PetDetails, to householdID: UUID) async throws(PetStoreError) -> Pet
   /// Saves `details` to the Pet with `id`, and returns it as stored.
   func updatePet(_ id: UUID, _ details: PetDetails) async throws(PetStoreError) -> Pet
+  /// Points the Pet with `id` at the photo stored at `path`, changing nothing else, and returns
+  /// it as stored.
+  func setPhotoPath(_ path: String, of id: UUID) async throws(PetStoreError) -> Pet
 }

@@ -29,8 +29,8 @@ What Members call their Household, shown in titles.
 _Avoid_: Household name
 
 **Pet**:
-An animal a Household cares for. It belongs to exactly one Household, and every Member sees and manages it. It has a name and a species (Cat, Dog or Other), and may have a breed and a date of birth.
-_Avoid_: Animal, profile
+An animal a Household cares for. It belongs to exactly one Household, and every Member sees and manages it. It has a name and a species (Cat, Dog or Other), and may have a breed, a date of birth and a photo.
+_Avoid_: Animal, profile; for the photo, avatar or picture
 
 **Event**:
 Something about a Pet on a date: either a Pet event or a Calendar event.

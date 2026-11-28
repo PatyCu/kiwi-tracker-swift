@@ -7,15 +7,19 @@ import SwiftUI
 /// so the choice covers every screen and lasts through sign-out until the app quits.
 public struct RootView: View {
   private enum Setup {
-    case ready(any PasswordAuth, any HouseholdStore, any PetStore)
+    case ready(any PasswordAuth, any HouseholdStore, any PetStore, any PetPhotoCache)
     case unavailable(String)
   }
 
   private let setup: Setup
   @State private var appearance = Appearance.system
 
-  public init(auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore) {
-    setup = .ready(auth, households, pets)
+  /// `photos` keeps the Pets' photos on this device; signing out clears it.
+  public init(
+    auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore,
+    photos: any PetPhotoCache
+  ) {
+    setup = .ready(auth, households, pets, photos)
   }
 
   /// For a build that can't offer sign-in; `message` says why.
@@ -26,8 +30,8 @@ public struct RootView: View {
   public var body: some View {
     Group {
       switch setup {
-      case .ready(let auth, let households, let pets):
-        SessionView(auth: auth, households: households, pets: pets)
+      case .ready(let auth, let households, let pets, let photos):
+        SessionView(auth: auth, households: households, pets: pets, photos: photos)
       case .unavailable(let message): SignInUnavailableScreen(message: message)
       }
     }
@@ -41,13 +45,18 @@ private struct SessionView: View {
   let auth: any PasswordAuth
   let households: any HouseholdStore
   let pets: any PetStore
+  let photos: any PetPhotoCache
   @State private var session: SessionModel
 
-  init(auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore) {
+  init(
+    auth: any PasswordAuth, households: any HouseholdStore, pets: any PetStore,
+    photos: any PetPhotoCache
+  ) {
     self.auth = auth
     self.households = households
     self.pets = pets
-    _session = State(initialValue: SessionModel(auth: auth))
+    self.photos = photos
+    _session = State(initialValue: SessionModel(auth: auth, photos: photos))
   }
 
   var body: some View {
@@ -61,7 +70,8 @@ private struct SessionView: View {
       case .signedIn(let user):
         // A new Household, Pets and shell for each sign-in: a new Account never sees the
         // previous Household or its Pets, and every tab starts fresh on Today.
-        HouseholdView(households: households, pets: pets, user: user).id(user.id)
+        HouseholdView(households: households, pets: pets, photos: photos, user: user)
+          .id(user.id)
       }
     }
     .environment(session)
@@ -79,12 +89,15 @@ private struct HouseholdView: View {
   @State private var members: MembersModel
   @State private var pets: PetsModel
 
-  init(households: any HouseholdStore, pets: any PetStore, user: SignedInUser) {
+  init(
+    households: any HouseholdStore, pets: any PetStore, photos: any PetPhotoStore,
+    user: SignedInUser
+  ) {
     email = user.email
     _household = State(initialValue: HouseholdModel(store: households))
     _members = State(
       initialValue: MembersModel(store: households, signedInAccountID: user.id))
-    _pets = State(initialValue: PetsModel(store: pets))
+    _pets = State(initialValue: PetsModel(store: pets, photos: photos))
   }
 
   var body: some View {
@@ -127,13 +140,15 @@ extension View {
     RootView(
       auth: PreviewPasswordAuth(user: .preview),
       households: PreviewHouseholdStore(outcome: outcome),
-      pets: PreviewPetStore()
+      pets: PreviewPetStore(),
+      photos: PreviewPetPhotoStore()
     )
   }
 
   #Preview("Signed out") {
     RootView(
-      auth: PreviewPasswordAuth(), households: PreviewHouseholdStore(), pets: PreviewPetStore())
+      auth: PreviewPasswordAuth(), households: PreviewHouseholdStore(), pets: PreviewPetStore(),
+      photos: PreviewPetPhotoStore())
   }
 
   #Preview("Signed in") {

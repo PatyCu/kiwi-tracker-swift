@@ -12,14 +12,18 @@ import Observation
 
   private(set) var state = State.loading
   private let auth: any PasswordAuth
+  private let photos: any PetPhotoCache
 
-  init(auth: any PasswordAuth) {
+  init(auth: any PasswordAuth, photos: any PetPhotoCache) {
     self.auth = auth
+    self.photos = photos
   }
 
-  /// Ends the session on this device; `observe()` then switches to signed out.
+  /// Ends the session on this device, then clears the Pet photos kept on it, so the next Account
+  /// can't see them; `observe()` then switches to signed out. A failed sign-out keeps them.
   func signOut() async throws {
     try await auth.signOut()
+    await photos.clear()
   }
 
   /// Follows sign-in and sign-out until the calling task is cancelled.

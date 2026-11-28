@@ -2,8 +2,6 @@ import Testing
 
 @testable import KiwiFeatures
 
-private struct SignOutFailed: Error {}
-
 @Suite struct SignOutModelTests {
   @Test func staysSigningOutWhenItSucceeds() async {
     let model = SignOutModel()

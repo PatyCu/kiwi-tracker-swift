@@ -24,14 +24,14 @@ private func settle() async {
 
 @Suite struct SessionModelTests {
   @Test func isLoadingUntilTheStoredSessionHasBeenRead() {
-    let model = SessionModel(auth: RecordingPasswordAuth())
+    let model = SessionModel(auth: RecordingPasswordAuth(), photos: RecordingPetPhotoStore())
 
     #expect(model.state == .loading)
   }
 
   @Test func followsSignInAndSignOut() async {
     let auth = RecordingPasswordAuth()
-    let model = SessionModel(auth: auth)
+    let model = SessionModel(auth: auth, photos: RecordingPetPhotoStore())
     let task = await observing(model, auth)
     defer { task.cancel() }
 
@@ -50,7 +50,7 @@ private func settle() async {
 
   @Test func keepsTheSameStateWhenATokenRefreshReportsTheSameUser() async {
     let auth = RecordingPasswordAuth()
-    let model = SessionModel(auth: auth)
+    let model = SessionModel(auth: auth, photos: RecordingPetPhotoStore())
     let task = await observing(model, auth)
     defer { task.cancel() }
     auth.emit(alex)
@@ -72,14 +72,41 @@ private func settle() async {
   @Test func signsOutThroughAuth() async throws {
     let auth = RecordingPasswordAuth()
 
-    try await SessionModel(auth: auth).signOut()
+    try await SessionModel(auth: auth, photos: RecordingPetPhotoStore()).signOut()
 
     #expect(auth.signOuts == 1)
   }
 
+  @Test func clearsCachedPhotosWhenTheAccountSignsOutAndNotWhileSignedIn() async throws {
+    let auth = RecordingPasswordAuth()
+    let photos = RecordingPetPhotoStore()
+    let model = SessionModel(auth: auth, photos: photos)
+    let task = await observing(model, auth)
+    defer { task.cancel() }
+    auth.emit(alex)
+    await settle()
+    #expect(photos.clears == 0)
+
+    try await model.signOut()
+
+    #expect(photos.clears == 1)
+  }
+
+  @Test func keepsCachedPhotosWhenSigningOutFails() async {
+    let auth = RecordingPasswordAuth()
+    auth.signOutFails = true
+    let photos = RecordingPetPhotoStore()
+
+    await #expect(throws: SignOutFailed.self) {
+      try await SessionModel(auth: auth, photos: photos).signOut()
+    }
+
+    #expect(photos.clears == 0)
+  }
+
   @Test func unsubscribesWhenObservingStops() async {
     let auth = RecordingPasswordAuth()
-    let task = await observing(SessionModel(auth: auth), auth)
+    let task = await observing(SessionModel(auth: auth, photos: RecordingPetPhotoStore()), auth)
 
     task.cancel()
     await task.value

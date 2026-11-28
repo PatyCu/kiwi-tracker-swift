@@ -16,9 +16,10 @@ import Testing
         200,
         #"""
         [{"id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc", "name": "Kiwi", "species": "Cat",
-          "breed": "European shorthair", "birth_date": "2021-04-12"},
+          "breed": "European shorthair", "birth_date": "2021-04-12",
+          "photo_path": "cccccccc-cccc-4ccc-8ccc-cccccccccccc/1762621200000.jpg"},
          {"id": "ffffffff-ffff-4fff-8fff-ffffffffffff", "name": "Luna", "species": "Dog",
-          "breed": null, "birth_date": null}]
+          "breed": null, "birth_date": null, "photo_path": null}]
         """#
       )
     }
@@ -32,7 +33,8 @@ import Testing
           name: "Kiwi",
           species: .cat,
           breed: "European shorthair",
-          birthDate: BirthDate(year: 2021, month: 4, day: 12)
+          birthDate: BirthDate(year: 2021, month: 4, day: 12),
+          photoPath: "cccccccc-cccc-4ccc-8ccc-cccccccccccc/1762621200000.jpg"
         ),
         Pet(
           id: try #require(UUID(uuidString: "ffffffff-ffff-4fff-8fff-ffffffffffff")),
@@ -46,7 +48,7 @@ import Testing
     #expect(
       Set(request.queryItems ?? [])
         == [
-          URLQueryItem(name: "select", value: "id,name,species,breed,birth_date"),
+          URLQueryItem(name: "select", value: "id,name,species,breed,birth_date,photo_path"),
           URLQueryItem(name: "order", value: "name.asc.nullslast,id.asc.nullslast"),
         ]
     )
@@ -107,7 +109,7 @@ import Testing
     let (request, body) = try #require(sent.withLock { $0 })
     #expect(request.httpMethod == "POST")
     #expect(request.url?.path == "/rest/v1/pets")
-    #expect(try queryValue("select", of: request) == "id,name,species,breed,birth_date")
+    #expect(try queryValue("select", of: request) == "id,name,species,breed,birth_date,photo_path")
     #expect(
       try json(body)
         == [
@@ -138,11 +140,37 @@ import Testing
     let (request, body) = try #require(sent.withLock { $0 })
     #expect(request.httpMethod == "PATCH")
     #expect(try queryValue("id", of: request) == "eq.cccccccc-cccc-4ccc-8ccc-cccccccccccc")
-    #expect(try queryValue("select", of: request) == "id,name,species,breed,birth_date")
+    #expect(try queryValue("select", of: request) == "id,name,species,breed,birth_date,photo_path")
     #expect(
       try json(body)
         == ["name": "Kiwi", "species": "Cat", "breed": NSNull(), "birth_date": NSNull()]
     )
+  }
+
+  @Test func recordsWhereAPetPhotoIsStoredAndTouchesNothingElse() async throws {
+    let sent = Mutex<(URLRequest, Data)?>(nil)
+    let backend = try StubSupabaseServer.backend { request, body in
+      sent.withLock { $0 = (request, body) }
+      return (
+        200,
+        #"""
+        {"id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc", "name": "Kiwi", "species": "Cat",
+         "breed": "European shorthair", "birth_date": "2021-04-12",
+         "photo_path": "cccccccc-cccc-4ccc-8ccc-cccccccccccc/new.jpg"}
+        """#
+      )
+    }
+    let kiwi = try storedKiwi()
+
+    let pet = try await SupabasePetStore(backend: backend).setPhotoPath(
+      "cccccccc-cccc-4ccc-8ccc-cccccccccccc/new.jpg", of: kiwi.id)
+
+    #expect(pet.photoPath == "cccccccc-cccc-4ccc-8ccc-cccccccccccc/new.jpg")
+    #expect(pet.details == kiwi.details)
+    let (request, body) = try #require(sent.withLock { $0 })
+    #expect(request.httpMethod == "PATCH")
+    #expect(try queryValue("id", of: request) == "eq.cccccccc-cccc-4ccc-8ccc-cccccccccccc")
+    #expect(try json(body) == ["photo_path": "cccccccc-cccc-4ccc-8ccc-cccccccccccc/new.jpg"])
   }
 
   @Test func wrapsAFailedWriteInATypedError() async throws {
@@ -157,6 +185,9 @@ import Testing
     }
     await #expect(throws: PetStoreError.couldNotSave) {
       try await store.updatePet(kiwi.id, PetDetails(name: "Kiwi", species: .cat))
+    }
+    await #expect(throws: PetStoreError.couldNotSave) {
+      try await store.setPhotoPath("\(kiwi.id)/new.jpg", of: kiwi.id)
     }
   }
 }
