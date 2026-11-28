@@ -33,9 +33,7 @@ struct AddPetCard: View {
       .contentShape(.rect(cornerRadius: 17))
     }
     .buttonStyle(.plain)
-    .accessibilityElement(children: .ignore)
     .accessibilityLabel("Add another pet")
-    .accessibilityAddTraits(.isButton)
   }
 
   private var dashed: StrokeStyle { StrokeStyle(lineWidth: 1, dash: [4, 3]) }
