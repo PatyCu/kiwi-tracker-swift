@@ -16,6 +16,7 @@ private func grantType(of request: URLRequest) -> String? {
 }
 
 @Suite struct SupabasePasswordAuthTests {
+  // Covers: AUTH-001
   @Test func signsInWithTheEmailAndPassword() async throws {
     let sent = Mutex<(path: String?, grantType: String?, body: [String: String])?>(nil)
     let backend = try StubSupabaseServer.backend { request, body in
@@ -34,6 +35,7 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(request.body["password"] == "secret")
   }
 
+  // Covers: AUTH-004
   @Test(arguments: [
     (400, "invalid_credentials" as String?, SignInError.invalidCredentials),
     (400, "email_not_confirmed", .emailNotConfirmed),
@@ -54,6 +56,7 @@ private func grantType(of request: URLRequest) -> String? {
     }
   }
 
+  // Covers: AUTH-004
   @Test func mapsAFailedRequestToNetwork() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
@@ -65,6 +68,7 @@ private func grantType(of request: URLRequest) -> String? {
     }
   }
 
+  // Covers: AUTH-004
   @Test func wrapsOtherErrorsThrownByTheClient() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in (200, "not json") }
 
@@ -74,6 +78,7 @@ private func grantType(of request: URLRequest) -> String? {
     }
   }
 
+  // Covers: AUTH-009
   @Test func reportsTheStoredUserAndLaterChanges() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in (200, sessionResponse()) }
     let auth = SupabasePasswordAuth(backend: backend)
@@ -84,6 +89,7 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(await users.next() == alex)
   }
 
+  // Covers: AUTH-016
   @Test func signsOutOnThisDeviceOnly() async throws {
     let logout = Mutex<URLComponents?>(nil)
     let backend = try StubSupabaseServer.backend { request, _ in
@@ -105,6 +111,7 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(await users.next() == .some(nil))
   }
 
+  // Covers: AUTH-010
   @Test func waitsForTheRefreshOfAnExpiredStoredSession() async throws {
     let backend = try await installWithAnExpiredSession().launch { request, _ in
       #expect(grantType(of: request) == "refresh_token")
@@ -115,6 +122,7 @@ private func grantType(of request: URLRequest) -> String? {
     #expect(await users.next() == alex)
   }
 
+  // Covers: AUTH-011
   @Test func reportsNoUserWhenAnExpiredStoredSessionCannotRefresh() async throws {
     let backend = try await installWithAnExpiredSession().launch { _, _ in
       throw URLError(.notConnectedToInternet)

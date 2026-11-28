@@ -8,6 +8,7 @@ import Testing
 private let alexsHome = Household(id: UUID(), alias: "Alex's home")
 
 @Suite struct HouseholdModelTests {
+  // Covers: HH-001
   @Test func loadsTheSignedInAccountsHousehold() async {
     let model = HouseholdModel(store: RecordingHouseholdStore(.success(alexsHome)))
 
@@ -16,6 +17,7 @@ private let alexsHome = Household(id: UUID(), alias: "Alex's home")
     #expect(model.state == .ready(alexsHome))
   }
 
+  // Covers: HH-003
   @Test func reportsASignedInAccountWithoutAHouseholdAsMissing() async {
     let model = HouseholdModel(store: RecordingHouseholdStore(.success(nil)))
 
@@ -24,6 +26,7 @@ private let alexsHome = Household(id: UUID(), alias: "Alex's home")
     #expect(model.state == .missing)
   }
 
+  // Covers: HH-002, HH-004
   @Test func keepsAFailedLoadApartFromAMissingHousehold() async {
     let model = HouseholdModel(store: RecordingHouseholdStore(.failure(.couldNotLoad)))
 
@@ -32,6 +35,7 @@ private let alexsHome = Household(id: UUID(), alias: "Alex's home")
     #expect(model.state == .failed)
   }
 
+  // Covers: HH-005
   @Test func checksAgainOnRetrySoANewlyAddedMembershipIsPickedUp() async {
     let model = HouseholdModel(store: RecordingHouseholdStore(.success(nil), .success(alexsHome)))
     await model.load()
@@ -42,6 +46,7 @@ private let alexsHome = Household(id: UUID(), alias: "Alex's home")
     #expect(model.state == .ready(alexsHome))
   }
 
+  // Covers: HH-002
   @Test func showsLoadingAgainWhileARetryAfterAFailedLoadRuns() async {
     let states = Mutex<[HouseholdModel.State]>([])
     let box = ModelBox()
@@ -61,6 +66,7 @@ private let alexsHome = Household(id: UUID(), alias: "Alex's home")
     #expect(model.state == .ready(alexsHome))
   }
 
+  // Covers: HH-007
   @Test func ignoresAnEarlierLoadThatFinishesLast() async {
     let release = AsyncStream<Void>.makeStream()
     let first = Mutex(true)

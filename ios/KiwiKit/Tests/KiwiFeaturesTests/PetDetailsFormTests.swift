@@ -36,6 +36,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
 }
 
 @Suite struct PetDetailsFormTests {
+  // Covers: PET-031
   @Test func addsANewPetToTheHouseholdAsOneRecord() async {
     let (pets, store) = await loadedPets([kiwi])
     let form = PetDetailsForm(pets: pets, householdID: household.id)
@@ -58,6 +59,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(!form.isOpen)
   }
 
+  // Covers: PET-030
   @Test func refusesToEditAPetThatIsNoLongerInTheList() async {
     let (pets, store) = await loadedPets([luna])
     let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwi)
@@ -70,6 +72,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(pets.state == .ready([luna]))
   }
 
+  // Covers: PET-028
   @Test func addsTheFirstPetFromTheEmptyStateWhenTheHouseholdHasNoneYet() async {
     let (pets, _) = await loadedPets([])
     let form = PetDetailsForm(pets: pets, householdID: household.id)
@@ -83,6 +86,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(selectedPet(nil, in: loaded)?.name == "Miso")
   }
 
+  // Covers: PET-016, PET-018
   @Test func opensWithThePetsDetailsWhenEditing() async {
     let (pets, _) = await loadedPets([kiwi, luna])
     let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwi)
@@ -96,6 +100,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
 
   /// The invalid cases live in `PetDetailsTests`. A date after the form's today shows the form
   /// checks against the clock and calendar it was given.
+  // Covers: PET-019, PET-023
   @Test func blocksSaveWhileTheDetailsAreInvalid() async {
     let (pets, store) = await loadedPets([kiwi])
     let form = PetDetailsForm(
@@ -112,6 +117,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(form.canSave)
   }
 
+  // Covers: PET-027
   @Test func editsAPetAndKeepsItInNameOrder() async {
     let (pets, store) = await loadedPets([kiwi, luna])
     let form = PetDetailsForm(pets: pets, householdID: household.id, editing: luna)
@@ -126,6 +132,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(!form.isOpen)
   }
 
+  // Covers: PET-021, PET-022
   @Test func clearsABreedAndADateOfBirth() async {
     let (pets, store) = await loadedPets([kiwi])
     let form = PetDetailsForm(pets: pets, householdID: household.id, editing: kiwi)
@@ -138,6 +145,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(pets.state == .ready([Pet(id: kiwi.id, name: "Kiwi", species: .cat)]))
   }
 
+  // Covers: PET-027
   @Test func addsAPetInNameOrderKeepingTheSelection() async {
     let (pets, _) = await loadedPets([kiwi, luna])
     let form = PetDetailsForm(pets: pets, householdID: household.id)
@@ -150,6 +158,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(selectedPet(luna.id, in: loaded) == luna)
   }
 
+  // Covers: PET-029
   @Test func keepsTheFormOpenWithItsInputWhenAnAddFails() async {
     let store = RecordingPetStore(.success([kiwi]))
     store.saveFails = true
@@ -167,6 +176,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(pets.state == .ready([kiwi]))
   }
 
+  // Covers: PET-029
   @Test func saysTheUpdateFailedWhenAnEditFails() async {
     let store = RecordingPetStore(.success([kiwi]))
     store.saveFails = true
@@ -182,6 +192,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(pets.state == .ready([kiwi]))
   }
 
+  // Covers: PET-025
   @Test func savesNothingMoreWhileASaveRuns() async {
     let release = AsyncStream<Void>.makeStream()
     let store = RecordingPetStore(.success([kiwi])) {
@@ -206,6 +217,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
 }
 
 @Suite struct PetDetailsFormPhotoTests {
+  // Covers: PHOTO-012
   @Test func uploadsANewPetsPhotoAfterAddingItAndRecordsWhereItIsStored() async throws {
     let photos = RecordingPetPhotoStore()
     let (pets, store) = await loadedPets([], photos: photos)
@@ -230,6 +242,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(!form.isOpen)
   }
 
+  // Covers: PHOTO-020
   @Test func showsAPhotoJustSavedWithoutFetchingIt() async throws {
     let photos = RecordingPetPhotoStore()
     let (pets, _) = await loadedPets([], photos: photos)
@@ -245,6 +258,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(photos.fetches.isEmpty)
   }
 
+  // Covers: PHOTO-017
   @Test func pointsThePetAtItsNewPhotoBeforeDeletingTheFileItReplaces() async throws {
     let store = RecordingPetStore(.success([kiwiWithPhoto]))
     let pointedFirst = Mutex<Bool?>(nil)
@@ -265,6 +279,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(form.photoNotSavedFor == nil)
   }
 
+  // Covers: PHOTO-015
   @Test func keepsTheShownPhotoWhenTheDetailsAreSavedWithoutANewPhoto() async throws {
     let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
     let (pets, store) = await loadedPets([kiwiWithPhoto], photos: photos)
@@ -281,6 +296,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(store.saves.count == 1)
   }
 
+  // Covers: PHOTO-013
   @Test func doesNotUploadThePhotoWhenTheDetailsAreNotSaved() async {
     let store = RecordingPetStore(.success([]))
     store.saveFails = true
@@ -298,6 +314,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(form.pickedPhoto != nil)
   }
 
+  // Covers: PHOTO-014
   @Test func returnsTheSavedPetWhenOnlyItsPhotoFailsSoItIsNeverAddedTwice() async throws {
     let photos = RecordingPetPhotoStore()
     photos.fail(.couldNotUpload)
@@ -316,6 +333,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(form.photoNotSavedFor == "Miso")
   }
 
+  // Covers: PHOTO-016
   @Test func keepsThePreviousPhotoAndDeletesTheNewFileWhenThePetCannotPointToIt() async {
     let store = RecordingPetStore(.success([kiwiWithPhoto]))
     store.photoPathFails = true
@@ -334,6 +352,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(!form.isOpen)
   }
 
+  // Covers: PHOTO-018
   @Test func stillSavesTheNewPhotoWhenTheReplacedFileCannotBeDeleted() async {
     let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
     photos.fail(.couldNotRemove)
@@ -348,6 +367,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(!form.isOpen)
   }
 
+  // Covers: PHOTO-004, PHOTO-006
   @Test func showsThePickedPhotoAsStoredAndSavesOnlyTheLastOne() async throws {
     let photos = RecordingPetPhotoStore()
     let (pets, _) = await loadedPets([], photos: photos)
@@ -365,6 +385,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(photos.files.values.map { $0 } == [last])
   }
 
+  // Covers: PHOTO-005
   @Test(arguments: [Data("not a photo".utf8), nil])
   func reportsAPhotoThatCannotBeReadAndKeepsTheSheetAsItWas(data: Data?) async throws {
     let (pets, _) = await loadedPets([])
@@ -379,6 +400,7 @@ private func pet(named name: String, in pets: PetsModel) -> Pet? {
     #expect(form.isOpen)
   }
 
+  // Covers: PHOTO-007
   @Test func opensWithTheStoredPhotoAndNothingPickedAfterACancelledPick() async {
     let photos = RecordingPetPhotoStore([oldPhoto: storedPhoto])
     let (pets, _) = await loadedPets([kiwiWithPhoto], photos: photos)

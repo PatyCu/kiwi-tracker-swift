@@ -29,6 +29,7 @@ import Testing
     #expect(request.queryItems == [URLQueryItem(name: "select", value: "id,alias")])
   }
 
+  // Covers: HH-012
   @Test func trimsSpacesFromBothEndsOfTheAlias() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (200, #"[{"id": "22222222-2222-4222-8222-222222222222", "alias": "  The Burrow \n"}]"#)
@@ -39,12 +40,14 @@ import Testing
     #expect(household?.alias == "The Burrow")
   }
 
+  // Covers: HH-003
   @Test func returnsNilWhenTheAccountIsNotInAHousehold() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in (200, "[]") }
 
     #expect(try await SupabaseHouseholdStore(backend: backend).loadHousehold() == nil)
   }
 
+  // Covers: HH-002
   @Test func throwsWhenTheQueryFails() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (500, #"{"code": "XX000", "message": "Stub error"}"#)
@@ -55,6 +58,7 @@ import Testing
     }
   }
 
+  // Covers: HH-002
   @Test func throwsWhenSupabaseCannotBeReached() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
@@ -65,6 +69,7 @@ import Testing
     }
   }
 
+  // Covers: HH-013
   @Test func returnsTheHouseholdsMembersSortedByDisplayName() async throws {
     let sent = Mutex<URLComponents?>(nil)
     let backend = try StubSupabaseServer.backend { request, _ in
@@ -105,6 +110,7 @@ import Testing
     )
   }
 
+  // Covers: HH-015
   @Test func trimsSpacesFromBothEndsOfADisplayName() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (200, #"[{"user_id": "11111111-1111-4111-8111-111111111111", "display_name": " Alex \n"}]"#)
@@ -115,6 +121,7 @@ import Testing
     #expect(members.map(\.displayName) == ["Alex"])
   }
 
+  // Covers: HH-017
   @Test func throwsWhenTheMembersQueryFails() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (500, #"{"code": "XX000", "message": "Stub error"}"#)

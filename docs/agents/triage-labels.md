@@ -1,6 +1,6 @@
 # Triage labels
 
-The skills speak in terms of five canonical triage roles. This file maps them to the strings used in our tracker: the `Status:` line of a file under `tracker/` until iOS parity, then labels in Linear (see `issue-tracker.md`).
+The skills speak in terms of five canonical triage roles. This file maps them to the GitHub labels in this repo (see `issue-tracker.md`).
 
 | Label in mattpocock/skills | Label in our tracker | Meaning                                  |
 | -------------------------- | -------------------- | ---------------------------------------- |
@@ -10,4 +10,4 @@ The skills speak in terms of five canonical triage roles. This file maps them to
 | `ready-for-human`          | `ready-for-human`    | Requires human implementation            |
 | `wontfix`                  | `wontfix`            | Will not be actioned                     |
 
-When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
+When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table. Besides these, `bug` marks a bug and `after-parity` an improvement held until iOS parity.

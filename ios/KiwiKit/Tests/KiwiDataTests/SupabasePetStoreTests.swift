@@ -6,6 +6,7 @@ import Testing
 @testable import KiwiData
 
 @Suite struct SupabasePetStoreTests {
+  // Covers: PET-002
   @Test func loadsTheHouseholdsPetsByName() async throws {
     let sent = Mutex<URLComponents?>(nil)
     let backend = try StubSupabaseServer.backend { request, _ in
@@ -54,6 +55,7 @@ import Testing
     )
   }
 
+  // Covers: PET-011
   @Test func reportsAnUnknownSpeciesInsteadOfGuessing() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (
@@ -70,6 +72,7 @@ import Testing
     }
   }
 
+  // Covers: PET-007
   @Test func wrapsAFailedLoadInATypedError() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (500, #"{"code": "XX000", "message": "Stub error"}"#)
@@ -80,6 +83,7 @@ import Testing
     }
   }
 
+  // Covers: PET-007
   @Test func throwsWhenSupabaseCannotBeReached() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       throw URLError(.notConnectedToInternet)
@@ -90,6 +94,7 @@ import Testing
     }
   }
 
+  // Covers: PET-031
   @Test func addsAPetToTheGivenHouseholdAsOneRow() async throws {
     let householdID = try #require(UUID(uuidString: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"))
     let sent = Mutex<(URLRequest, Data)?>(nil)
@@ -119,6 +124,7 @@ import Testing
     )
   }
 
+  // Covers: PET-021, PET-022
   @Test func savesOnePetByIDAndClearsFieldsLeftEmpty() async throws {
     let sent = Mutex<(URLRequest, Data)?>(nil)
     let backend = try StubSupabaseServer.backend { request, body in
@@ -147,6 +153,7 @@ import Testing
     )
   }
 
+  // Covers: PHOTO-012
   @Test func recordsWhereAPetPhotoIsStoredAndTouchesNothingElse() async throws {
     let sent = Mutex<(URLRequest, Data)?>(nil)
     let backend = try StubSupabaseServer.backend { request, body in
@@ -173,6 +180,7 @@ import Testing
     #expect(try json(body) == ["photo_path": "cccccccc-cccc-4ccc-8ccc-cccccccccccc/new.jpg"])
   }
 
+  // Covers: PET-029
   @Test func wrapsAFailedWriteInATypedError() async throws {
     let backend = try StubSupabaseServer.backend { _, _ in
       (403, #"{"code": "42501", "message": "Stub error"}"#)

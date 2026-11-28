@@ -1,6 +1,6 @@
 ---
 name: port-feature
-description: Port a capability from the Expo reference app (.reference/kiwi-tracker) to the native iOS app, matching its rules, flows, copy and states. Use when starting or continuing a tracker item that brings a reference feature to iOS, or when asked to "port", "match" or "check parity" for a screen or feature.
+description: Port a capability from the Expo reference app (.reference/kiwi-tracker) to the native iOS app, matching its rules, flows, copy and states. Use when starting or continuing a feature that brings a reference feature to iOS, or when asked to "port", "match" or "check parity" for a screen or feature.
 ---
 
 # Port a feature
@@ -38,6 +38,9 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   developer while the spec is written.
 - List what a person sees: each screen and sheet, every string, and the
   loading, empty, error and Retry states.
+- Extract its behaviours into `requirements/` as drafts, following
+  `.claude/skills/requirements/SKILL.md`, for the developer to approve while
+  the spec is written.
 
 ## 2. Port the rules first
 
@@ -48,7 +51,7 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
 
 - Stores in `KiwiData` read and write the columns the reference does that this
   feature uses, with the same validation before writing. No schema change unless
-  the tracker item asks for one.
+  the feature's issue asks for one.
 - The household load is the worked example of store, model and tests:
   `SupabaseHouseholdStore` and `SupabaseHouseholdStoreTests` (over
   `StubSupabaseServer`), `HouseholdModel`, `RecordingHouseholdStore` and
@@ -76,10 +79,11 @@ state against the reference component and its test instead, and say so in the ha
   copy, states and what each action does. Chrome may differ where a native
   component replaces a custom one; nothing else may.
 - Fix differences, or list the ones that are intentional for the developer to
-  confirm, and record confirmed ones in the feature's spec in `tracker/`.
+  confirm, and record confirmed ones in the feature's spec (its GitHub issue)
+  and as `Migration: changed` in its requirements.
 
 ## 5. Hand over
 
 Continue with `CONTRIBUTING.md#validate` and the root `AGENTS.md` workflow:
-checks, local validation, the developer's check on the shared project, tracker
-sync and wrap-up.
+checks, local validation, the developer's check on the shared project and
+wrap-up.

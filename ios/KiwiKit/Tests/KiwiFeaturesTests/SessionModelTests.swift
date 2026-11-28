@@ -77,6 +77,7 @@ private func settle() async {
     #expect(auth.signOuts == 1)
   }
 
+  // Covers: PHOTO-024
   @Test func clearsCachedPhotosWhenTheAccountSignsOutAndNotWhileSignedIn() async throws {
     let auth = RecordingPasswordAuth()
     let photos = RecordingPetPhotoStore()
@@ -92,6 +93,7 @@ private func settle() async {
     #expect(photos.clears == 1)
   }
 
+  // Covers: PHOTO-024
   @Test func keepsCachedPhotosWhenSigningOutFails() async {
     let auth = RecordingPasswordAuth()
     auth.signOutFails = true

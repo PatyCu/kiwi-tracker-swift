@@ -9,6 +9,7 @@ private let kiwi = Pet(id: UUID(), name: "Kiwi", species: .cat)
 private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
 
 @Suite struct PetsModelTests {
+  // Covers: PET-001
   @Test func loadsTheHouseholdsPets() async {
     let model = PetsModel(
       store: RecordingPetStore(.success([kiwi, luna])), photos: RecordingPetPhotoStore())
@@ -18,6 +19,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .ready([kiwi, luna]))
   }
 
+  // Covers: PET-007
   @Test(arguments: [PetStoreError.couldNotLoad, .invalidData])
   func failsWhenThePetsCannotLoad(error: PetStoreError) async {
     let model = PetsModel(
@@ -28,6 +30,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .failed)
   }
 
+  // Covers: PET-007
   @Test func loadsAgainOnRetry() async {
     let model = PetsModel(
       store: RecordingPetStore(.failure(.couldNotLoad), .success([kiwi])),
@@ -40,6 +43,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .ready([kiwi]))
   }
 
+  // Covers: PET-007
   @Test func showsLoadingAgainWhileARetryRuns() async {
     let states = Mutex<[PetsModel.State]>([])
     let box = ModelBox()
@@ -59,6 +63,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .ready([kiwi]))
   }
 
+  // Covers: PET-008
   @Test func ignoresAnEarlierLoadThatFinishesLast() async {
     let release = AsyncStream<Void>.makeStream()
     let first = Mutex(true)
@@ -83,6 +88,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(model.state == .ready([kiwi, luna]))
   }
 
+  // Covers: PHOTO-021
   @Test func showsAPhotoFetchedOnceWithoutFetchingItAgain() async {
     let photo = Data("kiwi photo".utf8)
     let kiwi = Pet(id: UUID(), name: "Kiwi", species: .cat, photoPath: "kiwi/1.jpg")
@@ -99,6 +105,7 @@ private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
     #expect(photos.fetches == ["kiwi/1.jpg"])
   }
 
+  // Covers: PHOTO-023
   @Test func showsThePawWhenAPhotoCannotBeFetchedAndTriesAgainNextTime() async {
     let photo = Data("kiwi photo".utf8)
     let kiwi = Pet(id: UUID(), name: "Kiwi", species: .cat, photoPath: "kiwi/1.jpg")

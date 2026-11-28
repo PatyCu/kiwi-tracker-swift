@@ -9,6 +9,7 @@ private let alex = Member(accountID: UUID(), displayName: "Alex")
 private let sam = Member(accountID: UUID(), displayName: "Sam")
 
 @Suite struct MembersModelTests {
+  // Covers: HH-013
   @Test func showsTheHouseholdsMembersByName() async {
     let model = MembersModel(
       store: RecordingHouseholdStore(members: [.success([alex, sam])]),
@@ -20,6 +21,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
     #expect(model.state == .ready([alex, sam]))
   }
 
+  // Covers: HH-014
   @Test func marksOnlyTheSignedInAccountAsYou() {
     let model = MembersModel(
       store: RecordingHouseholdStore(),
@@ -30,6 +32,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
     #expect(!model.isSignedIn(sam))
   }
 
+  // Covers: HH-017
   @Test func saysSoWhenTheMembersCannotBeLoadedAndRetries() async {
     let store = RecordingHouseholdStore(members: [.failure(.couldNotLoad), .success([alex])])
     let model = MembersModel(store: store, signedInAccountID: alex.accountID)
@@ -42,6 +45,7 @@ private let sam = Member(accountID: UUID(), displayName: "Sam")
     #expect(store.memberLoads == 2)
   }
 
+  // Covers: HH-018
   @Test func loadsOnlyOnceWhenSettingsOpensAgain() async {
     let store = RecordingHouseholdStore(members: [.success([alex])])
     let model = MembersModel(store: store, signedInAccountID: alex.accountID)

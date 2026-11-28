@@ -8,6 +8,7 @@ import Testing
 private let kiwiID = UUID(uuidString: "cccccccc-cccc-4ccc-8ccc-cccccccccccc") ?? UUID()
 
 @Suite struct SupabasePetPhotoStoreTests {
+  // Covers: PHOTO-011
   @Test func storesEachNewPhotoUnderItsOwnNameInThePetsFolder() async throws {
     let sent = Mutex<(URLRequest, Data)?>(nil)
     let backend = try StubSupabaseServer.backend { request, body in
@@ -45,6 +46,7 @@ private let kiwiID = UUID(uuidString: "cccccccc-cccc-4ccc-8ccc-cccccccccccc") ??
     }
   }
 
+  // Covers: PHOTO-017
   @Test func deletesOnePhotoFileByPath() async throws {
     let sent = Mutex<(URLRequest, Data)?>(nil)
     let backend = try StubSupabaseServer.backend { request, body in

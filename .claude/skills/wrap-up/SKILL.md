@@ -1,6 +1,6 @@
 ---
 name: wrap-up
-description: Finish the current piece of work, from final checks to a clean worktree. Validates, syncs the feature tracker, commits, pushes to main or opens a PR, confirms the shared Supabase project already has its migrations, and cleans up the branch. Use when the developer says "wrap up", "wrap it up" or "let's wrap up".
+description: Finish the current piece of work, from final checks to a clean worktree. Validates, updates the GitHub issues and the plan, commits, pushes to main or opens a PR, confirms the shared Supabase project already has its migrations, and cleans up the branch. Use when the developer says "wrap up", "wrap it up" or "let's wrap up".
 ---
 
 # Wrap up
@@ -16,18 +16,18 @@ Stop and report to the developer whenever a step fails. Don't skip ahead.
 - Match the checks to what changed. Any failure or warning stops the wrap-up.
   - **iOS code or config** (`ios/**`: `.swift`, `.xcconfig`, project, package or asset files): run `make lint`, `make build` and `make test` in `ios/`.
   - **Supabase** (`supabase/**`: migrations, seed or tests): `supabase db reset`, `supabase db lint` and `supabase test db` pass, and after a migration the iOS row types were regenerated (`make db-types` in `ios/`).
-  - **Only docs or skills** (`.md` files): no build checks apply; reread the changed files for broken links.
+  - **Only docs, skills or requirements** (`.md` files): no build checks apply; reread the changed files for broken links.
 - Review `git status` and `git diff`. Commit only files that belong to this task. Point out unrelated or unexpected changes and leave them out unless the developer says to include them.
 
-## 2. Sync the feature tracker
+## 2. Update the tracker
 
-Set `Status: done` on the `tracker/` tickets and bugs this work finishes, tick off the plan's features whose last ticket is now done in `docs/migration-plan.md`, and if that finishes the phase, update **Current phase**. See `docs/agents/issue-tracker.md`.
+The commit message closes the issues this work finishes (`CONTRIBUTING.md#commit`). Tick off the plan's features whose issue that closes in `docs/migration-plan.md`, and if that finishes the phase, update **Current phase**. See `docs/agents/issue-tracker.md`.
 
-After iOS parity, also sync Linear when `AGENTS.md` calls for it, following `.claude/skills/sync-feature-tracker/SKILL.md`. This step is the exception to stopping on failure: if Linear can't be updated, say which records are out of date and carry on.
+If the work touched tests or requirements, run `.claude/skills/req-coverage/scripts/req-coverage.sh`; it must pass.
 
 ## 3. Commit
 
-One commit in the style `CONTRIBUTING.md#commit` describes (for example `feat: on iOS, edit an event's details from the event detail screen`). End the message with the attribution lines the environment asks for.
+One commit in the style `CONTRIBUTING.md#commit` describes (for example `feat: on iOS, edit a pet event's details from its details screen (closes #12)`). End the message with the attribution lines the environment asks for.
 
 ## 4. Publish
 
@@ -54,4 +54,4 @@ Files left out of the commit in step 1 because they don't belong to this task ar
 
 ## 7. Report
 
-Finish with a short summary: the commit hash and message, where it went (pushed to `main`, or the PR link), tracker changes, and anything left out or still open.
+Finish with a short summary: the commit hash and message, where it went (pushed to `main`, or the PR link), the issues it closed, and anything left out or still open.

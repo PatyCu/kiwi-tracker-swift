@@ -1,4 +1,5 @@
 -- Who can read and write pet photos: members of the pet's household, in the pet's folder, nobody else.
+-- Covers: PHOTO-026, PHOTO-027, PHOTO-028
 begin;
 select plan(15);
 

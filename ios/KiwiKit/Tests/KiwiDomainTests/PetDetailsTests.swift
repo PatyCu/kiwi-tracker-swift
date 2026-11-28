@@ -3,6 +3,7 @@ import KiwiDomain
 import Testing
 
 @Suite struct PetDetailsTests {
+  // Covers: PET-020, PET-021
   @Test func trimsTheNameAndBreedAndSavesAnEmptyBreedAsNone() {
     #expect(
       PetDetails(name: " Murri ", species: .cat, breed: "  ").normalized()
@@ -11,11 +12,13 @@ import Testing
       PetDetails(name: "Kiwi", species: .cat, breed: " Tabby ").normalized().breed == "Tabby")
   }
 
+  // Covers: PET-019
   @Test(arguments: ["", "   "])
   func needsAName(name: String) {
     #expect(!PetDetails(name: name, species: .cat).isValid(now: today, calendar: madrid))
   }
 
+  // Covers: PET-022, PET-023
   @Test func acceptsNoDateOfBirthOrOneUpToToday() {
     let details = { (day: BirthDate?) in PetDetails(name: "Miso", species: .cat, birthDate: day) }
 
@@ -26,6 +29,7 @@ import Testing
       !details(BirthDate(year: 2026, month: 11, day: 23)).isValid(now: today, calendar: madrid))
   }
 
+  // Covers: PET-024
   @Test func keepsTheDayChosenWhateverTheTimeZone() {
     // 23:30 on 22 November in Madrid is already the 23rd in Tokyo.
     let lateEvening = Date(timeIntervalSince1970: 1_795_386_600)

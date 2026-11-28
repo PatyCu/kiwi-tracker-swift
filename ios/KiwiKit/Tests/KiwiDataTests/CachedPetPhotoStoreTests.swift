@@ -6,6 +6,7 @@ import Testing
 @testable import KiwiData
 
 @Suite struct CachedPetPhotoStoreTests {
+  // Covers: PHOTO-021
   @Test func fetchesAPathOnceAndThenServesIt() async throws {
     let storage = CountingPhotoStore()
     let cache = CachedPetPhotoStore(store: storage, folder: temporaryFolder())
@@ -16,6 +17,7 @@ import Testing
     #expect(storage.fetches == ["kiwi/1.jpg"])
   }
 
+  // Covers: PHOTO-021
   @Test func keepsPhotosForTheNextLaunch() async throws {
     let storage = CountingPhotoStore()
     let folder = temporaryFolder()
@@ -27,6 +29,7 @@ import Testing
     #expect(storage.fetches == ["kiwi/1.jpg"])
   }
 
+  // Covers: PHOTO-022
   @Test func fetchesANewPath() async throws {
     let storage = CountingPhotoStore()
     let cache = CachedPetPhotoStore(store: storage, folder: temporaryFolder())
@@ -37,6 +40,7 @@ import Testing
     #expect(storage.fetches == ["kiwi/1.jpg", "kiwi/2.jpg"])
   }
 
+  // Covers: PHOTO-024
   @Test func fetchesAgainAfterClearing() async throws {
     let storage = CountingPhotoStore()
     let cache = CachedPetPhotoStore(store: storage, folder: temporaryFolder())
@@ -48,6 +52,7 @@ import Testing
     #expect(storage.fetches == ["kiwi/1.jpg", "kiwi/1.jpg"])
   }
 
+  // Covers: PHOTO-020
   @Test func servesAnUploadedPhotoWithoutFetchingIt() async throws {
     let storage = CountingPhotoStore()
     let cache = CachedPetPhotoStore(store: storage, folder: temporaryFolder())
@@ -70,6 +75,7 @@ import Testing
     #expect(storage.fetches == ["kiwi/1.jpg", "kiwi/1.jpg"])
   }
 
+  // Covers: PHOTO-023
   @Test func passesOnAFailedFetch() async throws {
     let storage = CountingPhotoStore()
     storage.fetchFails = true

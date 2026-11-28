@@ -8,14 +8,17 @@ private let kiwi = Pet(id: UUID(), name: "Kiwi", species: .cat)
 private let luna = Pet(id: UUID(), name: "Luna", species: .dog)
 
 @Suite struct SelectedPetTests {
+  // Covers: PET-003
   @Test func selectsTheFirstPetByDefault() {
     #expect(selectedPet(nil, in: [kiwi, luna]) == kiwi)
   }
 
+  // Covers: PET-003
   @Test func keepsTheSelectedPet() {
     #expect(selectedPet(luna.id, in: [kiwi, luna]) == luna)
   }
 
+  // Covers: PET-005
   @Test func fallsBackToTheFirstPetWhenTheSelectedOneIsGone() {
     #expect(selectedPet(UUID(), in: [kiwi, luna]) == kiwi)
   }

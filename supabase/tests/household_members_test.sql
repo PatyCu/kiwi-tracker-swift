@@ -1,5 +1,6 @@
 -- Who can read memberships: the household's members, every membership in it,
 -- nobody else. Only the dashboard adds, edits or removes them.
+-- Covers: HH-019, HH-020, HH-021
 begin;
 select plan(9);
 

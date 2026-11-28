@@ -1,4 +1,5 @@
 -- Who can read and write pets: their household's members, nobody else.
+-- Covers: PET-033, PET-034, PET-035
 begin;
 select plan(13);
 

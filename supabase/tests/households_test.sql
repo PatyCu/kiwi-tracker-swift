@@ -1,5 +1,6 @@
 -- Who can read households: their members, nobody else. Only the dashboard
 -- creates, edits or deletes them.
+-- Covers: HH-019, HH-020, HH-021
 begin;
 select plan(9);
 

@@ -20,6 +20,7 @@ private func signIn(on install: Install) async throws {
 }
 
 @Suite struct SupabaseBackendTests {
+  // Covers: AUTH-012
   @Test func clearsTheStoredSessionOnTheFirstLaunchAfterAnInstall() async throws {
     let install = try Install()
     try await signIn(on: install)
@@ -30,6 +31,7 @@ private func signIn(on install: Install) async throws {
     #expect(reinstall.storage.isEmpty)
   }
 
+  // Covers: AUTH-009
   @Test func restoresTheStoredSessionOnLaterLaunches() async throws {
     let install = try Install()
     try await signIn(on: install)
@@ -37,6 +39,7 @@ private func signIn(on install: Install) async throws {
     #expect(await firstUser(after: try install.launch()) == alex)
   }
 
+  // Covers: AUTH-013
   @Test func retriesOnTheNextLaunchWhenRemovingTheSessionFails() async throws {
     let install = try Install()
     try await signIn(on: install)

@@ -24,6 +24,7 @@ private func configError(url: String?, publishableKey: String?) -> SupabaseConfi
     #expect(config.publishableKey == publishableKey)
   }
 
+  // Covers: AUTH-008
   @Test(arguments: [nil, "", "   "])
   func namesTheURLWhenItIsMissing(_ url: String?) throws {
     let error = try #require(configError(url: url, publishableKey: publishableKey))
@@ -31,6 +32,7 @@ private func configError(url: String?, publishableKey: String?) -> SupabaseConfi
     #expect(error.description.contains("SUPABASE_URL"))
   }
 
+  // Covers: AUTH-008
   @Test(arguments: ["127.0.0.1:54321", "ftp://example.com", "not a url"])
   func namesTheURLWhenItIsNotHTTP(_ url: String) throws {
     let error = try #require(configError(url: url, publishableKey: publishableKey))
@@ -39,6 +41,7 @@ private func configError(url: String?, publishableKey: String?) -> SupabaseConfi
     #expect(error != configError(url: nil, publishableKey: publishableKey))
   }
 
+  // Covers: AUTH-008
   @Test(arguments: [nil, "", "  "])
   func namesThePublishableKeyWhenItIsMissing(_ key: String?) throws {
     let error = try #require(configError(url: localURL, publishableKey: key))
@@ -46,6 +49,7 @@ private func configError(url: String?, publishableKey: String?) -> SupabaseConfi
     #expect(error.description.contains("SUPABASE_PUBLISHABLE_KEY"))
   }
 
+  // Covers: AUTH-008
   @Test func rejectsASecretKey() throws {
     let error = try #require(configError(url: localURL, publishableKey: "sb_secret_abc"))
 

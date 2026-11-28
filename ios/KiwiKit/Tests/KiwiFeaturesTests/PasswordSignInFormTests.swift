@@ -17,6 +17,7 @@ private func filledForm(
 nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
 
 @Suite struct PasswordSignInFormTests {
+  // Covers: AUTH-002, AUTH-006
   @Test func signsInWithTheNormalizedEmailAndThePasswordAsTyped() async {
     let auth = RecordingPasswordAuth()
     let form = filledForm("  Alex@Kiwi.test ", " pass word ", auth: auth)
@@ -29,6 +30,7 @@ nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
     #expect(form.error == nil)
   }
 
+  // Covers: AUTH-003
   @Test(arguments: missingFields)
   func asksForBothFieldsWithoutCallingTheServer(email: String, password: String) async {
     let auth = RecordingPasswordAuth()
@@ -40,6 +42,7 @@ nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
     #expect(form.error != nil)
   }
 
+  // Covers: AUTH-004, AUTH-005
   @Test func showsAnErrorAndLetsThePersonTryAgainWhenSignInFails() async {
     let auth = RecordingPasswordAuth()
     auth.answer(.failure(.invalidCredentials))
@@ -54,6 +57,7 @@ nonisolated private let missingFields = [("", "secret"), ("alex@kiwi.test", "")]
     #expect(form.error == nil)
   }
 
+  // Covers: AUTH-004
   @Test func givesEachSignInProblemItsOwnMessage() async {
     let failures: [SignInError] = [
       .invalidCredentials, .emailNotConfirmed, .rateLimited, .network, .unknown,

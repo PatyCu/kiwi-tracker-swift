@@ -13,17 +13,21 @@ change is checked against the [architecture principles](docs/architecture.md).
 - [docs/supabase.md](docs/supabase.md): the data model.
 - [docs/accounts.md](docs/accounts.md): setting up Accounts, Households and
   Members.
+- [requirements/](requirements/): what the app does, one ID per behaviour.
 - [docs/migration-plan.md](docs/migration-plan.md): the roadmap, with each
-  feature's tickets and the bugs under [tracker/](docs/agents/issue-tracker.md).
+  feature, its tickets and the bugs in
+  [GitHub Issues](docs/agents/issue-tracker.md).
 - [AGENTS.md](AGENTS.md) and [ios/AGENTS.md](ios/AGENTS.md): what only agents
   need.
 
 ## Plan
 
-- Until iOS parity, the tracker is `docs/migration-plan.md` and `tracker/`, as
-  [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md) describes. After
-  parity it's Linear's Kiwi Tracker project. Don't use GitHub Issues or GitHub
-  Projects.
+- The roadmap is `docs/migration-plan.md`; features, tickets and bugs are
+  GitHub issues, as [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md)
+  describes. Don't use GitHub Projects or Linear.
+- A behaviour is decided in [requirements/](requirements/) before it's built:
+  a spec lists the requirement IDs it satisfies, and each test names the IDs
+  it proves.
 - Bugs come first: log one in the tracker when it's found, and fix open bugs
   before new feature work unless the developer decides otherwise. Fixing bugs
   related to the current change is part of finishing it.
@@ -34,7 +38,7 @@ change is checked against the [architecture principles](docs/architecture.md).
 - A spec's manual check lists the behaviors only a view shows (VoiceOver
   labels and traits, a control's first state, layout fit), one line per user
   story the tests can't reach.
-- Before fixing a bug, its tracker file answers "why didn't the tests catch
+- Before fixing a bug, its issue answers "why didn't the tests catch
   it?". The fix closes that cause: the spec, the suite or the manual check.
   There's no blanket rule of one regression test per bug.
 
@@ -99,5 +103,4 @@ warnings.
 - One commit per change, with a one-line message: `type: what changed, in plain
   words`, specific enough that the log alone says what changed. Types: `feat`,
   `fix`, `docs`, `refactor`, `test`, `chore`.
-- After iOS parity, update Linear before committing whenever a change alters
-  what an app shows or can do.
+- A commit that finishes an issue ends its message with `(closes #n)`.
