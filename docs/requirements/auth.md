@@ -92,7 +92,8 @@ Source: decision
 If the first launch after an install can't clear the leftover Session, the next launch clears it.
 
 ### AUTH-014: A Session never moves to another device
-Status: active
+Status: dropped
+Reason: No test can show it; kept as the Keychain rule in ios/CONVENTIONS.md.
 Migration: new
 Source: decision
 

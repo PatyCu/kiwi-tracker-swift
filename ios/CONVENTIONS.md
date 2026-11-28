@@ -99,6 +99,8 @@ Tests apply the principle that
 
 KiwiKit's tests run outside the app, so the Keychain refuses them
 (`errSecMissingEntitlement`): code that touches it is checked on the simulator.
+The Session is stored `AfterFirstUnlockThisDeviceOnly`, so a backup never moves
+it to another device.
 
 ## Project
 
