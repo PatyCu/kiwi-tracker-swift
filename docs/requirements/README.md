@@ -18,3 +18,5 @@ decided it.
 | SET | Settings and Appearance | [settings.md](settings.md) |
 | PET | Pets and their details | [pets.md](pets.md) |
 | PHOTO | Pet photos | [pet-photos.md](pet-photos.md) |
+| STAT | Health status of a Pet | [pet-status.md](pet-status.md) |
+| TODAY | The Today tab | [today.md](today.md) |
