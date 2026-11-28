@@ -1,6 +1,6 @@
 # Pet photo from the library (KIW-24)
 
-Status: in-progress
+Status: done
 
 ## Problem Statement
 
