@@ -197,3 +197,45 @@ Migration: same
 Source: supabase/migrations
 
 A signed-out person can't read, upload, replace or delete any Pet photo.
+
+### PHOTO-029: Photos keep showing while the app stays open
+Status: draft
+Migration: same
+Source: src/modules/pets/state/PetsProvider.tsx
+
+A Pet's photo keeps showing when the app stays open for more than an hour.
+
+### PHOTO-030: Photo links that fail are retried a minute later
+Status: draft
+Migration: same
+Source: src/modules/pets/state/PetsProvider.tsx
+
+When the photos' links can't be fetched, the Pets show without them and the app tries again a minute later, without a reload.
+
+### PHOTO-031: A photo link works for an hour at most
+Status: draft
+Migration: same
+Source: src/modules/pets/persistence/petPhotoStore.ts
+
+A link the app gets to show a photo opens it for at most an hour.
+
+### PHOTO-032: A photo that can't be prepared saves nothing
+Status: draft
+Migration: same
+Source: src/modules/pets/profile/savePetProfile.ts
+
+When a picked photo can't be converted for storing, neither the Pet nor its photo is saved and the "Pet not added" or "Pet not updated" alert shows.
+
+### PHOTO-033: An ended Session clears photos too
+Status: draft
+Migration: same
+Source: src/modules/pets/state/PetsProvider.tsx
+
+When a Session ends without signing out, such as one that can't refresh, the Pets' photos are removed from the device.
+
+### PHOTO-034: The photo store takes only images up to 5 MB
+Status: draft
+Migration: same
+Source: supabase/migrations
+
+The server refuses a photo file over 5 MB, or one that isn't a JPEG, PNG, WebP or HEIC image.

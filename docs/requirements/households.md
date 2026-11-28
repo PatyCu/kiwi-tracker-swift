@@ -146,3 +146,17 @@ Migration: same
 Source: supabase/migrations
 
 A signed-out person can't read or change any Household or membership.
+
+### HH-022: The load error says nothing was changed
+Status: draft
+Migration: same
+Source: src/shared/ui/LoadState.tsx
+
+The load error reads "Could not load your data", "Check your connection and try again." and "Your saved data has not been changed."
+
+### HH-023: The Household's Retry also retries what failed with it
+Status: draft
+Migration: same
+Source: src/app/_layout.tsx
+
+Retry on the Household load error also reloads the Pets, Pet events and Calendar events that failed to load, so one Retry opens the app.

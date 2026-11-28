@@ -248,3 +248,118 @@ Migration: same
 Source: supabase/migrations
 
 A signed-out person can't read, add, edit or delete any Pet.
+
+### PET-036: Pets shows the selected Pet's overview
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverview.tsx
+
+Below the selector cards, Pets shows the selected Pet's overview: Overview, Up next, its activity, then More.
+
+### PET-037: Pets waits for the Pets and their Events
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetsScreen.tsx
+
+Pets shows loading until the Household's Pets, Pet events and Calendar events have all loaded.
+
+### PET-038: Retry on Pets reloads only what failed
+Status: draft
+Migration: same
+Source: src/modules/calendar/useCalendarDataLoad.ts
+
+Retry on Pets reloads only the loads that failed and keeps the ones that loaded.
+
+### PET-039: The overview opens the Pet's Calendar
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverview.tsx
+
+The overview's "Calendar" link, "See everything logged and scheduled", opens Calendar showing only that Pet.
+
+### PET-040: The overview opens the Pet's details screen
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverview.tsx
+
+The overview's "Profile" link, "View and edit pet details", opens the Pet's details screen.
+Note: the reference says "profile" where the glossary says Pet.
+
+### PET-041: The details screen shows the Pet's details
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetProfileScreen.tsx
+
+The Pet's details screen, titled "‹name›’s profile", shows its photo, name, species, breed and date of birth, with "Not provided" for a missing breed or date of birth.
+
+### PET-042: The details screen shows the date of birth as a date
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetProfileScreen.tsx
+
+The details screen shows the Pet's date of birth as its calendar day.
+Note: possible bug, confirm: the reference shows the stored text, such as 2021-04-03, where the sheet shows 03-04-2021.
+
+### PET-043: The details screen opens the edit sheet
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetProfileScreen.tsx
+
+The details screen's Edit button and its "Edit profile" button both open the edit sheet for that Pet.
+
+### PET-044: A Pet that isn't there shows Pet not found
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverviewScreen.tsx
+
+Opening the overview or details screen of a Pet not in the Household shows "Pet not found", "This pet is unavailable" and "It may have been removed from this device."
+
+### PET-045: A Pet's overview on its own screen
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverviewScreen.tsx
+
+A Pet's overview opened on its own screen, as from a Pet event, is titled with its name, subtitled with its breed or else its species, and has Back and an Edit button for that Pet.
+
+### PET-046: The overview screen waits for the Pets and their Events
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetOverviewScreen.tsx
+
+A Pet's overview screen shows loading, or the load error with Retry, until the Pets, Pet events and Calendar events have loaded.
+
+### PET-047: The details screen waits only for the Pets
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetProfileScreen.tsx
+
+The Pet's details screen shows loading, or the load error with Retry, until the Pets have loaded.
+
+### PET-048: A saved Pet closes the sheet
+Status: draft
+Migration: same
+Source: src/modules/pets/profile/usePetProfileForm.ts
+
+A successful "Add" or "Save" closes the add or edit sheet.
+
+### PET-049: The sheet opens with the name focused
+Status: draft
+Migration: same
+Source: src/modules/pets/ui/PetProfileModal.tsx
+
+The add and edit sheets open with the name field focused and the keyboard up.
+
+### PET-050: Today is a valid date of birth from local midnight
+Status: draft
+Migration: same
+Source: src/shared/dates/dateTime.ts
+
+Today's date, in the device's time zone, can be saved as a date of birth at any hour, and tomorrow's never can.
+Note: possible bug, confirm: the reference compares with UTC midnight, so east of UTC today is refused just after midnight, and west of UTC tomorrow is accepted in the evening.
+
+### PET-051: A blank name or unknown species is never stored
+Status: draft
+Migration: same
+Source: supabase/migrations
+
+The server refuses a Pet whose name is empty or only spaces, or whose species isn't Cat, Dog or Other.

@@ -140,3 +140,52 @@ Migration: same
 Source: src/app/_layout.tsx
 
 The next sign-in, as the same Account or another, opens Today with every tab at its first screen.
+
+### AUTH-021: Launch never flashes the sign-in form
+Status: draft
+Migration: same
+Source: src/app/_layout.tsx
+
+At launch, the app shows an empty screen until it knows whether a Session is stored.
+
+### AUTH-022: The sign-in fields are locked while signing in
+Status: draft
+Migration: same
+Source: src/modules/auth/ui/SignInScreen.tsx
+
+While a sign-in runs, the email and password can't be edited.
+
+### AUTH-023: Return moves from email to password, then signs in
+Status: draft
+Migration: same
+Source: src/modules/auth/ui/SignInScreen.tsx
+
+The keyboard's return key on the email moves to the password, and on the password starts the sign-in.
+
+### AUTH-024: Sign-in opens with the email focused
+Status: draft
+Migration: same
+Source: src/modules/auth/ui/SignInScreen.tsx
+
+The sign-in form opens with the email field focused and the keyboard up.
+
+### AUTH-025: Sign-in unavailable names what is wrong
+Status: draft
+Migration: same
+Source: src/shared/supabase/supabaseConfig.ts
+
+Below "Sign-in is not available", the app names the missing or invalid setting.
+
+### AUTH-026: A Session that stops refreshing while in use shows sign-in
+Status: draft
+Migration: same
+Source: src/modules/auth/state/SessionProvider.tsx
+
+When a Session can no longer be refreshed while the app is open, the app shows the sign-in form.
+
+### AUTH-027: Signing out works offline
+Status: draft
+Migration: same
+Source: src/modules/auth/persistence/passwordAuth.ts
+
+Without a connection, signing out still ends the Session on this device and shows the sign-in form.
