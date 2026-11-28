@@ -40,6 +40,14 @@ _Avoid_: Record, activity, entry
 An Event logged about a Pet after it happened: a Symptom, a Diet change or Other.
 _Avoid_: Log, record
 
+**Diet item**:
+A product a Pet eats, with a food type, added by one Diet change and ended by a later switch or stop.
+_Avoid_: Food, product
+
+**Current diet**:
+A Pet's Diet items not yet ended.
+_Avoid_: Diet, menu
+
 **Calendar event**:
 An Event scheduled for a Pet, such as a vet visit, a vaccine or a medicine. It stays a Calendar event after its date and never becomes a Pet event.
 _Avoid_: Appointment, reminder
