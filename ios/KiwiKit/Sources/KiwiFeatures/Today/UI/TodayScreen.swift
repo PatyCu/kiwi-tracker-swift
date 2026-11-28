@@ -2,9 +2,9 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// The Today tab, as the reference app's `TodayScreen`: loading or the error with Retry until the
-/// Household's Pets load, then the no-pets card, which adds the first Pet, when there are none.
-/// Today's content for a Household with Pets is still a placeholder.
+/// The Today tab: loading or the error with Retry until the Household's Pets load, then the no-pets
+/// card, which adds the first Pet, when there are none. Today's content for a Household with Pets
+/// is still a placeholder.
 struct TodayScreen: View {
   let household: Household
   /// The Pets loaded since sign-in, shared with the Pets tab, so Retry here updates both.

@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// What a screen shows in place of its data while it loads, as the reference
-/// app's `Loading`.
+/// What a screen shows in place of its data while it loads.
 public struct LoadingView: View {
   public init() {}
 
@@ -22,8 +21,7 @@ public struct LoadingView: View {
   }
 }
 
-/// What a screen shows in place of its data when loading failed, with Retry,
-/// as the reference app's `LoadError`.
+/// What a screen shows in place of its data when loading failed, with Retry.
 public struct LoadErrorView: View {
   private let onRetry: () -> Void
 

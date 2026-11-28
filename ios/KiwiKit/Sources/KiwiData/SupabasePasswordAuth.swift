@@ -30,8 +30,8 @@ public struct SupabasePasswordAuth: PasswordAuth {
           var current = session
           if event == .initialSession, let session, session.isExpired {
             // The stored session expired since the last launch. Wait for the refresh the SDK
-            // starts (shared, not repeated), as supabase-js does before its initial session,
-            // so the app doesn't flash sign-in; a failed refresh means signed out.
+            // starts (shared, not repeated), so the app doesn't flash sign-in; a failed refresh
+            // means signed out.
             current = try? await auth.session
           }
           continuation.yield(current.map(SignedInUser.init))
@@ -43,8 +43,8 @@ public struct SupabasePasswordAuth: PasswordAuth {
   }
 
   static func signInError(for error: any Error) -> SignInError {
-    // The request never got an answer, or a gateway couldn't reach Auth: supabase-js's
-    // AuthRetryableFetchError.
+    // The request never got an answer, or a gateway couldn't reach Auth: a network error the
+    // Member can retry.
     if error is URLError { return .network }
     guard case .api(_, let code, _, let response) = error as? AuthError else { return .unknown }
     switch response.statusCode {

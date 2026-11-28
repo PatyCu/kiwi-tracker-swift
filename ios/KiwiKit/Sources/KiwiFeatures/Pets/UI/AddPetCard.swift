@@ -1,8 +1,7 @@
 import KiwiDesign
 import SwiftUI
 
-/// The dashed card after the Pets in the selector that adds another Pet, as the reference app's
-/// add card in `PetSelector`.
+/// The dashed card after the Pets in the selector that adds another Pet.
 struct AddPetCard: View {
   let onAdd: () -> Void
 

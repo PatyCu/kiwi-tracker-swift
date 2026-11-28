@@ -2,9 +2,8 @@ import Foundation
 import KiwiDomain
 import Observation
 
-/// The signed-in Account's Household's Pets, as the reference app's `PetsProvider`: loads them
-/// and saves a Member's changes. One model per sign-in, so a new Account never sees the previous
-/// Pets.
+/// The signed-in Account's Household's Pets: loads them and saves a Member's changes. One model per
+/// sign-in, so a new Account never sees the previous Pets.
 @Observable final class PetsModel {
   enum State: Equatable {
     case loading
@@ -35,11 +34,10 @@ import Observation
     if current == attempt { state = next }
   }
 
-  /// Adds a Pet with `details` to the Household with `householdID`, or, with `editing`, saves
-  /// them to that Pet, as the reference's `saveProfile`. The stored Pet goes into the list in
-  /// name order at once, leaving the selection as it is. Saving needs the Pets loaded, and
-  /// editing a Pet no longer in the list fails without saving, so the wrong Pet is never
-  /// recreated or overwritten.
+  /// Adds a Pet with `details` to the Household with `householdID`, or, with `editing`, saves them
+  /// to that Pet. The stored Pet goes into the list in name order at once, leaving the selection as
+  /// it is. Saving needs the Pets loaded, and editing a Pet no longer in the list fails without
+  /// saving, so the wrong Pet is never recreated or overwritten.
   func save(_ details: PetDetails, editing: UUID?, householdID: UUID) async throws(PetStoreError) {
     guard case .ready(let pets) = state else { throw .couldNotSave }
     let stored: Pet
@@ -65,7 +63,7 @@ private func nameOrder(_ lhs: Pet, _ rhs: Pet) -> Bool {
 }
 
 /// The Pet the Pets tab shows: the one with `id`, or the first when none is chosen or the
-/// chosen one is gone, as the reference's `PetsScreen`.
+/// chosen one is gone, so a Household with Pets always shows one.
 func selectedPet(_ id: UUID?, in pets: [Pet]) -> Pet? {
   pets.first { $0.id == id } ?? pets.first
 }

@@ -3,11 +3,11 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// Adds a Pet or edits its details, as the reference app's `PetProfileModal`: name, species,
-/// breed and an optional date of birth, with Cancel and Add or Save. While saving, the confirm
-/// button shows a spinner and the sheet can't be dismissed; a failed save keeps it open with an
-/// alert. Cancel or swiping down discards the changes without asking, as the reference does.
-/// Builds its own form, so the tabs that present it only hand in the Pets and the Household.
+/// Adds a Pet or edits its details: name, species, breed and an optional date of birth, with Cancel
+/// and Add or Save. While saving, the confirm button shows a spinner and the sheet can't be
+/// dismissed; a failed save keeps it open with an alert. Cancel or swiping down discards the
+/// changes without asking. Builds its own form, so the tabs that present it only hand in the Pets
+/// and the Household.
 struct PetDetailsSheet: View {
   @State private var form: PetDetailsForm
   @Environment(\.dismiss) private var dismiss

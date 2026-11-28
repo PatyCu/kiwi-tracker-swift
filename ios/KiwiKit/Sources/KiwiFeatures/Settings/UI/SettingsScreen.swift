@@ -1,7 +1,7 @@
 import KiwiDesign
 import SwiftUI
 
-/// The Settings tab, as the reference app's `SettingsScreen`.
+/// The Settings tab: appearance, the Household and its Members, then the Account.
 struct SettingsScreen: View {
   let members: MembersModel
 

@@ -2,7 +2,7 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// Who is signed in, and Sign out on this device, as the reference app's `AccountSection`.
+/// Who is signed in, and Sign out on this device, in Settings.
 struct AccountSection: View {
   @Environment(SessionModel.self) private var session
   @State private var model: SignOutModel
@@ -34,7 +34,7 @@ struct AccountSection: View {
         }
       }
       .onChange(of: model.error) { _, error in
-        // The reference marks the error as an alert, which screen readers announce.
+        // Announced, as VoiceOver doesn't read text that appears on its own.
         if let error { AccessibilityNotification.Announcement(error).post() }
       }
     }

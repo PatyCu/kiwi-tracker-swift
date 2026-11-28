@@ -1,6 +1,6 @@
 import Foundation
 
-/// The app's four tabs, as the reference app's `(tabs)` layout.
+/// The app's four tabs.
 nonisolated public enum AppTab: Hashable, CaseIterable, Sendable {
   case today, pets, calendar, settings
 
@@ -13,7 +13,7 @@ nonisolated public enum AppTab: Hashable, CaseIterable, Sendable {
     }
   }
 
-  /// The SF Symbol matching the reference's Ionicon; the tab bar fills it when selected.
+  /// The tab's SF Symbol, in outline; the tab bar fills it when selected.
   public var systemImage: String {
     switch self {
     case .today: "house"

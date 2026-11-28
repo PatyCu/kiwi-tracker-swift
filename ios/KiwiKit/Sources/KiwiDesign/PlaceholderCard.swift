@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// A card with an icon, a title and a description, as the reference app's
-/// `PlaceholderCard`. `systemImage` is an SF Symbol; the default matches the
-/// reference's `calendar-outline`.
+/// A card with an icon, a title and a description, standing in for content
+/// still to come. `systemImage` is an SF Symbol, a calendar by default.
 public struct PlaceholderCard: View {
   private let title: String
   private let description: String

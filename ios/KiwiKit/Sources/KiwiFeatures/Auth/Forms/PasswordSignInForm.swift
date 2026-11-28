@@ -2,9 +2,8 @@ import Foundation
 import KiwiDomain
 import Observation
 
-/// Email and password sign-in for existing accounts, as the reference app's
-/// `usePasswordSignInForm`. On success the session switches the app over, so the form stays
-/// "signing in" until it goes away.
+/// Email and password sign-in for existing accounts. On success the session switches the app over,
+/// so the form stays "signing in" until it goes away.
 @Observable final class PasswordSignInForm {
   var email = "" {
     didSet { clearError() }

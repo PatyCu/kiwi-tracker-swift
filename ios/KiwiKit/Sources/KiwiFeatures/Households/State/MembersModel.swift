@@ -2,8 +2,8 @@ import Foundation
 import KiwiDomain
 import Observation
 
-/// The signed-in Account's Household Members, as the reference app's `useHouseholdMembers`. One
-/// model per sign-in, loaded apart from the Household so a failure never keeps the tabs closed.
+/// The signed-in Account's Household Members. One model per sign-in, loaded apart from the
+/// Household so a failure never keeps the tabs closed.
 @Observable final class MembersModel {
   enum State: Equatable {
     case loading
@@ -26,8 +26,8 @@ import Observation
     member.accountID == signedInAccountID
   }
 
-  /// Loads the Members unless a load has already started: the reference loads them once, when
-  /// Settings first opens, so switching back to Settings doesn't reload.
+  /// Loads the Members unless a load has already started: once, when Settings first opens, so
+  /// switching back to Settings doesn't reload.
   func loadOnce() async {
     guard attempt == 0 else { return }
     await load()

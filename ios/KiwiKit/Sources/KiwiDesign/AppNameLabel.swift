@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The logo next to the app's name, as the reference app's `AppIdentity`.
+/// The logo next to the app's name.
 public struct AppNameLabel: View {
   public init() {}
 

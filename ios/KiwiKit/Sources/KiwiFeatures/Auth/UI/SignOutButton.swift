@@ -2,8 +2,8 @@ import KiwiDesign
 import SwiftUI
 
 /// Sign out on this device as a standalone button, with "Could not sign out. Try again." under
-/// it when that fails, as on the reference app's `NoHouseholdScreen`. Expects the `SessionModel`
-/// in the environment.
+/// it when that fails, for screens outside Settings such as the no-household screen. Expects the
+/// `SessionModel` in the environment.
 struct SignOutButton: View {
   @Environment(SessionModel.self) private var session
   @State private var model: SignOutModel
@@ -31,7 +31,7 @@ struct SignOutButton: View {
       }
     }
     .onChange(of: model.error) { _, error in
-      // The reference marks the error as an alert, which screen readers announce.
+      // Announced, as VoiceOver doesn't read text that appears on its own.
       if let error { AccessibilityNotification.Announcement(error).post() }
     }
   }

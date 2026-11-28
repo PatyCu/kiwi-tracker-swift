@@ -3,7 +3,7 @@ import KiwiDomain
 import Supabase
 
 /// The signed-in Account's Household and its Members from the `households` and
-/// `household_members` tables, as the reference app's `householdStore`.
+/// `household_members` tables.
 public struct SupabaseHouseholdStore: HouseholdStore {
   private let backend: SupabaseBackend
 
@@ -19,7 +19,7 @@ public struct SupabaseHouseholdStore: HouseholdStore {
       throw .couldNotLoad
     }
     // Access rules return only the Account's own Household, and it belongs to at most one;
-    // more than one row is an error, as supabase-js's `maybeSingle()` treats it.
+    // more than one row is an error rather than a guess at which one is theirs.
     guard rows.count <= 1 else { throw .couldNotLoad }
     return rows.first.map { Household(id: $0.id, alias: $0.alias) }
   }

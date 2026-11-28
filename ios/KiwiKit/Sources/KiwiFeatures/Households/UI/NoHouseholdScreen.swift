@@ -1,10 +1,10 @@
 import KiwiDesign
 import SwiftUI
 
-/// Shown instead of the app when the signed-in Account isn't in a Household, as the reference
-/// app's `NoHouseholdScreen`. Every Account should have one, so this points at a setup mistake
-/// rather than showing an empty app. The app root hands in the Account's email, Check again and
-/// the Sign out control, so this folder doesn't depend on Auth.
+/// Shown instead of the app when the signed-in Account isn't in a Household. Every Account should
+/// have one, so this points at a setup mistake rather than showing an empty app. The app root hands
+/// in the Account's email, Check again and the Sign out control, so this folder doesn't depend on
+/// Auth.
 struct NoHouseholdScreen<SignOut: View>: View {
   private let email: String?
   private let onCheckAgain: () -> Void

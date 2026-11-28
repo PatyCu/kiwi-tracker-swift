@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// The reference app's palette (`src/shared/theme/palette.ts`). Each token has
-/// a light and a dark value in the asset catalog and follows the color scheme.
-/// Views use these instead of color literals.
+/// The app's palette. Each token has a light and a dark value in the asset
+/// catalog and follows the color scheme. Views use these instead of color
+/// literals.
 public enum Palette {
   public static let bg = Color(.bg)
   public static let surface = Color(.surface)

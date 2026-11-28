@@ -1,7 +1,6 @@
 import SwiftUI
 
-/// A section's action, shown as a small outlined pill, as the reference app's
-/// `SectionAction`.
+/// A section's action, shown as a small outlined pill.
 public struct SectionAction {
   /// Short visible label, such as "Schedule".
   public let label: String
@@ -24,8 +23,8 @@ public struct SectionAction {
   }
 }
 
-/// A section's title with an optional action, as the reference app's
-/// `SectionHeader`. `compact` drops the spacing above and below.
+/// A section's title with an optional action. `compact` drops the spacing above
+/// and below.
 public struct SectionHeader: View {
   private let title: String
   private let action: SectionAction?

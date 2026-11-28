@@ -1,8 +1,8 @@
 import KiwiDesign
 import SwiftUI
 
-/// System, Light or Dark in Settings, as the reference app's `AppearanceSection`: one row per
-/// choice with a radio button, the selected one filled, plus an icon per choice.
+/// System, Light or Dark in Settings: one row per choice with a radio button, the selected one
+/// filled, plus an icon per choice.
 struct AppearanceSection: View {
   @Environment(\.appearance) private var appearance
 

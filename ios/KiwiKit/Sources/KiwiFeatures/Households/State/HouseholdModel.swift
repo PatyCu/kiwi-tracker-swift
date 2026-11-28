@@ -1,8 +1,8 @@
 import KiwiDomain
 import Observation
 
-/// The signed-in Account's Household, as the reference app's `HouseholdProvider`. One model per
-/// sign-in, so a new Account never sees the previous Household.
+/// The signed-in Account's Household. One model per sign-in, so a new Account never sees the
+/// previous Household.
 @Observable final class HouseholdModel {
   enum State: Equatable {
     case loading

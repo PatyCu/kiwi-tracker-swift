@@ -2,9 +2,8 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// The signed-in Account's Household in Settings, as the reference app's `HouseholdSection`.
-/// The reference labels the alias "Name"; this uses the glossary's "Alias". The Members follow in
-/// `MembersSection`.
+/// The signed-in Account's Household in Settings, its alias labelled "Alias" as in the glossary.
+/// The Members follow in `MembersSection`.
 struct HouseholdSection: View {
   @Environment(\.household) private var household
 

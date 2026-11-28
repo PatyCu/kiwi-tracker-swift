@@ -2,10 +2,9 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// The app's root: sign-in until someone is signed in, then their Household, then the tabs.
-/// Shows why sign-in is unavailable when the app can't set it up. The order follows the
-/// reference app's `RootStack`. Holds the appearance above all of it, so the choice covers every
-/// screen and lasts through sign-out until the app quits.
+/// The app's root: sign-in until someone is signed in, then their Household, then the tabs. Shows
+/// why sign-in is unavailable when the app can't set it up. Holds the appearance above all of it,
+/// so the choice covers every screen and lasts through sign-out until the app quits.
 public struct RootView: View {
   private enum Setup {
     case ready(any PasswordAuth, any HouseholdStore, any PetStore)
@@ -72,8 +71,7 @@ private struct SessionView: View {
 
 /// Waits for the signed-in Account's Household: loading, then the tabs, an error with Retry, or
 /// the no-household screen. Saving pets and the screen titles need the Household. The Pets load
-/// alongside it, as the reference's `PetsProvider` loads per user, and the Pets tab waits for
-/// them.
+/// alongside it, once per sign-in, and the Pets tab waits for them.
 private struct HouseholdView: View {
   let email: String
   @State private var household: HouseholdModel

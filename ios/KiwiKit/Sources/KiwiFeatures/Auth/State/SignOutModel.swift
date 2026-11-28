@@ -1,7 +1,7 @@
 import Observation
 
-/// The Sign out button's state, as the reference app's `AccountSection`. On success the session
-/// switches the app to sign-in, so it stays "signing out" until the section goes away.
+/// The Sign out button's state. On success the session switches the app to sign-in, so it stays
+/// "signing out" until the section goes away.
 @Observable final class SignOutModel {
   private(set) var signingOut = false
   private(set) var error: String?

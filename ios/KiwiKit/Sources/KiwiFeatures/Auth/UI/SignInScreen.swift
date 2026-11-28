@@ -2,7 +2,7 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// Email and password sign-in, as the reference app's `SignInScreen`.
+/// Email and password sign-in, shown until someone is signed in.
 struct SignInScreen: View {
   private enum Field {
     case email, password
@@ -100,7 +100,7 @@ struct SignInScreen: View {
     .tint(Palette.kiwi)
     .onAppear { focusedField = .email }
     .onChange(of: form.error) { _, error in
-      // The reference marks the error as an alert, which screen readers announce.
+      // Announced, as VoiceOver doesn't read text that appears on its own.
       if let error { AccessibilityNotification.Announcement(error).post() }
     }
   }

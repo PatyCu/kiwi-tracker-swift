@@ -3,9 +3,8 @@ import KiwiDomain
 import SwiftUI
 
 /// One Pet in the Pets tab's selector: a paw avatar and the name, with a checkmark and a kiwi
-/// border when selected, and an Edit button under the name, as the reference app's
-/// `PetSelectorCard`. Selecting and editing are two sibling buttons, so editing never changes
-/// the selection.
+/// border when selected, and an Edit button under the name. Selecting and editing are two sibling
+/// buttons, so editing never changes the selection.
 struct PetSelectorCard: View {
   let pet: Pet
   let isSelected: Bool

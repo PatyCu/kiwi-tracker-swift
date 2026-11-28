@@ -1,7 +1,7 @@
 import KiwiDomain
 import Observation
 
-/// Who is signed in on this device, as the reference app's `SessionProvider`.
+/// Who is signed in on this device.
 @Observable final class SessionModel {
   enum State: Equatable {
     /// The stored session is still being read.

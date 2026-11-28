@@ -15,7 +15,7 @@ struct KiwiTrackerApp: App {
         pets: SupabasePetStore(backend: backend)
       )
     } catch {
-      // The message names the missing or invalid key, as the reference's setup error does.
+      // The message names the missing or invalid key, so whoever set up the build can fix it.
       root = RootView(signInUnavailable: error.description)
     }
   }

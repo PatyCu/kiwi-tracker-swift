@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The Kiwi Tracker logo, as the reference app's `BrandLogo`.
+/// The Kiwi Tracker logo.
 public struct LogoImage: View {
   private let size: CGFloat
 

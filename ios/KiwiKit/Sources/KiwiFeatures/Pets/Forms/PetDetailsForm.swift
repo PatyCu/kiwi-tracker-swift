@@ -2,9 +2,8 @@ import Foundation
 import KiwiDomain
 import Observation
 
-/// Adding a Pet or editing its details, as the reference app's `usePetProfileForm`. Opens empty
-/// with Cat, or with the Pet's details; closes once the save succeeds, and stays open with what
-/// was entered when it fails.
+/// Adding a Pet or editing its details. Opens empty with Cat, or with the Pet's details; closes
+/// once the save succeeds, and stays open with what was entered when it fails.
 @Observable final class PetDetailsForm {
   /// Which save failed, so the sheet names it.
   enum Failure: Equatable {

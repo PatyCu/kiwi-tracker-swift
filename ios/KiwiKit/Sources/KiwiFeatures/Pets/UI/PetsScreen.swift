@@ -3,10 +3,10 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// The Pets tab, as the reference app's `PetsScreen`: the Household's Pets as a row of selector
-/// cards, the first selected by default, then the add card, above a placeholder for the selected
-/// Pet's overview. Selecting a card changes the selection in place, without pushing a screen; its
-/// Edit button opens the Pet's details sheet. With no Pets, the no-pets card.
+/// The Pets tab: the Household's Pets as a row of selector cards, the first selected by default,
+/// then the add card, above a placeholder for the selected Pet's overview. Selecting a card changes
+/// the selection in place, without pushing a screen; its Edit button opens the Pet's details sheet.
+/// With no Pets, the no-pets card.
 struct PetsScreen: View {
   let household: Household
   let model: PetsModel

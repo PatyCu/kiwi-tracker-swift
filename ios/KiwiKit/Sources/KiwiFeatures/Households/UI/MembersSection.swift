@@ -2,8 +2,8 @@ import KiwiDesign
 import KiwiDomain
 import SwiftUI
 
-/// Who is in the signed-in Account's Household, by Display name, as the Members row of the
-/// reference app's `HouseholdSection`. iOS gives them their own section, a row each.
+/// Who is in the signed-in Account's Household, by Display name, in their own Settings section,
+/// a row each.
 struct MembersSection: View {
   let model: MembersModel
   private let loadError: LocalizedStringResource = "Could not load the members."
@@ -36,7 +36,7 @@ struct MembersSection: View {
     // Started outside the view's task so switching tabs mid-load doesn't cancel it.
     .onAppear { Task { await model.loadOnce() } }
     .onChange(of: model.state) { _, state in
-      // The reference marks the error as an alert, which screen readers announce.
+      // Announced, as VoiceOver doesn't read text that appears on its own.
       if state == .failed {
         AccessibilityNotification.Announcement(String(localized: loadError)).post()
       }

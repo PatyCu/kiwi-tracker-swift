@@ -32,8 +32,7 @@ public enum PetSpecies: String, CaseIterable, Sendable {
   case other = "Other"
 }
 
-/// What a Member enters for a Pet, as the reference app's `PetProfile`; the id comes from
-/// storage.
+/// What a Member enters for a Pet; the id comes from storage.
 public struct PetDetails: Equatable, Sendable {
   public var name: String
   public var species: PetSpecies

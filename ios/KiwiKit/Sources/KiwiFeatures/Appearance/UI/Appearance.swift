@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// How the app looks, as the reference app's `Appearance`: following the device, or always light
-/// or dark. Held in memory by `RootView`, so every launch starts at System, as in the reference.
+/// How the app looks: following the device, or always light or dark. Held in memory by
+/// `RootView`, so every launch starts at System.
 enum Appearance: CaseIterable, Hashable {
   case system, light, dark
 

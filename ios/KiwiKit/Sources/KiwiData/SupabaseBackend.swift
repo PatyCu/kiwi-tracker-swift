@@ -32,8 +32,8 @@ public final class SupabaseBackend: Sendable {
 
     // Tokens refresh automatically only while the app is active: the SDK starts and stops
     // refreshing on UIApplication's become-active and resign-active notifications.
-    // The stored session is emitted as the initial session, as supabase-js does (and without it
-    // the SDK reports a runtime issue at launch); callers must check `session.isExpired`.
+    // The stored session is emitted as the initial session even when it has expired (without
+    // this the SDK reports a runtime issue at launch); callers must check `session.isExpired`.
     client = SupabaseClient(
       supabaseURL: config.url,
       supabaseKey: config.publishableKey,
@@ -51,9 +51,10 @@ public final class SupabaseBackend: Sendable {
 
   private static let hasLaunchedKey = "kiwi.hasLaunched"
 
-  /// iOS keeps the Keychain when the app is deleted but deletes its UserDefaults, so a missing
-  /// flag means a new install, whose first launch shows sign-in as the reference's does. The flag
-  /// is set only once the session is gone, so a failed removal is retried on the next launch.
+  /// iOS keeps the Keychain when the app is deleted but deletes its UserDefaults, so a missing flag
+  /// means a new install, whose first launch shows sign-in rather than the Account the deleted
+  /// install left signed in. The flag is set only once the session is gone, so a failed removal is
+  /// retried on the next launch.
   private static func clearSessionLeftByAPreviousInstall(
     key: String, storage: any AuthLocalStorage, installDefaults: UserDefaults
   ) {

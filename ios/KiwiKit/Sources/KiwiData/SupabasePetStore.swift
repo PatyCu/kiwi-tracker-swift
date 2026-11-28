@@ -2,8 +2,7 @@ import Foundation
 import KiwiDomain
 import Supabase
 
-/// The signed-in Account's Household's Pets in the `pets` table, as the reference app's
-/// `petStore`.
+/// The signed-in Account's Household's Pets in the `pets` table.
 public struct SupabasePetStore: PetStore {
   private static let columns = "id, name, species, breed, birth_date"
   private let backend: SupabaseBackend
@@ -25,7 +24,7 @@ public struct SupabasePetStore: PetStore {
     } catch {
       throw .couldNotLoad
     }
-    // An unknown species fails the whole load, as the reference does, rather than guessing.
+    // An unknown species fails the whole load rather than guessing at one.
     return try rows.map { row throws(PetStoreError) in try row.pet() }
   }
 

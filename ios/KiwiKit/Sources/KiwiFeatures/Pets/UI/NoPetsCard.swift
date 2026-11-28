@@ -1,9 +1,8 @@
 import KiwiDesign
 import SwiftUI
 
-/// Shown in place of a tab's content while the Household has no Pets, with a way to add the
-/// first one, as the reference app's `NoPetsCard`. `description` says what adding a Pet unlocks
-/// on that tab.
+/// Shown in place of a tab's content while the Household has no Pets, with a way to add the first
+/// one. `description` says what adding a Pet unlocks on that tab.
 struct NoPetsCard: View {
   let description: String
   let onAdd: () -> Void
