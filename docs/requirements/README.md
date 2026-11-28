@@ -18,3 +18,4 @@ decided it.
 | SET | Settings and Appearance | [settings.md](settings.md) |
 | PET | Pets and their details | [pets.md](pets.md) |
 | PHOTO | Pet photos | [pet-photos.md](pet-photos.md) |
+| APP | The app shell: tabs, routing, app-wide states | [app-shell.md](app-shell.md) |
