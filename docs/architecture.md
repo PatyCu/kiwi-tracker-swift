@@ -39,7 +39,7 @@ the exception.
 
 7. **Domain rules are pure.** Rules and validation have no UI and no I/O, take
    the time ("now" and a calendar) as input, and are tested without mocks.
-   Every client runs the same rule cases.
+   Every client tests the same spec behaviors for each rule.
    ([ADR 0006](adr/0006-domain-rules-run-on-each-client.md))
 8. **Dependencies point inward.** UI and data both depend on the domain, never
    on each other. Only the data layer knows the backend and its row types, and
@@ -61,3 +61,9 @@ the exception.
     ambient "current pet".
 13. **User input survives failure.** A failed write keeps what the user entered
     and says what went wrong; nothing is discarded silently.
+14. **Tests protect what the specs promise.** Every test checks a behavior a
+    spec lists, through the unit's public interface, the way its caller sees
+    it. A test stays only if a plausible wrong change that still compiles would
+    make it fail, so a refactor that keeps the behavior keeps every test
+    green. The [iOS conventions](../ios/CONVENTIONS.md#tests) say how the app's
+    tests apply this.

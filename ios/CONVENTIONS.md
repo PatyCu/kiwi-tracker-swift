@@ -76,9 +76,22 @@ Info.plist. The code lives in the local package `KiwiKit`:
 
 ## Tests
 
+Tests apply the principle that
+[tests protect what the specs promise](../docs/architecture.md#code):
+
+- What reaches a store, auth or the server is behavior too. Doubles stand in
+  only at those boundaries, never inside the unit.
+- No assertions on constants, default values, literal copy or pass-throughs.
+  Copy built by logic is tested for its branch, not its words.
+- One behavior, one test, at the lowest layer that can show it. A form checks
+  that invalid details block Save; the invalid cases live in the domain tests.
+- A suite is named after the Swift unit it tests, and a test after the spec
+  behavior it checks, in words.
+- Code, tests and their comments never mention the reference app.
+
 | Target         | What                                                             | With                                              |
 | -------------- | ---------------------------------------------------------------- | ------------------------------------------------- |
-| `KiwiDomain`   | Every rule, with the reference's test cases and names.           | No mocks                                          |
+| `KiwiDomain`   | Every rule, with the behaviors its spec lists.                   | No mocks                                          |
 | `KiwiData`     | Row ↔ model and error mapping, Session restore and clearing.     | Recorded JSON payloads, in-memory Session storage |
 | `KiwiFeatures` | Model state transitions: load, retry, a failed save keeps input. | In-memory stores                                  |
 

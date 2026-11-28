@@ -29,6 +29,14 @@ change is checked against the [architecture principles](docs/architecture.md).
   related to the current change is part of finishing it.
 - Port a capability from the Expo app with
   [port-feature](.claude/skills/port-feature/SKILL.md).
+- A spec's Testing Decisions list, by unit, the behaviors its automated tests
+  cover, drawn from its user stories.
+- A spec's manual check lists the behaviors only a view shows (VoiceOver
+  labels and traits, a control's first state, layout fit), one line per user
+  story the tests can't reach.
+- Before fixing a bug, its tracker file answers "why didn't the tests catch
+  it?". The fix closes that cause: the spec, the suite or the manual check.
+  There's no blanket rule of one regression test per bug.
 
 ## What a change includes
 

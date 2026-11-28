@@ -33,17 +33,16 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   | `modules/*/ui`                             | `KiwiFeatures/*/UI`                                         |
   | `shared/theme`, `shared/ui`                | `KiwiDesign`                                                |
   | `modules/pets/media`                       | `KiwiData` (cache, upload) + `KiwiFeatures/Pets` (picker)   |
-- Read its tests: they are the specification of its rules.
+- Read its tests to find behaviors for the spec; they aren't the
+  specification themselves. Raise a reference test that looks wrong with the
+  developer while the spec is written.
 - List what a person sees: each screen and sheet, every string, and the
   loading, empty, error and Retry states.
 
 ## 2. Port the rules first
 
-- Port pure rules and validation to `KiwiDomain`, and port their Jest tests to
-  Swift Testing with the same case names and the same expectations. Passing
-  these is the definition of a matching rule.
-- If a reference test looks wrong, port it as it is and tell the developer;
-  don't fix the rule silently.
+- Port pure rules and validation to `KiwiDomain`, with tests for the
+  behaviors the spec lists, following the Tests rules in `ios/CONVENTIONS.md`.
 
 ## 3. Data, state, UI
 
@@ -51,7 +50,8 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   feature uses, with the same validation before writing. No schema change unless
   the tracker item asks for one.
 - The household load is the worked example of store, model and tests:
-  `SupabaseHouseholdStore`, `HouseholdModel`, `RecordingHouseholdStore` and
+  `SupabaseHouseholdStore` and `SupabaseHouseholdStoreTests` (over the stub
+  server), `HouseholdModel`, `RecordingHouseholdStore` and
   `HouseholdModelTests`.
 - Models in `KiwiFeatures/<Area>/State` mirror the reference provider's
   operations and load and retry behavior.
