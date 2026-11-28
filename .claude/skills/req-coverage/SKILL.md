@@ -1,6 +1,6 @@
 ---
 name: req-coverage
-description: Check which active requirements in requirements/*.md lack Swift or pgTAP tests, and flag broken IDs, orphan test IDs and tests for dropped requirements. Use before finishing any implementation, when asked for migration status or parity gaps, or when tests or requirements change.
+description: Check which active requirements in docs/requirements/*.md lack Swift or pgTAP tests, and flag broken IDs, orphan test IDs and tests for dropped requirements. Use before finishing any implementation, when asked for migration status or parity gaps, or when tests or requirements change.
 ---
 
 # Requirement coverage
@@ -15,7 +15,7 @@ A requirement is **covered** when at least one Swift test file references its ID
 .claude/skills/req-coverage/scripts/req-coverage.sh report   # never fails, just prints
 ```
 
-Env overrides: `REQ_DIR` (default `requirements`), `TEST_ROOT` (default `.`). Test files are `*.swift` under any path containing `Tests`, and the pgTAP tests in `supabase/tests/*.sql`, excluding `.build`, `DerivedData` and `.reference`. Only IDs whose prefix is in `requirements/README.md` count.
+Env overrides: `REQ_DIR` (default `docs/requirements`), `TEST_ROOT` (default `.`). Test files are `*.swift` under any path containing `Tests`, and the pgTAP tests in `supabase/tests/*.sql`, excluding `.build`, `DerivedData` and `.reference`. Only IDs whose prefix is in `docs/requirements/README.md` count.
 
 ## How tests reference IDs
 

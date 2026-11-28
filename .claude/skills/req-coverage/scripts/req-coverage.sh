@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Checks requirements/*.md against the tests that cite their IDs.
+# Checks docs/requirements/*.md against the tests that cite their IDs.
 #   req-coverage.sh          integrity check: fails on malformed requirements, orphan or dropped IDs in tests
 #   req-coverage.sh strict   also fails while an active requirement has no test
 #   req-coverage.sh report   prints everything, never fails
@@ -15,7 +15,7 @@ esac
 
 root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$root"
-req_dir="${REQ_DIR:-requirements}"
+req_dir="${REQ_DIR:-docs/requirements}"
 test_root="${TEST_ROOT:-.}"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT

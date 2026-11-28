@@ -38,7 +38,7 @@ Phase 0 describes; never read or run `../kiwi-tracker` instead.
   developer while the spec is written.
 - List what a person sees: each screen and sheet, every string, and the
   loading, empty, error and Retry states.
-- Extract its behaviours into `requirements/` as drafts, following
+- Extract its behaviours into `docs/requirements/` as drafts, following
   `.claude/skills/requirements/SKILL.md`, for the developer to approve while
   the spec is written.
 

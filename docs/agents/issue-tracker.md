@@ -6,7 +6,7 @@ Where the engineering skills (`to-tickets`, `to-spec`, `triage`, `wayfinder`) re
 
 - **Roadmap**: [`docs/migration-plan.md`](../migration-plan.md): phases, one checklist line per feature, and each phase's exit check.
 - **Feature**: one issue, opened when work on the feature starts, never ahead of it. The feature's line in the plan then links to it: `- [ ] Pet overview screen (KIW-26) — [#12](https://github.com/PatyCu/kiwi-tracker-swift/issues/12)`. Its body is the spec once `/to-spec` writes it.
-- **Spec**: the feature issue's body. Its `## Requirements` section lists the [requirement](../../requirements/) IDs it satisfies and never restates them. Its Implementation Decisions name only the fields, columns and cases the feature uses now.
+- **Spec**: the feature issue's body. Its `## Requirements` section lists the [requirement](../requirements/) IDs it satisfies and never restates them. Its Implementation Decisions name only the fields, columns and cases the feature uses now.
 - **Ticket**: one sub-issue of the feature per piece of work, in delivery order. A feature that is one piece of work has none; its issue is its only ticket.
 - **Bug**: an issue labelled `bug`, saying what goes wrong and where it was found. Before it's fixed, a comment answers "why didn't the tests catch it?". Open bugs come before the next ticket.
 - **After parity**: an improvement that would change the reference app's behaviour is an issue labelled `after-parity`, left until Phase 7 is done.

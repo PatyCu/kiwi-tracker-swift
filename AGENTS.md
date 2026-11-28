@@ -42,7 +42,7 @@ The five default labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready
 
 ### Requirements
 
-`requirements/*.md` states what the app does, one ID per behaviour; specs and tests cite the IDs. Follow `.claude/skills/requirements/SKILL.md` to write them and `.claude/skills/req-coverage/SKILL.md` to check their tests.
+`docs/requirements/*.md` states what the app does, one ID per behaviour; specs and tests cite the IDs. Follow `.claude/skills/requirements/SKILL.md` to write them and `.claude/skills/req-coverage/SKILL.md` to check their tests.
 
 ### Domain docs
 

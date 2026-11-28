@@ -1,11 +1,11 @@
 ---
 name: requirements
-description: Author, update, extract or drop app requirements in requirements/*.md, the repo's permanent source of truth for app behaviour. Use when a behaviour is decided, changed or dropped, when extracting behaviour from the legacy Expo app, or when a spec or test needs a requirement ID.
+description: Author, update, extract or drop app requirements in docs/requirements/*.md, the repo's permanent source of truth for app behaviour. Use when a behaviour is decided, changed or dropped, when extracting behaviour from the legacy Expo app, or when a spec or test needs a requirement ID.
 ---
 
 # Requirements
 
-`requirements/` states **what** Kiwi Tracker does, in observable behaviour. It is permanent and outlives every spec and ticket.
+`docs/requirements/` states **what** Kiwi Tracker does, in observable behaviour. It is permanent and outlives every spec and ticket.
 
 - Specs (from `/to-spec`) say **how** a change gets there, and they **reference** requirement IDs. They never restate them.
 - Tests prove requirements. Each test carries the IDs it proves (see `req-coverage`).
@@ -14,7 +14,7 @@ description: Author, update, extract or drop app requirements in requirements/*.
 ## Layout
 
 ```
-requirements/
+docs/requirements/
   README.md        # prefix registry + format reminder (create if missing)
   meds.md          # one file per area, named after the area
   reminders.md
@@ -48,7 +48,7 @@ The body is **one declarative sentence** (two at most). Scenarios, data and asse
 | Title | One line | Describes the behaviour, not the UI element |
 | Status | `draft` / `active` / `dropped` | Only `active` must be covered by tests |
 | Migration | `same` / `changed` / `new` | Optional. Relation to the Expo behaviour. Remove after cutover if you like |
-| Source | Path or `decision` | Where the behaviour came from; paths as `requirements/README.md` says |
+| Source | Path or `decision` | Where the behaviour came from; paths as `docs/requirements/README.md` says |
 | Note | One line | Optional. A confirmed difference from the reference, or `possible bug, confirm` |
 
 ## Rules
@@ -60,7 +60,7 @@ The body is **one declarative sentence** (two at most). Scenarios, data and asse
 4. **Dropping keeps history.** Set `Status: dropped` and add `Reason:` with one line. Never delete the block.
 5. **Changing behaviour** of an `active` requirement: edit it in place only if tests are updated in the same change. Otherwise flag it.
 6. **Use GLOSSARY terms.** A new term goes through `domain-modeling` first.
-7. **No duplicates.** Before adding, search `requirements/` for the behaviour. Extend or reference instead.
+7. **No duplicates.** Before adding, search `docs/requirements/` for the behaviour. Extend or reference instead.
 
 ## Workflows
 
@@ -92,7 +92,7 @@ Allocate the next ID, write it as `draft`, get the user's approval, then `active
 
 When no `active` requirement is uncovered and no `draft` is left, tell the user a review is due:
 - Remove the `Migration:` fields, since they no longer carry information.
-- Check for redundancy: if requirement sentences only restate test names, propose collapsing `requirements/` into the tests (or generating the doc from test names). That decision belongs to the user.
+- Check for redundancy: if requirement sentences only restate test names, propose collapsing `docs/requirements/` into the tests (or generating the doc from test names). That decision belongs to the user.
 
 ## Never
 

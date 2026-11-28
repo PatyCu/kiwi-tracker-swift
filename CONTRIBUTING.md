@@ -13,7 +13,7 @@ change is checked against the [architecture principles](docs/architecture.md).
 - [docs/supabase.md](docs/supabase.md): the data model.
 - [docs/accounts.md](docs/accounts.md): setting up Accounts, Households and
   Members.
-- [requirements/](requirements/): what the app does, one ID per behaviour.
+- [docs/requirements/](docs/requirements/): what the app does, one ID per behaviour.
 - [docs/migration-plan.md](docs/migration-plan.md): the roadmap, with each
   feature, its tickets and the bugs in
   [GitHub Issues](docs/agents/issue-tracker.md).
@@ -25,7 +25,7 @@ change is checked against the [architecture principles](docs/architecture.md).
 - The roadmap is `docs/migration-plan.md`; features, tickets and bugs are
   GitHub issues, as [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md)
   describes. Don't use GitHub Projects or Linear.
-- A behaviour is decided in [requirements/](requirements/) before it's built:
+- A behaviour is decided in [docs/requirements/](docs/requirements/) before it's built:
   a spec lists the requirement IDs it satisfies, and each test names the IDs
   it proves.
 - Bugs come first: log one in the tracker when it's found, and fix open bugs

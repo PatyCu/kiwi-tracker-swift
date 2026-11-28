@@ -3,8 +3,8 @@
 What Kiwi Tracker does, in observable behaviour: one file per area, one ID per
 behaviour. Specs and tests cite these IDs. The format and the rules for
 writing, approving and dropping requirements are in the
-[requirements skill](../.claude/skills/requirements/SKILL.md). The
-[req-coverage skill](../.claude/skills/req-coverage/SKILL.md) checks which
+[requirements skill](../../.claude/skills/requirements/SKILL.md). The
+[req-coverage skill](../../.claude/skills/req-coverage/SKILL.md) checks which
 `active` requirements have tests.
 
 A `Source:` path is relative to the reference copy `.reference/kiwi-tracker`,

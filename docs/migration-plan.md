@@ -3,7 +3,7 @@
 Moving Kiwi Tracker from the Expo app to a native iOS app, a React web app and
 a backend owned by this repo. This file is the roadmap; each feature, its
 tickets and the bugs are GitHub issues ([how](agents/issue-tracker.md)), and
-what the app does is in [`requirements/`](../requirements/).
+what the app does is in [`requirements/`](requirements/).
 
 **Current phase:** 3 — Pets
 
